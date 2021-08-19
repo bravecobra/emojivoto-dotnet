@@ -5,6 +5,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using EmojiSvc.Domain;
 using EmojiSvc.Domain.Impl;
+using EmojiSvc.Persistence;
+using EmojiSvc.Persistence.Impl;
 using EmojiSvc.Services;
 
 namespace EmojiSvc
@@ -18,7 +20,7 @@ namespace EmojiSvc
             services.AddGrpc();
             services.AddSingleton<IEmojiRepo, InMemoryAllEmoji>();
             services.AddTransient<IAllEmoji, AllEmoji>();
-            services.AddAutoMapper(typeof(EmojiMapper));
+            services.AddAutoMapper(typeof(EmojiProfile));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -33,7 +35,7 @@ namespace EmojiSvc
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapGrpcService<Services.EmojiSvc>();
+                endpoints.MapGrpcService<EmojiGrpcSvc>();
 
                 endpoints.MapGet("/", async context =>
                 {

@@ -10,13 +10,13 @@ using Microsoft.Extensions.Logging;
 
 namespace EmojiSvc.Services
 {
-    public class EmojiSvc: EmojiService.EmojiServiceBase
+    public class EmojiGrpcSvc: EmojiService.EmojiServiceBase
     {
-        private readonly ILogger<EmojiSvc> _logger;
+        private readonly ILogger<EmojiGrpcSvc> _logger;
         private readonly IAllEmoji _allEmoji;
         private readonly IMapper _mapper;
 
-        public EmojiSvc(ILogger<EmojiSvc> logger, IAllEmoji allEmoji, IMapper mapper)
+        public EmojiGrpcSvc(ILogger<EmojiGrpcSvc> logger, IAllEmoji allEmoji, IMapper mapper)
         {
             _logger = logger;
             _allEmoji = allEmoji;
@@ -30,7 +30,7 @@ namespace EmojiSvc.Services
             Emojivoto.V1.Emoji? result = null;
             if (emoji != null)
             {
-                _mapper.Map<Emojivoto.V1.Emoji>(emoji);
+                result = _mapper.Map<Emojivoto.V1.Emoji>(emoji);
             }
             
             return Task.FromResult(new FindByShortcodeResponse
