@@ -2,9 +2,9 @@
 
 namespace EmojiSvc.Domain
 {
-    public class EmojiMapper: Profile
+    public class EmojiProfile: Profile
     {
-        public EmojiMapper()
+        public EmojiProfile()
         {
             CreateMap<Emoji, Emojivoto.V1.Emoji>();
         }

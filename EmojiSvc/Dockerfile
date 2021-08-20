@@ -9,7 +9,8 @@ FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
 WORKDIR /src
 COPY ["EmojiSvc/EmojiSvc.csproj", "EmojiSvc/"]
 RUN dotnet restore "EmojiSvc/EmojiSvc.csproj"
-COPY . .
+COPY ./EmojiSvc ./EmojiSvc
+COPY ./protos ./protos
 WORKDIR "/src/EmojiSvc"
 RUN dotnet build "EmojiSvc.csproj" -c Release -o /app/build
 

@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using EmojiSvc.Persistence;
 
 namespace EmojiSvc.Domain.Impl
 {
-    class AllEmoji : IAllEmoji
+    public class AllEmoji : IAllEmoji
     {
         private readonly IEmojiRepo _repo;
 
@@ -11,7 +12,6 @@ namespace EmojiSvc.Domain.Impl
         {
             _repo = repo;
         }
-
 
         public Emoji? WithShortcode(string shortcode)
         {
