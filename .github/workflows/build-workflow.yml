@@ -71,8 +71,22 @@ jobs:
       id: gitversion
       uses: gittools/actions/gitversion/execute@v0.9.9
 
+    - name: Docker meta
+      id: meta
+      uses: docker/metadata-action@v3
+      with:
+        images: name/app
+        flavor: |
+          latest=false
+        tags: |
+          type=sha
+          type=raw,enable=${{ github.ref == 'refs/heads/develop' }},value=latest
+          type=raw,enable=${{ github.ref == 'refs/heads/master' }},value=stable
+          type=semver,pattern={{version}},value=${{ steps.gitversion.outputs.semVer }}
+
     - name: Login to DockerHub
       uses: docker/login-action@v1
+      if: github.event_name != 'pull_request'
       with:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
@@ -84,5 +98,5 @@ jobs:
       with:
         context: .
         file: EmojiSvc/Dockerfile
-        push: true
+        push: ${{ github.event_name != 'pull_request' }}
         tags: bravecobra/emoji-svc:${{ steps.gitversion.outputs.semVer }}
