@@ -1,0 +1,52 @@
+version: '3'
+
+services:
+  web:
+    image: buoyantio/emojivoto-web:v11
+    environment:
+    - WEB_PORT=8080
+    - EMOJISVC_HOST=emoji-svc:80
+    - VOTINGSVC_HOST=voting-svc:80
+    - INDEX_BUNDLE=dist/index_bundle.js
+    ports:
+      - "8080:8080"
+    depends_on:
+      - voting-svc
+      - emoji-svc
+
+  # vote-bot:
+  #   image: buoyantio/emojivoto-web:v11
+  #   entrypoint: emojivoto-vote-bot
+  #   environment:
+  #     - WEB_HOST=web:8080
+  #   depends_on:
+  #     - web
+
+  emoji-svc:
+    image: bravecobra/emoji-svc:0.1.0-add-voting-service.1
+    environment:
+      - GRPC_PORT=8080
+    ports:
+      - "8081:80"
+
+  voting-svc:
+    image: bravecobra/emoji-voting-svc:0.1.0-add-voting-service.1
+    environment:
+      - GRPC_PORT=8080
+      - FAILURE_RATE=10
+    ports:
+      - "8082:80"
+
+  # emoji-svc:
+  #   image: buoyantio/emojivoto-emoji-svc:v11
+  #   environment:
+  #     - GRPC_PORT=8080
+  #   ports:
+  #     - "8081:8080"
+
+  # voting-svc:
+  #   image: buoyantio/emojivoto-voting-svc:v11
+  #   environment:
+  #     - GRPC_PORT=8080
+  #   ports:
+  #     - "8082:8080"
