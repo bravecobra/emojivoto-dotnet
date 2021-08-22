@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using EmojiSvc.Persistence.Impl;
 using Xunit;
 
