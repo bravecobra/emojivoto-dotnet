@@ -2,17 +2,45 @@ version: '3'
 
 services:
   web:
-    image: buoyantio/emojivoto-web:v11
+    image: bravecobra/emoji-ui-svc:0.1.0-add-ui.1
+    container_name: emoji-ui-svc
     environment:
-    - WEB_PORT=8080
-    - EMOJISVC_HOST=emoji-svc:80
-    - VOTINGSVC_HOST=voting-svc:80
-    - INDEX_BUNDLE=dist/index_bundle.js
+      - EMOJISVC_HOST=http://emoji-svc
+      - VOTINGSVC_HOST=http://voting-svc
+      - ASPNETCORE_ENVIRONMENT=Development
     ports:
-      - "8080:8080"
+      - "8080:80"
     depends_on:
       - voting-svc
       - emoji-svc
+
+  emoji-svc:
+    image: bravecobra/emoji-svc:0.1.0-add-ui.1
+    container_name: emoji-svc
+    ports:
+      - "8081:80"
+
+  voting-svc:
+    image: bravecobra/emoji-voting-svc:0.1.0-add-ui.1
+    container_name: voting-svc
+    environment:
+      - FAILURE_RATE=10
+      - ARTIFICIAL_DELAY=0
+    ports:
+      - "8082:80"
+
+  # web:
+  #   image: buoyantio/emojivoto-web:v11
+  #   environment:
+  #   - WEB_PORT=8080
+  #   - EMOJISVC_HOST=emoji-svc:80
+  #   - VOTINGSVC_HOST=voting-svc:80
+  #   - INDEX_BUNDLE=dist/index_bundle.js
+  #   ports:
+  #     - "8080:8080"
+  #   depends_on:
+  #     - voting-svc
+  #     - emoji-svc
 
   # vote-bot:
   #   image: buoyantio/emojivoto-web:v11
@@ -21,21 +49,6 @@ services:
   #     - WEB_HOST=web:8080
   #   depends_on:
   #     - web
-
-  emoji-svc:
-    image: bravecobra/emoji-svc:0.1.0-add-voting-service.1
-    environment:
-      - GRPC_PORT=8080
-    ports:
-      - "8081:80"
-
-  voting-svc:
-    image: bravecobra/emoji-voting-svc:0.1.0-add-voting-service.1
-    environment:
-      - GRPC_PORT=8080
-      - FAILURE_RATE=10
-    ports:
-      - "8082:80"
 
   # emoji-svc:
   #   image: buoyantio/emojivoto-emoji-svc:v11
