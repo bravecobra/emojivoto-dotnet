@@ -2,12 +2,11 @@ version: '3'
 
 services:
   web:
-    image: bravecobra/emoji-ui-svc:0.1.0-alpha.9
+    image: bravecobra/emoji-ui-svc:0.1.0-alpha.10
     container_name: emoji-ui-svc
     environment:
       - EMOJISVC_HOST=http://emoji-svc
       - VOTINGSVC_HOST=http://voting-svc
-      - ASPNETCORE_ENVIRONMENT=Development
     ports:
       - "8080:80"
     depends_on:
@@ -15,19 +14,26 @@ services:
       - emoji-svc
 
   emoji-svc:
-    image: bravecobra/emoji-svc:0.1.0-alpha.9
+    image: bravecobra/emoji-svc:0.1.0-alpha.10
     container_name: emoji-svc
     ports:
       - "8081:80"
 
   voting-svc:
-    image: bravecobra/emoji-voting-svc:0.1.0-alpha.9
+    image: bravecobra/emoji-voting-svc:0.1.0-alpha.10
     container_name: voting-svc
     environment:
       - FAILURE_RATE=10
       - ARTIFICIAL_DELAY=0
     ports:
       - "8082:80"
+
+  vote-bot:
+    image: bravecobra/emoji-votebot:0.1.0-alpha.10
+    environment:
+      - WEB_HOST=http://web
+    depends_on:
+      - web
 
   # web:
   #   image: buoyantio/emojivoto-web:v11
