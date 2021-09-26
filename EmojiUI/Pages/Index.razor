@@ -1,0 +1,70 @@
+﻿@page "/"
+@using EmojiUI.Shared.Store.FetchEmojies
+@inherits Fluxor.Blazor.Web.Components.FluxorComponent
+
+<div class="background">
+    <div class="page-content container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                @if (VoteState.Value.Error == string.Empty)
+                {
+                    <h1 class="headline">🗳</h1>
+                }
+                else
+                {
+                    <h1 class="headline">🚧</h1>
+                }
+
+                <div>
+                    @if (VoteState.Value.Error != string.Empty)
+                    {
+                        @VoteState.Value.Error
+                        <p>We couldn't process your request.</p>
+                        @if (VoteState.Value.SelectedEmoji?.Shortcode == ":doughnut:")
+                        {
+                            <div>
+                                <p class="doughnut-explanation">For the sake of this demo, voting for 🍩<br />always returns an error.
+                                </p>
+                                <p>
+                                    <NavLink class="nav-link" href="/" @onclick="() => Dispatcher.Dispatch(new ResetAction())" ><div class="btn btn-white">Pick another</div></NavLink>
+                                </p>
+                            </div>
+                        }
+                        <NavLink href="/" @onclick="() => Dispatcher.Dispatch(new ResetAction())"><div class="btn btn-blue">Select again</div></NavLink>
+                    }
+                    else if (VoteState.Value.SelectedEmoji != null){
+                        <div>
+                        <p>See how you stack up against others</p>
+                            <NavLink href="/leaderboard"><div class="btn btn-blue">View the leaderboard</div></NavLink>
+                            <NavLink class="nav-link" href="/" @onclick="() => Dispatcher.Dispatch(new ResetAction())" ><div class="btn btn-white">Pick another one</div></NavLink>
+                        </div>
+                    }
+                    else
+                    {
+                        <h1>EMOJI VOTE</h1>
+                        <p>Tap to vote for your favorite emoji below</p>
+
+                        <NavLink href="/leaderboard"><div class="btn btn-blue">View the leaderboard</div></NavLink>
+                        @if (VoteState.Value.IsLoading)
+                        {
+                            <p><em>Loading emojies...</em></p>
+                        }
+
+                        <div class="emoji-list">
+                            @foreach (var emoji in VoteState.Value.Emojies)
+                            {
+                                <div class="emoji emoji-votable" @onclick="() => this.Dispatcher.Dispatch(new VoteEmojiAction(emoji))">
+                                    @emoji.Unicode
+                                </div>
+                            }
+                            @* <div className="footer-text"> *@
+                            @*     <p>A <a href='https://buoyant.io'>Buoyant</a> social experiment</p> *@
+                            @*     <p>© 2017 Buoyant, Inc. All Rights Reserved.</p> *@
+                            @* </div> *@
+                        </div>
+                    }
+                </div >
+            </div>
+        </div>
+    </div>
+</div>

@@ -6,7 +6,7 @@ using Grpc.Net.Client;
 
 namespace EmojiClient
 {
-    class Program
+    static class Program
     {
         static async Task Main(string[] args)
         {
