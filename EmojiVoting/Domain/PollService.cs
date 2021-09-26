@@ -8,7 +8,7 @@ namespace EmojiVoting.Domain
     public class PollService: IPollService
     {
         private readonly ILogger<PollService> _logger;
-        private readonly ConcurrentDictionary<string, Result> _votes = new(); //Move to persistence layer
+        private readonly ConcurrentDictionary<string, Result> _votes = new(); //TODO: Move to persistence layer
         private int _voteCounter = 0;
 
         public PollService(ILogger<PollService> logger)

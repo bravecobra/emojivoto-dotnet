@@ -9,15 +9,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EmojiClient", "EmojiClient\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EmojiSvc.Tests", "EmojiSvc.Tests\EmojiSvc.Tests.csproj", "{15287F9A-B3C6-46D8-A769-2B0F2FAEBBA9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmojiVoting", "EmojiVoting\EmojiVoting.csproj", "{54412D52-17D8-46F1-997A-F1F3F0EACDCB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EmojiVoting", "EmojiVoting\EmojiVoting.csproj", "{54412D52-17D8-46F1-997A-F1F3F0EACDCB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmojiVoting.Tests", "EmojiVoting.Tests\EmojiVoting.Tests.csproj", "{09B4932A-8BAB-4BF8-9DE4-005062E60128}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EmojiVoting.Tests", "EmojiVoting.Tests\EmojiVoting.Tests.csproj", "{09B4932A-8BAB-4BF8-9DE4-005062E60128}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Misc", "Misc", "{80853468-DDD4-4FF7-8D13-C4EB6FE83412}"
 	ProjectSection(SolutionItems) = preProject
 		.github\workflows\build-workflow.yml = .github\workflows\build-workflow.yml
 		README.md = README.md
 	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EmojiUI", "EmojiUI\EmojiUI.csproj", "{591966B8-F8A9-4416-A3A1-CC6105B93C8A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{09B4932A-8BAB-4BF8-9DE4-005062E60128}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{09B4932A-8BAB-4BF8-9DE4-005062E60128}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{09B4932A-8BAB-4BF8-9DE4-005062E60128}.Release|Any CPU.Build.0 = Release|Any CPU
+		{591966B8-F8A9-4416-A3A1-CC6105B93C8A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{591966B8-F8A9-4416-A3A1-CC6105B93C8A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{591966B8-F8A9-4416-A3A1-CC6105B93C8A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{591966B8-F8A9-4416-A3A1-CC6105B93C8A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

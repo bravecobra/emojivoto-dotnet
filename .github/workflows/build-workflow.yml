@@ -58,6 +58,8 @@ jobs:
             svcDockerName: bravecobra/emoji-svc
           - svcProjectName: EmojiVoting
             svcDockerName: bravecobra/emoji-voting-svc
+          - svcProjectName: EmojiUI
+            svcDockerName: bravecobra/emoji-ui-svc
     needs: [build]
     steps:
     - name: Checkout
