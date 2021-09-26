@@ -8,7 +8,10 @@ namespace EmojiUI.Shared.Store.LeaderBoard
 
         protected override LeaderBoardState GetInitialState()
         {
-            return new LeaderBoardState(false, null);
+            return new LeaderBoardState(
+                isLoading: true, 
+                results: null, 
+                error:string.Empty);
         }
     }
 }

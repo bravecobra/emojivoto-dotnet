@@ -8,7 +8,14 @@
             <div class="col-md-12">
                 @if (VoteState.Value.Error == string.Empty)
                 {
-                    <h1 class="headline">🗳</h1>
+                    @if (VoteState.Value.SelectedEmoji != null)
+                    {
+                        <h1 class="headline">@VoteState.Value.SelectedEmoji.Unicode</h1>                    
+                    }
+                    else
+                    {
+                        <h1 class="headline">🗳</h1>                    
+                    }
                 }
                 else
                 {
@@ -23,7 +30,7 @@
                         @if (VoteState.Value.SelectedEmoji?.Shortcode == ":doughnut:")
                         {
                             <div>
-                                <p class="doughnut-explanation">For the sake of this demo, voting for 🍩<br />always returns an error.
+                                <p class="doughnut-explanation">For the sake of this demo, voting for 🍩<br />randomly returns an error.
                                 </p>
                                 <p>
                                     <NavLink class="nav-link" href="/" @onclick="() => Dispatcher.Dispatch(new ResetAction())" ><div class="btn btn-white">Pick another</div></NavLink>

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using EmojiUI.Services;
+using Emojivoto.V1;
 using Microsoft.AspNetCore.Mvc;
 using Emoji = EmojiUI.Controllers.Dtos.Emoji;
 
@@ -23,16 +24,13 @@ namespace EmojiUI.Controllers
             return await _voteService.ListEmojis();
         }
 
-        // [HttpGet("{shortcode}")]
-        // public async Task<Emoji> FindByShortCode(string shortcode)
-        // {
-        //     var response = await _client.FindByShortcodeAsync(new FindByShortcodeRequest()
-        //     {
-        //         Shortcode = shortcode
-        //     });
-        //     return response.Emoji != null ? 
-        //         new Emoji { Shortcode = response.Emoji.Shortcode, Unicode = response.Emoji.Unicode } : 
-        //         null;
-        // }
+        [HttpGet("{shortcode}")]
+        public async Task<Emoji> FindByShortCode(string shortcode)
+        {
+            var response = await _voteService.FindByShortCode(shortcode);
+            return response != null ? 
+                new Emoji { Shortcode = response.Shortcode, Unicode = response.Unicode } : 
+                null;
+        }
     }
 }
