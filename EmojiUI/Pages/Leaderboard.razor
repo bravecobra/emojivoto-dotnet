@@ -14,9 +14,13 @@
                 <NavLink href="/">
                     <div class="btn btn-blue">Vote on your favorite</div></NavLink>
                 <div class="emoji-list">
-                    @if (!LeaderBoardState.Value.IsLoading)
+                    @if (LeaderBoardState.Value.IsLoading)
                     {
-                        foreach (var result in LeaderBoardState.Value?.Results)
+                        <p><em>Loading results...</em></p>
+                    }
+                    else
+                    {
+                        foreach (var result in LeaderBoardState?.Value?.Results)
                         {
                             var title = $"{result.Votes} votes";
                             <div class="emoji" title="@title">

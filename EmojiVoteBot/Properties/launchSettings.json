@@ -1,0 +1,15 @@
+{
+  "profiles": {
+    "EmojiVoteBot": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "DOTNET_ENVIRONMENT": "Development",
+        "WEB_HOST": "http://localhost:8080"
+      },
+      "dotnetRunMessages": "true"
+    },
+    "Docker": {
+      "commandName": "Docker"
+    }
+  }
+}

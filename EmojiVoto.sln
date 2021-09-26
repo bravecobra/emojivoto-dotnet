@@ -21,6 +21,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Misc", "Misc", "{80853468-D
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EmojiUI", "EmojiUI\EmojiUI.csproj", "{591966B8-F8A9-4416-A3A1-CC6105B93C8A}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EmojiVoteBot", "EmojiVoteBot\EmojiVoteBot.csproj", "{28BF8E5A-60FA-434B-9146-F546EE576EFE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,10 @@ Global
 		{591966B8-F8A9-4416-A3A1-CC6105B93C8A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{591966B8-F8A9-4416-A3A1-CC6105B93C8A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{591966B8-F8A9-4416-A3A1-CC6105B93C8A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{28BF8E5A-60FA-434B-9146-F546EE576EFE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{28BF8E5A-60FA-434B-9146-F546EE576EFE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{28BF8E5A-60FA-434B-9146-F546EE576EFE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{28BF8E5A-60FA-434B-9146-F546EE576EFE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
