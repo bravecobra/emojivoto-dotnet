@@ -21,8 +21,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Misc", "Misc", "{80853468-D
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EmojiUI", "EmojiUI\EmojiUI.csproj", "{591966B8-F8A9-4416-A3A1-CC6105B93C8A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "test", "test\test.csproj", "{C2BB21B8-AB0E-4DBA-943A-3BBD2242AEBF}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -53,10 +51,6 @@ Global
 		{591966B8-F8A9-4416-A3A1-CC6105B93C8A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{591966B8-F8A9-4416-A3A1-CC6105B93C8A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{591966B8-F8A9-4416-A3A1-CC6105B93C8A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C2BB21B8-AB0E-4DBA-943A-3BBD2242AEBF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C2BB21B8-AB0E-4DBA-943A-3BBD2242AEBF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C2BB21B8-AB0E-4DBA-943A-3BBD2242AEBF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C2BB21B8-AB0E-4DBA-943A-3BBD2242AEBF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
