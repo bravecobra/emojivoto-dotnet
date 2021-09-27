@@ -7,20 +7,20 @@ services:
     environment:
       - EMOJISVC_HOST=http://emoji-svc
       - VOTINGSVC_HOST=http://voting-svc
-      - OTEL_SERVICE_NAME=emoji-ui
     ports:
       - "8080:80"
     depends_on:
       - voting-svc
       - emoji-svc
+      - jaeger
 
   emoji-svc:
     image: bravecobra/emoji-svc:0.1.0-alpha.10
     container_name: emoji-svc
-    environment:
-      - OTEL_SERVICE_NAME=emoji-svc
     ports:
       - "8081:80"
+    depends_on:
+      - jaeger
 
   voting-svc:
     image: bravecobra/emoji-voting-svc:0.1.0-alpha.10
@@ -28,18 +28,19 @@ services:
     environment:
       - FAILURE_RATE=10
       - ARTIFICIAL_DELAY=0
-      - OTEL_SERVICE_NAME=voting-svc
     ports:
       - "8082:80"
+    depends_on:
+      - jaeger
 
   vote-bot:
     image: bravecobra/emoji-votebot:0.1.0-alpha.10
     container_name: votebot
     environment:
       - WEB_HOST=http://web
-      - OTEL_SERVICE_NAME=vote-bot
     depends_on:
       - web
+      - jaeger
 
   jaeger:
     image: jaegertracing/all-in-one:latest

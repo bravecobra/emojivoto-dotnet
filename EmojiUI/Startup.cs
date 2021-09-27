@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
 
 namespace EmojiUI
@@ -55,6 +56,7 @@ namespace EmojiUI
                 .UseRouting()
                 .UseReduxDevTools()
                 .AddMiddleware<LoggingMiddleware>());
+            var resourceBuilder = ResourceBuilder.CreateDefault().AddService("EmojiUI");
             services.AddOpenTelemetryTracing(
                 (builder) => builder
                     .AddAspNetCoreInstrumentation(options => options.EnableGrpcAspNetCoreSupport = true)
@@ -66,6 +68,7 @@ namespace EmojiUI
                         options.AgentHost = "jaeger";
                         options.AgentPort = 6831;
                     })
+                    .SetResourceBuilder(resourceBuilder)
             );
         }
 

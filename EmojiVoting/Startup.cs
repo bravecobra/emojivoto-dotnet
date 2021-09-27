@@ -6,6 +6,7 @@ using Microsoft.Extensions.Hosting;
 using EmojiVoting.Domain;
 using EmojiVoting.Services;
 using Microsoft.Extensions.Configuration;
+using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
 
 namespace EmojiVoting
@@ -26,6 +27,7 @@ namespace EmojiVoting
             services.AddSingleton<IPollService, PollService>();
             services.AddSingleton<IConfiguration>(_configuration);
             services.AddAutoMapper(typeof(VotingProfile));
+            var resourceBuilder = ResourceBuilder.CreateDefault().AddService("EmojiVoting");
             services.AddOpenTelemetryTracing(
                 (builder) => builder
                     .AddSource(nameof(Program))
@@ -42,6 +44,7 @@ namespace EmojiVoting
                         options.AgentHost = "jaeger";
                         options.AgentPort = 6831;
                     })
+                    .SetResourceBuilder(resourceBuilder)
             );
         }
 
