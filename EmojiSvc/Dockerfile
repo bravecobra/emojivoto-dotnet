@@ -12,10 +12,10 @@ RUN dotnet restore "EmojiSvc/EmojiSvc.csproj"
 COPY ./EmojiSvc ./EmojiSvc
 COPY ./protos ./protos
 WORKDIR "/src/EmojiSvc"
-RUN dotnet build "EmojiSvc.csproj" -c Release -o /app/build
+RUN dotnet build "EmojiSvc.csproj" -c Debug -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "EmojiSvc.csproj" -c Release -o /app/publish
+RUN dotnet publish "EmojiSvc.csproj" -c Debug -o /app/publish
 
 FROM base AS final
 WORKDIR /app

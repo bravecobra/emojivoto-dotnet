@@ -4,6 +4,7 @@ using EmojiVoteBot.Services;
 using EmojiVoteBot.Services.Impl;
 using System;
 using System.Text;
+using OpenTelemetry.Trace;
 
 namespace EmojiVoteBot
 {
@@ -22,6 +23,16 @@ namespace EmojiVoteBot
                     services.AddHttpClient();
                     services.AddTransient<IEmojiVoteService, EmojiVoteRestService>();
                     services.AddHostedService<VotingBot>();
+                    services.AddOpenTelemetryTracing(
+                        (builder) => builder
+                            .AddHttpClientInstrumentation()
+                            .AddGrpcClientInstrumentation()
+                            .AddJaegerExporter(options =>
+                            {
+                                options.AgentHost = "jaeger";
+                                options.AgentPort = 6831;
+                            })
+                    );
                 });
     }
 }

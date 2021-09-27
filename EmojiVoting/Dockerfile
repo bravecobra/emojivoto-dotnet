@@ -12,10 +12,10 @@ RUN dotnet restore "EmojiVoting/EmojiVoting.csproj"
 COPY ./EmojiVoting ./EmojiVoting
 COPY ./protos ./protos
 WORKDIR "/src/EmojiVoting"
-RUN dotnet build "EmojiVoting.csproj" -c Release -o /app/build
+RUN dotnet build "EmojiVoting.csproj" -c Debug -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "EmojiVoting.csproj" -c Release -o /app/publish
+RUN dotnet publish "EmojiVoting.csproj" -c Debug -o /app/publish
 
 FROM base AS final
 WORKDIR /app

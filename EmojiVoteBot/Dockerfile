@@ -10,10 +10,10 @@ RUN dotnet restore "EmojiVoteBot/EmojiVoteBot.csproj"
 COPY ./EmojiVoteBot ./EmojiVoteBot
 COPY ./protos ./protos
 WORKDIR "/src/EmojiVoteBot"
-RUN dotnet build "EmojiVoteBot.csproj" -c Release -o /app/build
+RUN dotnet build "EmojiVoteBot.csproj" -c Debug -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "EmojiVoteBot.csproj" -c Release -o /app/publish
+RUN dotnet publish "EmojiVoteBot.csproj" -c Debug -o /app/publish
 
 FROM base AS final
 WORKDIR /app

@@ -6,6 +6,7 @@ using Microsoft.Extensions.Hosting;
 using EmojiVoting.Domain;
 using EmojiVoting.Services;
 using Microsoft.Extensions.Configuration;
+using OpenTelemetry.Trace;
 
 namespace EmojiVoting
 {
@@ -25,6 +26,23 @@ namespace EmojiVoting
             services.AddSingleton<IPollService, PollService>();
             services.AddSingleton<IConfiguration>(_configuration);
             services.AddAutoMapper(typeof(VotingProfile));
+            services.AddOpenTelemetryTracing(
+                (builder) => builder
+                    .AddSource(nameof(Program))
+                    .AddAspNetCoreInstrumentation(options =>
+                    {
+                        options.RecordException = true;
+                        options.EnableGrpcAspNetCoreSupport = true;
+                    })
+                    .AddGrpcCoreInstrumentation()
+                    .AddHttpClientInstrumentation()
+                    .AddGrpcClientInstrumentation()
+                    .AddJaegerExporter(options =>
+                    {
+                        options.AgentHost = "jaeger";
+                        options.AgentPort = 6831;
+                    })
+            );
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

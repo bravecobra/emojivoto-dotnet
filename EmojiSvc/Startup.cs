@@ -8,6 +8,7 @@ using EmojiSvc.Domain.Impl;
 using EmojiSvc.Persistence;
 using EmojiSvc.Persistence.Impl;
 using EmojiSvc.Services;
+using OpenTelemetry.Trace;
 
 namespace EmojiSvc
 {
@@ -21,6 +22,18 @@ namespace EmojiSvc
             services.AddSingleton<IEmojiRepo, InMemoryAllEmoji>();
             services.AddTransient<IAllEmoji, AllEmoji>();
             services.AddAutoMapper(typeof(EmojiProfile));
+            services.AddOpenTelemetryTracing(
+                (builder) => builder
+                    .AddAspNetCoreInstrumentation(options => options.EnableGrpcAspNetCoreSupport = true)
+                    .AddGrpcCoreInstrumentation()
+                    .AddHttpClientInstrumentation()
+                    .AddGrpcClientInstrumentation()
+                    .AddJaegerExporter(options =>
+                    {
+                        options.AgentHost = "jaeger";
+                        options.AgentPort = 6831;
+                    })
+            );
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
