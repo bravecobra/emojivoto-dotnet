@@ -12,12 +12,15 @@ services:
     depends_on:
       - voting-svc
       - emoji-svc
+      - jaeger
 
   emoji-svc:
     image: bravecobra/emoji-svc:0.1.0-alpha.10
     container_name: emoji-svc
     ports:
       - "8081:80"
+    depends_on:
+      - jaeger
 
   voting-svc:
     image: bravecobra/emoji-voting-svc:0.1.0-alpha.10
@@ -27,14 +30,25 @@ services:
       - ARTIFICIAL_DELAY=0
     ports:
       - "8082:80"
+    depends_on:
+      - jaeger
 
   vote-bot:
     image: bravecobra/emoji-votebot:0.1.0-alpha.10
+    container_name: votebot
     environment:
       - WEB_HOST=http://web
+      - VOTING_RATE=1000
     depends_on:
       - web
+      - jaeger
 
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    container_name: jaeger
+    ports:
+      - "6831:6831/udp"
+      - "16686:16686"
   # web:
   #   image: buoyantio/emojivoto-web:v11
   #   environment:

@@ -10,6 +10,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using OpenTelemetry.Resources;
+using OpenTelemetry.Trace;
 
 namespace EmojiUI
 {
@@ -54,6 +56,27 @@ namespace EmojiUI
                 .UseRouting()
                 .UseReduxDevTools()
                 .AddMiddleware<LoggingMiddleware>());
+            var resourceBuilder = ResourceBuilder.CreateDefault()
+                .AddService("EmojiUI")
+                .AddTelemetrySdk();
+            services.AddOpenTelemetryTracing(
+                (builder) => builder
+                    .AddAspNetCoreInstrumentation(options =>
+                    {
+                        options.RecordException = true;
+                        options.EnableGrpcAspNetCoreSupport = true;
+                    })
+                    .AddGrpcCoreInstrumentation()
+                    .AddHttpClientInstrumentation()
+                    .AddGrpcClientInstrumentation()
+                    .AddConsoleExporter()
+                    .AddJaegerExporter(options =>
+                    {
+                        options.AgentHost = "jaeger";
+                        options.AgentPort = 6831;
+                    })
+                    .SetResourceBuilder(resourceBuilder)
+            );
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

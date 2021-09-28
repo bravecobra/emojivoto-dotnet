@@ -12,10 +12,10 @@ RUN dotnet restore "EmojiUI/EmojiUI.csproj"
 COPY ./EmojiUI ./EmojiUI
 COPY ./protos ./protos
 WORKDIR "/src/EmojiUI"
-RUN dotnet build "EmojiUI.csproj" -c Release -o /app/build
+RUN dotnet build "EmojiUI.csproj" -c Debug -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "EmojiUI.csproj" -c Release -o /app/publish
+RUN dotnet publish "EmojiUI.csproj" -c Debug -o /app/publish
 
 FROM base AS final
 WORKDIR /app

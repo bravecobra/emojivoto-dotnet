@@ -3,12 +3,18 @@ version: '3'
 # services:
 #   web:
 #     image: emojiui
-  # emoji-svc:
-  #   image: emojisvc
-  # voting-svc:
-  #   image: emojivoting
-  # vote-bot:
-  #   image: emojivotebot
+#   emoji-svc:
+#     image: emojisvc
+#   voting-svc:
+#     image: emojivoting
+#     environment:
+#       - FAILURE_RATE=10
+#       - ARTIFICIAL_DELAY=0
+#   vote-bot:
+#     image: emojivotebot
+#     environment:
+#       - WEB_HOST=http://web
+#       - VOTING_RATE=5000
 
   # web:
   #   image: buoyantio/emojivoto-web:v11
