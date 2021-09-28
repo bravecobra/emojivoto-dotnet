@@ -29,11 +29,16 @@ namespace EmojiVoteBot
                     services.AddHttpClient();
                     services.AddTransient<IEmojiVoteService, EmojiVoteRestService>();
                     services.AddHostedService<VotingBot>();
-                    var resourceBuilder = ResourceBuilder.CreateDefault().AddService("EmojiVoteBot");
+                    var resourceBuilder = ResourceBuilder.CreateDefault()
+                        .AddService("EmojiVoteBot")
+                        .AddTelemetrySdk();
                     services.AddOpenTelemetryTracing(
                         (builder) => builder
+                            .SetSampler(new AlwaysOnSampler())
+                            .AddSource(nameof(VotingBot))
                             .AddHttpClientInstrumentation()
                             .AddGrpcClientInstrumentation()
+                            .AddConsoleExporter()
                             .AddJaegerExporter(options =>
                             {
                                 options.AgentHost = "jaeger";

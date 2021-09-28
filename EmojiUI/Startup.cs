@@ -56,13 +56,16 @@ namespace EmojiUI
                 .UseRouting()
                 .UseReduxDevTools()
                 .AddMiddleware<LoggingMiddleware>());
-            var resourceBuilder = ResourceBuilder.CreateDefault().AddService("EmojiUI");
+            var resourceBuilder = ResourceBuilder.CreateDefault()
+                .AddService("EmojiUI")
+                .AddTelemetrySdk();
             services.AddOpenTelemetryTracing(
                 (builder) => builder
                     .AddAspNetCoreInstrumentation(options => options.EnableGrpcAspNetCoreSupport = true)
                     .AddGrpcCoreInstrumentation()
                     .AddHttpClientInstrumentation()
                     .AddGrpcClientInstrumentation()
+                    .AddConsoleExporter()
                     .AddJaegerExporter(options =>
                     {
                         options.AgentHost = "jaeger";

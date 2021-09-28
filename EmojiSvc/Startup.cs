@@ -23,13 +23,20 @@ namespace EmojiSvc
             services.AddSingleton<IEmojiRepo, InMemoryAllEmoji>();
             services.AddTransient<IAllEmoji, AllEmoji>();
             services.AddAutoMapper(typeof(EmojiProfile));
-            var resourceBuilder = ResourceBuilder.CreateDefault().AddService("EmojiSvc");
+            var resourceBuilder = ResourceBuilder.CreateDefault()
+                .AddService("EmojiSvc")
+                .AddTelemetrySdk();
             services.AddOpenTelemetryTracing(
                 (builder) => builder
-                    .AddAspNetCoreInstrumentation(options => options.EnableGrpcAspNetCoreSupport = true)
+                    .AddAspNetCoreInstrumentation(options =>
+                    {
+                        options.RecordException = true;
+                        options.EnableGrpcAspNetCoreSupport = true;
+                    })
                     .AddGrpcCoreInstrumentation()
                     .AddHttpClientInstrumentation()
                     .AddGrpcClientInstrumentation()
+                    .AddConsoleExporter()
                     .AddJaegerExporter(options =>
                     {
                         options.AgentHost = "jaeger";

@@ -25,12 +25,13 @@ namespace EmojiVoting
         {
             services.AddGrpc();
             services.AddSingleton<IPollService, PollService>();
-            services.AddSingleton<IConfiguration>(_configuration);
+            services.AddSingleton(_configuration);
             services.AddAutoMapper(typeof(VotingProfile));
-            var resourceBuilder = ResourceBuilder.CreateDefault().AddService("EmojiVoting");
+            var resourceBuilder = ResourceBuilder.CreateDefault()
+                .AddService("EmojiVoting")
+                .AddTelemetrySdk();
             services.AddOpenTelemetryTracing(
                 (builder) => builder
-                    .AddSource(nameof(Program))
                     .AddAspNetCoreInstrumentation(options =>
                     {
                         options.RecordException = true;
@@ -39,6 +40,7 @@ namespace EmojiVoting
                     .AddGrpcCoreInstrumentation()
                     .AddHttpClientInstrumentation()
                     .AddGrpcClientInstrumentation()
+                    .AddConsoleExporter()
                     .AddJaegerExporter(options =>
                     {
                         options.AgentHost = "jaeger";
