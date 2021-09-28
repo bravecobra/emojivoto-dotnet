@@ -61,7 +61,11 @@ namespace EmojiUI
                 .AddTelemetrySdk();
             services.AddOpenTelemetryTracing(
                 (builder) => builder
-                    .AddAspNetCoreInstrumentation(options => options.EnableGrpcAspNetCoreSupport = true)
+                    .AddAspNetCoreInstrumentation(options =>
+                    {
+                        options.RecordException = true;
+                        options.EnableGrpcAspNetCoreSupport = true;
+                    })
                     .AddGrpcCoreInstrumentation()
                     .AddHttpClientInstrumentation()
                     .AddGrpcClientInstrumentation()

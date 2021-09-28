@@ -38,6 +38,7 @@ services:
     container_name: votebot
     environment:
       - WEB_HOST=http://web
+      - VOTING_RATE=1000
     depends_on:
       - web
       - jaeger

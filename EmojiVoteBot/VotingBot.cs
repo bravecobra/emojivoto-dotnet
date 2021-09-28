@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using EmojiVoteBot.Services;
+using Microsoft.Extensions.Configuration;
 
 namespace EmojiVoteBot
 {
@@ -13,12 +14,14 @@ namespace EmojiVoteBot
     {
         private readonly ILogger<VotingBot> _logger;
         private readonly IEmojiVoteService _service;
+        private readonly IConfiguration _configuration;
         private static readonly ActivitySource MyActivitySource = new ActivitySource(nameof(VotingBot));
 
-        public VotingBot(ILogger<VotingBot> logger, IEmojiVoteService service)
+        public VotingBot(ILogger<VotingBot> logger, IEmojiVoteService service, IConfiguration configuration)
         {
             _logger = logger;
             _service = service;
+            _configuration = configuration;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -55,7 +58,9 @@ namespace EmojiVoteBot
                 {
                     _logger.LogError(e, "Failed to vote");
                 }
-                await Task.Delay(10000, stoppingToken);
+
+                var votingRate = _configuration.GetValue<int>("VOTING_RATE", 1000);
+                await Task.Delay(votingRate, stoppingToken);
             }
         }
     }
