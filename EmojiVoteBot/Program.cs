@@ -4,6 +4,7 @@ using EmojiVoteBot.Services;
 using EmojiVoteBot.Services.Impl;
 using System;
 using System.Diagnostics;
+using System.Reflection;
 using System.Text;
 using Microsoft.Extensions.Logging;
 using OpenTelemetry.Resources;
@@ -30,7 +31,7 @@ namespace EmojiVoteBot
                     services.AddTransient<IEmojiVoteService, EmojiVoteRestService>();
                     services.AddHostedService<VotingBot>();
                     var resourceBuilder = ResourceBuilder.CreateDefault()
-                        .AddService("EmojiVoteBot")
+                        .AddService(Assembly.GetEntryAssembly()?.GetName().Name)
                         .AddTelemetrySdk();
                     services.AddOpenTelemetryTracing(
                         (builder) => builder

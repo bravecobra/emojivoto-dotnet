@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using System.Reflection;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
@@ -24,7 +25,7 @@ namespace EmojiSvc
             services.AddTransient<IAllEmoji, AllEmoji>();
             services.AddAutoMapper(typeof(EmojiProfile));
             var resourceBuilder = ResourceBuilder.CreateDefault()
-                .AddService("EmojiSvc")
+                .AddService(Assembly.GetEntryAssembly()?.GetName().Name)
                 .AddTelemetrySdk();
             services.AddOpenTelemetryTracing(
                 (builder) => builder

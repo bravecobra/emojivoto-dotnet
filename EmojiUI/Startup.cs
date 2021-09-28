@@ -1,4 +1,5 @@
 using System;
+using System.Reflection;
 using EmojiUI.Services;
 using EmojiUI.Services.Impl;
 using EmojiUI.Shared;
@@ -57,7 +58,7 @@ namespace EmojiUI
                 .UseReduxDevTools()
                 .AddMiddleware<LoggingMiddleware>());
             var resourceBuilder = ResourceBuilder.CreateDefault()
-                .AddService("EmojiUI")
+                .AddService(Assembly.GetEntryAssembly()?.GetName().Name)
                 .AddTelemetrySdk();
             services.AddOpenTelemetryTracing(
                 (builder) => builder

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using System.Reflection;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
@@ -28,7 +29,7 @@ namespace EmojiVoting
             services.AddSingleton(_configuration);
             services.AddAutoMapper(typeof(VotingProfile));
             var resourceBuilder = ResourceBuilder.CreateDefault()
-                .AddService("EmojiVoting")
+                .AddService(Assembly.GetEntryAssembly()?.GetName().Name)
                 .AddTelemetrySdk();
             services.AddOpenTelemetryTracing(
                 (builder) => builder
