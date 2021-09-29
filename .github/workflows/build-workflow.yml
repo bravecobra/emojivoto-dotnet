@@ -48,7 +48,7 @@ jobs:
         dotnet --version
         dotnet test ./EmojiVoto.sln --configuration Release
   publish:
-    name: Publish Docker images
+    name: Publish Docker image
     runs-on: ubuntu-latest
     strategy:
       fail-fast: true
@@ -87,7 +87,7 @@ jobs:
       id: meta
       uses: docker/metadata-action@v3
       with:
-        images: name/app
+        images: bravecobra/${{ matrix.svcDockerName }}
         flavor: |
           latest=false
         tags: |
@@ -111,4 +111,5 @@ jobs:
         context: .
         file: ${{ matrix.svcProjectName }}/Dockerfile
         push: ${{ github.event_name != 'pull_request' }}
-        tags: ${{ matrix.svcDockerName }}:${{ steps.gitversion.outputs.semVer }}
+        tags: ${{ steps.meta.outputs.tags }}
+        labels: ${{ steps.meta.outputs.labels }}
