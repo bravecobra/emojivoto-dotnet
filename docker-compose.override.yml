@@ -2,51 +2,34 @@ version: '3'
 
 # services:
 #   web:
-#     image: emojiui
+#     image: emojiui:latest
+#     build:
+#       context: .
+#       dockerfile: ./EmojiUI/Dockerfile
 #   emoji-svc:
-#     image: emojisvc
+#     image: emojisvc:latest
+#     build:
+#       context: .
+#       dockerfile: ./EmojiSvc/Dockerfile
 #   voting-svc:
-#     image: emojivoting
+#     image: emojivoting:latest
+#     build:
+#       context: .
+#       dockerfile: ./EmojiVoting/Dockerfile
 #     environment:
 #       - FAILURE_RATE=10
 #       - ARTIFICIAL_DELAY=0
 #   vote-bot:
-#     image: emojivotebot
+#     image: emojivotebot:latest
+#     build:
+#       context: .
+#       dockerfile: ./EmojiVoteBot/Dockerfile
 #     environment:
 #       - WEB_HOST=http://web
 #       - VOTING_RATE=5000
 
-  # web:
-  #   image: buoyantio/emojivoto-web:v11
+  # aws-otel-collector:
   #   environment:
-  #   - WEB_PORT=8080
-  #   - EMOJISVC_HOST=emoji-svc:80
-  #   - VOTINGSVC_HOST=voting-svc:80
-  #   - INDEX_BUNDLE=dist/index_bundle.js
-  #   ports:
-  #     - "8080:8080"
-  #   depends_on:
-  #     - voting-svc
-  #     - emoji-svc
-
-  # vote-bot:
-  #   image: buoyantio/emojivoto-web:v11
-  #   entrypoint: emojivoto-vote-bot
-  #   environment:
-  #     - WEB_HOST=web:8080
-  #   depends_on:
-  #     - web
-
-  # emoji-svc:
-  #   image: buoyantio/emojivoto-emoji-svc:v11
-  #   environment:
-  #     - GRPC_PORT=8080
-  #   ports:
-  #     - "8081:8080"
-
-  # voting-svc:
-  #   image: buoyantio/emojivoto-voting-svc:v11
-  #   environment:
-  #     - GRPC_PORT=8080
-  #   ports:
-  #     - "8082:8080"
+  #     - AWS_ACCESS_KEY_ID=<to_be_added>
+  #     - AWS_SECRET_ACCESS_KEY=<to_be_added>
+  #     - AWS_REGION=<to_be_added>

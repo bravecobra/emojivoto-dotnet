@@ -47,8 +47,8 @@ jobs:
       run: |
         dotnet --version
         dotnet test ./EmojiVoto.sln --configuration Release
-  publish-emojisvc:
-    name: Publish EmojiSvc
+  publish:
+    name: Publish Docker images
     runs-on: ubuntu-latest
     strategy:
       fail-fast: true

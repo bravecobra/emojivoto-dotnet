@@ -7,20 +7,35 @@ services:
     environment:
       - EMOJISVC_HOST=http://emoji-svc
       - VOTINGSVC_HOST=http://voting-svc
+      - SEQ_URI=http://seq:5341
+      - CONSOLE_EXPORT=false
+      # - JAEGER_HOST=jaeger
+      # - JAEGER_PORT=6831
+      # - AWS_OTEL_URI=http://otel-collector:4317
     ports:
       - "8080:80"
     depends_on:
+      - seq
       - voting-svc
       - emoji-svc
-      - jaeger
+      # - jaeger
+      # - aws-otel-collector
 
   emoji-svc:
     image: bravecobra/emoji-svc:0.1.0-alpha.10
     container_name: emoji-svc
+    environment:
+      - SEQ_URI=http://seq:5341
+      - CONSOLE_EXPORT=false
+    #   - JAEGER_HOST=jaeger
+    #   - JAEGER_PORT=6831
+    #   - AWS_OTEL_URI=http://otel-collector:4317
     ports:
       - "8081:80"
     depends_on:
-      - jaeger
+      - seq
+      # - jaeger
+      # - aws-otel-collector
 
   voting-svc:
     image: bravecobra/emoji-voting-svc:0.1.0-alpha.10
@@ -28,10 +43,18 @@ services:
     environment:
       - FAILURE_RATE=10
       - ARTIFICIAL_DELAY=0
+      - SEQ_URI=http://seq:5341
+      - CONSOLE_EXPORT=false
+      - SEQ_HOST=http://seq
+      # - JAEGER_HOST=jaeger
+      # - JAEGER_PORT=6831
+      # - AWS_OTEL_URI=http://otel-collector:4317
     ports:
       - "8082:80"
     depends_on:
-      - jaeger
+      - seq
+      # - jaeger
+      # - aws-otel-collector
 
   vote-bot:
     image: bravecobra/emoji-votebot:0.1.0-alpha.10
@@ -39,47 +62,49 @@ services:
     environment:
       - WEB_HOST=http://web
       - VOTING_RATE=1000
+      - SEQ_URI=http://seq:5341
+      - CONSOLE_EXPORT=false
+      # - JAEGER_HOST=jaeger
+      # - JAEGER_PORT=6831
+      # - AWS_OTEL_URI=http://otel-collector:4317
     depends_on:
+      - seq
       - web
-      - jaeger
+      # - jaeger
+      # - aws-otel-collector
 
-  jaeger:
-    image: jaegertracing/all-in-one:latest
-    container_name: jaeger
+  seq:
+    image: datalust/seq:latest
+    container_name: seq
+    restart: always
     ports:
-      - "6831:6831/udp"
-      - "16686:16686"
-  # web:
-  #   image: buoyantio/emojivoto-web:v11
-  #   environment:
-  #   - WEB_PORT=8080
-  #   - EMOJISVC_HOST=emoji-svc:80
-  #   - VOTINGSVC_HOST=voting-svc:80
-  #   - INDEX_BUNDLE=dist/index_bundle.js
+      - "5341:80"
+    environment:
+      - ACCEPT_EULA=Y
+    deploy:
+      resources:
+         limits:
+            cpus: '0.500'
+            memory: 500M
+  # jaeger:
+  #   image: jaegertracing/all-in-one:latest
+  #   container_name: jaeger
   #   ports:
-  #     - "8080:8080"
-  #   depends_on:
-  #     - voting-svc
-  #     - emoji-svc
+  #     - "6831:6831/udp"
+  #     - "16686:16686"
 
-  # vote-bot:
-  #   image: buoyantio/emojivoto-web:v11
-  #   entrypoint: emojivoto-vote-bot
+  # aws-otel-collector:
+  #   image: public.ecr.aws/aws-observability/aws-otel-collector:latest
+  #   container_name: otel-collector
+  #   command: ["--config=/etc/otel-agent-config.yaml"]
+  #   # Add the AWS credentials in the docker-compose.override.yml file
   #   environment:
-  #     - WEB_HOST=web:8080
-  #   depends_on:
-  #     - web
+  #     - AWS_ACCESS_KEY_ID=<to_be_added>
+  #     - AWS_SECRET_ACCESS_KEY=<to_be_added>
+  #     - AWS_REGION=<to_be_added>
 
-  # emoji-svc:
-  #   image: buoyantio/emojivoto-emoji-svc:v11
-  #   environment:
-  #     - GRPC_PORT=8080
+  #   volumes:
+  #     - ./otel-config.yaml:/etc/otel-agent-config.yaml
+  #     # - ~/.aws:/root/.aws
   #   ports:
-  #     - "8081:8080"
-
-  # voting-svc:
-  #   image: buoyantio/emojivoto-voting-svc:v11
-  #   environment:
-  #     - GRPC_PORT=8080
-  #   ports:
-  #     - "8082:8080"
+  #     - "4317:4317"
