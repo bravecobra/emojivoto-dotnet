@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -22,6 +23,7 @@ namespace EmojiVoteBot.Services.Impl
         }
         public async Task<IEnumerable<Emoji>> ListEmojis()
         {
+            using var activity = Activity.Current?.Source.StartActivity(nameof(ListEmojis));
             using var client = _clientFactory.CreateClient();
             var response = await client.GetAsync(new Uri($"{_configuration["WEB_HOST"]}/api/Emojis"));
             response.EnsureSuccessStatusCode();
@@ -50,6 +52,7 @@ namespace EmojiVoteBot.Services.Impl
 
         public async Task<Emoji> FindByShortCode(string shortcode)
         {
+            using var activity = Activity.Current?.Source.StartActivity(nameof(FindByShortCode));
             using var client = _clientFactory.CreateClient();
             var response = await client.GetAsync(new Uri($"{_configuration["WEB_HOST"]}/api/Emojis/{shortcode}"));
             response.EnsureSuccessStatusCode();
@@ -79,6 +82,7 @@ namespace EmojiVoteBot.Services.Impl
 
         public async Task<bool> Vote(string choice)
         {
+            using var activity = Activity.Current?.Source.StartActivity(nameof(Vote));
             using var client = _clientFactory.CreateClient();
             var response = await client.PostAsync(new Uri($"{_configuration["WEB_HOST"]}/api/Vote?choice={choice}"), new StringContent(string.Empty));
             response.EnsureSuccessStatusCode();
