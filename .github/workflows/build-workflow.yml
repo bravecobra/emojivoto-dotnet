@@ -91,7 +91,6 @@ jobs:
         flavor: |
           latest=false
         tags: |
-          type=sha
           type=raw,enable=${{ github.ref == 'refs/heads/develop' }},value=latest
           type=raw,enable=${{ github.ref == 'refs/heads/master' }},value=stable
           type=semver,pattern={{version}},value=${{ steps.gitversion.outputs.semVer }}
@@ -105,6 +104,12 @@ jobs:
 
     - name: Build and push ${{ matrix.svcProjectName }} image
       uses: docker/build-push-action@v2
+      if: |
+        github.head_ref  == 'master' ||
+        github.head_ref  == 'develop' ||
+        contains(github.ref, 'refs/tags') ||
+        contains(github.ref, 'refs/heads/release') ||
+        contains(github.ref, 'refs/heads/hotfix')
       env:
         SemVer: ${{ steps.gitversion.outputs.semVer }}
       with:
