@@ -87,7 +87,7 @@ jobs:
       id: meta
       uses: docker/metadata-action@v3
       with:
-        images: bravecobra/${{ matrix.svcDockerName }}
+        images: ${{ matrix.svcDockerName }}
         flavor: |
           latest=false
         tags: |
