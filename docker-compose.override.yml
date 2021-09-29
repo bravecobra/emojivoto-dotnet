@@ -30,3 +30,6 @@ version: '3'
 
   # aws-otel-collector:
   #   environment:
+  #     - AWS_ACCESS_KEY_ID=<to_be_added>
+  #     - AWS_SECRET_ACCESS_KEY=<to_be_added>
+  #     - AWS_REGION=<to_be_added>
