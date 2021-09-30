@@ -23,6 +23,7 @@ namespace EmojiVoting
             Host.CreateDefaultBuilder(args)
                 // .ConfigureLogging(builder => builder.AddOpenTelemetry())
                 .UseSerilog((context, loggerConfiguration) =>
+                {
                     loggerConfiguration
                         .ReadFrom.Configuration(context.Configuration)
                         .Enrich.FromLogContext()
@@ -36,8 +37,12 @@ namespace EmojiVoting
                         .Enrich.WithThreadName()
                         .Enrich.WithSpan()
                         .Enrich.WithExceptionDetails()
-                        .WriteTo.Console(new RenderedCompactJsonFormatter())
-                        .WriteTo.Seq(context.Configuration["SEQ_URI"]))
+                        .WriteTo.Console(new RenderedCompactJsonFormatter());
+                    if (!string.IsNullOrEmpty(context.Configuration["SEQ_URI"]))
+                    {
+                        loggerConfiguration.WriteTo.Seq(context.Configuration["SEQ_URI"]);
+                    }
+                })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();

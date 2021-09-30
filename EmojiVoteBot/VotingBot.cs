@@ -35,7 +35,6 @@ namespace EmojiVoteBot
                     var probability = random.Next(1, 100);
                     if (probability < 15)
                     {
-                        activity?.SetBaggage("voting.shortcode", ":doughnut:");
                         activity?.SetTag("voting.shortcode", ":doughnut:");
                         var doughnut = await _service.FindByShortCode(":doughnut:");
 
@@ -46,7 +45,6 @@ namespace EmojiVoteBot
                     {
                         var availableCodes = await _service.ListEmojis();
                         var randomEmoji = availableCodes.ElementAt(random.Next(0, 99));
-                        activity?.SetBaggage("voting.shortcode", randomEmoji.Shortcode);
                         activity?.SetTag("voting.shortcode", randomEmoji.Shortcode);
                         await _service.Vote(randomEmoji.Shortcode);
                         _logger.LogInformation($"Voted for {randomEmoji.Unicode}: {randomEmoji.Shortcode}");

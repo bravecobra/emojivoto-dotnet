@@ -67,13 +67,13 @@ namespace EmojiUI
                     builder
                         .AddAspNetCoreInstrumentation(options =>
                         {
-                            options.RecordException = true;
+                            options.RecordException = false;
                             options.EnableGrpcAspNetCoreSupport = true;
                         })
                         .AddXRayTraceId()
                         .AddAWSInstrumentation()
+                        .AddHttpClientInstrumentation(options => options.RecordException = false)
                         .AddGrpcCoreInstrumentation()
-                        .AddHttpClientInstrumentation()
                         .AddGrpcClientInstrumentation()
                         .SetResourceBuilder(resourceBuilder);
                     var consoleExport = _configuration.GetValue<bool>("CONSOLE_EXPORT");

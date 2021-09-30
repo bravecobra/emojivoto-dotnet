@@ -41,13 +41,13 @@ namespace EmojiVoting
                     builder
                         .AddAspNetCoreInstrumentation(options =>
                         {
-                            options.RecordException = true;
+                            options.RecordException = false;
                             options.EnableGrpcAspNetCoreSupport = true;
                         })
                         .AddXRayTraceId()
                         .AddAWSInstrumentation()
                         .AddGrpcCoreInstrumentation()
-                        .AddHttpClientInstrumentation()
+                        .AddHttpClientInstrumentation(options => options.RecordException = false)
                         .AddGrpcClientInstrumentation()
                         .SetResourceBuilder(resourceBuilder);
                     var consoleExport = _configuration.GetValue<bool>("CONSOLE_EXPORT");

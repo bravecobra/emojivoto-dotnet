@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using EmojiSvc.Domain;
 
 namespace EmojiSvc.Persistence.Impl
@@ -19,6 +20,9 @@ namespace EmojiSvc.Persistence.Impl
             }
         }
 
-        public IReadOnlyCollection<Emoji> List() => _emojis.AsReadOnly();
+        public IReadOnlyCollection<Emoji> List()
+        {
+            return _emojis.AsReadOnly();
+        }
     }
 }

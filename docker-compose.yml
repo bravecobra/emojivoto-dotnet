@@ -2,7 +2,7 @@ version: '3'
 
 services:
   web:
-    image: bravecobra/emoji-ui-svc:0.1.0-alpha.10
+    image: bravecobra/emoji-ui-svc:stable
     container_name: emoji-ui-svc
     environment:
       - EMOJISVC_HOST=http://emoji-svc
@@ -22,7 +22,7 @@ services:
       # - aws-otel-collector
 
   emoji-svc:
-    image: bravecobra/emoji-svc:0.1.0-alpha.10
+    image: bravecobra/emoji-svc:stable
     container_name: emoji-svc
     environment:
       - SEQ_URI=http://seq:5341
@@ -38,7 +38,7 @@ services:
       # - aws-otel-collector
 
   voting-svc:
-    image: bravecobra/emoji-voting-svc:0.1.0-alpha.10
+    image: bravecobra/emoji-voting-svc:stable
     container_name: voting-svc
     environment:
       - FAILURE_RATE=10
@@ -57,7 +57,7 @@ services:
       # - aws-otel-collector
 
   vote-bot:
-    image: bravecobra/emoji-votebot:0.1.0-alpha.10
+    image: bravecobra/emoji-votebot:stable
     container_name: votebot
     environment:
       - WEB_HOST=http://web

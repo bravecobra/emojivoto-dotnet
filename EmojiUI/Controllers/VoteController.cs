@@ -31,7 +31,6 @@ namespace EmojiUI.Controllers
         {
             using var activity = Activity.Current?.Source.StartActivity(nameof(Vote));
             activity?.SetTag("vote.choice", choice);
-            activity?.SetBaggage("voteshortcode", choice);
             if (await _voteService.Vote(choice))
                 return Accepted();
             return BadRequest();
