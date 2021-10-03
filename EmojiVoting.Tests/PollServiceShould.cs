@@ -1,7 +1,12 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Threading.Tasks;
+using EmojiVoting.Application.Impl;
 using EmojiVoting.Domain;
+using EmojiVoting.Persistence;
 using Microsoft.Extensions.Logging.Abstractions;
+using Moq;
 using Xunit;
 
 namespace EmojiVoting.Tests
@@ -9,35 +14,45 @@ namespace EmojiVoting.Tests
     public class PollServiceShould
     {
         [Fact]
-        public void CaptureVotesForAnEmoji()
+        public async Task CaptureVotesForAnEmoji_GivenEmojiHasBeenVotedFor()
         {
             var choosenEmoji = ":winning";
-            var sut = new PollService(NullLogger<PollService>.Instance);
-            sut.Vote(choosenEmoji);
-            sut.Vote(choosenEmoji);
-            var results = sut.Results();
-            Debug.Assert(results != null, nameof(results) + " != null");
-            Assert.Equal(2, results.Find(r => r.Shortcode == choosenEmoji).Votes);
-        }
+            var repoMock = new Mock<IVotingRepository>();
+            var aResult = new Result() { Shortcode = choosenEmoji, Votes = 1 };
+            repoMock.Setup(repository => repository.AddVote(It.IsAny<Result>()));
+            repoMock.Setup(repository => repository.UpdateVote(It.IsAny<Result>()));
+            repoMock.Setup(repository => repository.GetResultByShortcode(It.Is<string>(s => s == choosenEmoji))).ReturnsAsync(aResult);
+            repoMock.Setup(repository => repository.GetResults()).ReturnsAsync(() => new List<Result>{aResult});
+            var sut = new PollService(NullLogger<PollService>.Instance, repoMock.Object);
+            await sut.Vote(choosenEmoji);
+            await sut.Vote(choosenEmoji);
+            var results = await sut.Results();
+            repoMock.Verify(repository => repository.AddVote(It.IsAny<Result>()), Times.Never);
+            repoMock.Verify(repository => repository.UpdateVote(It.IsAny<Result>()), Times.Exactly(2));
+            repoMock.Verify(repository => repository.GetResultByShortcode(It.Is<string>(s => s == choosenEmoji)), Times.Exactly(2));
 
+            Debug.Assert(results != null, nameof(results) + " != null");
+            Assert.Equal(3, results.Find(r => r.Shortcode == choosenEmoji)?.Votes);
+        }
         [Fact]
-        public void SortResultByDescendingVotesCounts()
+        public async Task CaptureVotesForAnEmoji_GivenEmojiHasNotBeenVotedFor()
         {
-            var firstPlace = ":1:";
-            var secondPlace = ":2:";
-            var thirdPlace = ":3:";
-            var sut = new PollService(NullLogger<PollService>.Instance);
-            sut.Vote(thirdPlace);
-            sut.Vote(firstPlace);
-            sut.Vote(secondPlace);
-            sut.Vote(firstPlace);
-            sut.Vote(secondPlace);
-            sut.Vote(firstPlace);
-            var results = sut.Results();
-            Assert.Equal(3, results.Count);
-            Assert.Equal(firstPlace, results[0].Shortcode);
-            Assert.Equal(secondPlace, results[1].Shortcode);
-            Assert.Equal(thirdPlace, results[2].Shortcode);
+            var choosenEmoji = ":winning";
+            var repoMock = new Mock<IVotingRepository>();
+            var aResult = new Result() { Shortcode = choosenEmoji, Votes = 1 };
+            repoMock.Setup(repository => repository.AddVote(It.IsAny<Result>()));
+            repoMock.Setup(repository => repository.UpdateVote(It.IsAny<Result>()));
+            repoMock.Setup(repository => repository.GetResultByShortcode(It.Is<string>(s => s == choosenEmoji))).ReturnsAsync(() => null);
+            repoMock.Setup(repository => repository.GetResults()).ReturnsAsync(() => new List<Result>{ aResult });
+            var sut = new PollService(NullLogger<PollService>.Instance, repoMock.Object);
+            await sut.Vote(choosenEmoji);
+            var results = await sut.Results();
+            repoMock.Verify(repository => repository.AddVote(It.IsAny<Result>()), Times.Once);
+            repoMock.Verify(repository => repository.UpdateVote(It.IsAny<Result>()), Times.Never);
+            repoMock.Verify(repository => repository.GetResultByShortcode(It.Is<string>(s => s == choosenEmoji)), Times.Exactly(1));
+
+            Debug.Assert(results != null, nameof(results) + " != null");
+            Assert.Equal(1, results.Find(r => r.Shortcode == choosenEmoji)?.Votes);
         }
     }
 }

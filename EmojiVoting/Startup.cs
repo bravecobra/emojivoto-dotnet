@@ -1,12 +1,17 @@
 ﻿using System;
 using System.Reflection;
+using EmojiVoting.Application;
+using EmojiVoting.Application.Impl;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using EmojiVoting.Domain;
+using EmojiVoting.Persistence;
+using EmojiVoting.Persistence.Impl;
 using EmojiVoting.Services;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using OpenTelemetry;
 using OpenTelemetry.Contrib.Extensions.AWSXRay.Trace;
@@ -32,6 +37,8 @@ namespace EmojiVoting
             services.AddSingleton(_configuration);
             services.AddAutoMapper(typeof(VotingProfile));
             AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true); //AWS
+            services.AddDbContext<VotingContext>(builder => builder.UseSqlite(_configuration.GetConnectionString("DefaultConnection")));
+            services.AddTransient<IVotingRepository, VotingRepository>();
             var resourceBuilder = ResourceBuilder.CreateDefault()
                 .AddService(Assembly.GetEntryAssembly()?.GetName().Name)
                 .AddTelemetrySdk();
@@ -49,6 +56,11 @@ namespace EmojiVoting
                         .AddGrpcCoreInstrumentation()
                         .AddHttpClientInstrumentation(options => options.RecordException = false)
                         .AddGrpcClientInstrumentation()
+                        .AddEntityFrameworkCoreInstrumentation(options =>
+                        {
+                            options.SetDbStatementForStoredProcedure = true;
+                            options.SetDbStatementForText = true;
+                        })
                         .SetResourceBuilder(resourceBuilder);
                     var consoleExport = _configuration.GetValue<bool>("CONSOLE_EXPORT");
                     if (consoleExport)
@@ -86,6 +98,11 @@ namespace EmojiVoting
             }
 
             app.UseRouting();
+            using (var scope = app.ApplicationServices.CreateScope())
+            {
+                var db = scope.ServiceProvider.GetRequiredService<VotingContext>();
+                db.Database.Migrate();
+            }
 
             app.UseEndpoints(endpoints =>
             {

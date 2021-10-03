@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
+using EmojiVoting.Application;
 using EmojiVoting.Domain;
 using Emojivoto.V1;
 using Grpc.Core;
@@ -27,19 +28,19 @@ namespace EmojiVoting.Services
             _configuration = configuration;
         }
 
-        private Task<VoteResponse> Vote(string choice)
+        private async Task<VoteResponse> Vote(string choice)
         {
             Thread.Sleep(_configuration.GetValue<int>("ARTIFICIAL_DELAY"));
-            _pollService.Vote(choice);
-            return Task.FromResult(new VoteResponse());
+            await _pollService.Vote(choice);
+            return new VoteResponse();
         }
 
-        public override Task<ResultsResponse> Results(ResultsRequest request, ServerCallContext context)
+        public override async Task<ResultsResponse> Results(ResultsRequest request, ServerCallContext context)
         {
-            var votingResults = _mapper.Map<List<VotingResult>>(_pollService.Results());
+            var votingResults = _mapper.Map<List<VotingResult>>(await _pollService.Results());
             var response = new ResultsResponse();
             response.Results.AddRange(votingResults.AsEnumerable());
-            return Task.FromResult(response);
+            return response;
         }
 
         public override Task<VoteResponse> VoteDoughnut(VoteRequest request, ServerCallContext context)
