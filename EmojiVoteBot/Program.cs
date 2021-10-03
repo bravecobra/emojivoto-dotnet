@@ -32,6 +32,7 @@ namespace EmojiVoteBot
             Host.CreateDefaultBuilder(args)
                 //.ConfigureLogging(builder => builder.AddOpenTelemetry())
                 .UseSerilog((context, loggerConfiguration) =>
+                {
                     loggerConfiguration
                         .ReadFrom.Configuration(context.Configuration)
                         .Enrich.FromLogContext()
@@ -45,8 +46,12 @@ namespace EmojiVoteBot
                         .Enrich.WithThreadName()
                         .Enrich.WithSpan()
                         .Enrich.WithExceptionDetails()
-                        .WriteTo.Console(new RenderedCompactJsonFormatter())
-                        .WriteTo.Seq(context.Configuration["SEQ_URI"]))
+                        .WriteTo.Console(new RenderedCompactJsonFormatter());
+                    if (!string.IsNullOrEmpty(context.Configuration["SEQ_URI"]))
+                    {
+                        loggerConfiguration.WriteTo.Seq(context.Configuration["SEQ_URI"]);
+                    }
+                })
                 .ConfigureServices((hostContext, services) =>
                 {
                     services.AddHttpClient();
@@ -64,7 +69,7 @@ namespace EmojiVoteBot
                                 .AddSource(nameof(VotingBot))
                                 .AddXRayTraceId()
                                 .AddAWSInstrumentation()
-                                .AddHttpClientInstrumentation()
+                                .AddHttpClientInstrumentation(options => options.RecordException = false)
                                 .AddGrpcClientInstrumentation()
                                 .SetResourceBuilder(resourceBuilder);
                             var consoleExport = hostContext.Configuration.GetValue<bool>("CONSOLE_EXPORT");

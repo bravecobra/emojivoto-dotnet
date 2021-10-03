@@ -10,6 +10,7 @@ using EmojiSvc.Domain.Impl;
 using EmojiSvc.Persistence;
 using EmojiSvc.Persistence.Impl;
 using EmojiSvc.Services;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using OpenTelemetry;
 using OpenTelemetry.Contrib.Extensions.AWSXRay.Trace;
@@ -31,10 +32,11 @@ namespace EmojiSvc
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddGrpc();
-            services.AddSingleton<IEmojiRepo, InMemoryAllEmoji>();
+            services.AddTransient<IEmojiRepo, DatabaseEmojiRepo>();
             services.AddTransient<IAllEmoji, AllEmoji>();
             services.AddAutoMapper(typeof(EmojiProfile));
             AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true); //AWS
+            services.AddDbContext<EmojiDbContext>(builder => builder.UseSqlite(_configuration.GetConnectionString("DefaultConnection")));
             var resourceBuilder = ResourceBuilder.CreateDefault()
                 .AddService(Assembly.GetEntryAssembly()?.GetName().Name)
                 .AddTelemetrySdk();
@@ -44,14 +46,19 @@ namespace EmojiSvc
                     builder
                         .AddAspNetCoreInstrumentation(options =>
                         {
-                            options.RecordException = true;
+                            options.RecordException = false;
                             options.EnableGrpcAspNetCoreSupport = true;
                         })
                         .AddXRayTraceId()
                         .AddAWSInstrumentation()
                         .AddGrpcCoreInstrumentation()
-                        .AddHttpClientInstrumentation()
+                        .AddHttpClientInstrumentation(options => options.RecordException = false)
                         .AddGrpcClientInstrumentation()
+                        .AddEntityFrameworkCoreInstrumentation(options =>
+                        {
+                            options.SetDbStatementForStoredProcedure = true;
+                            options.SetDbStatementForText = true;
+                        })
                         .SetResourceBuilder(resourceBuilder);
                     var consoleExport = _configuration.GetValue<bool>("CONSOLE_EXPORT");
                     if (consoleExport)
@@ -89,6 +96,12 @@ namespace EmojiSvc
             }
 
             app.UseRouting();
+
+            using (var scope = app.ApplicationServices.CreateScope())
+            {
+                var db = scope.ServiceProvider.GetRequiredService<EmojiDbContext>();
+                db.Database.Migrate();
+            }
 
             app.UseEndpoints(endpoints =>
             {
