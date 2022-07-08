@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace EmojiUI.Shared.Store.FetchEmojies
+﻿namespace EmojiUI.Shared.Store.FetchEmojies
 {
     public class ResetAction
     {

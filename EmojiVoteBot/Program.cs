@@ -1,12 +1,8 @@
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using EmojiVoteBot.Services;
 using EmojiVoteBot.Services.Impl;
-using System;
-using System.Diagnostics;
-using System.Reflection;
-using System.Text;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using OpenTelemetry;
 using OpenTelemetry.Contrib.Extensions.AWSXRay.Trace;
 using OpenTelemetry.Resources;
@@ -15,6 +11,10 @@ using Serilog;
 using Serilog.Enrichers.Span;
 using Serilog.Exceptions;
 using Serilog.Formatting.Compact;
+using System;
+using System.Diagnostics;
+using System.Reflection;
+using System.Text;
 
 namespace EmojiVoteBot
 {

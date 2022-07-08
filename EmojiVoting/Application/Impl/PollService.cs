@@ -1,14 +1,13 @@
-﻿using System.Collections.Concurrent;
+﻿using EmojiVoting.Domain;
+using EmojiVoting.Persistence;
+using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using EmojiVoting.Domain;
-using EmojiVoting.Persistence;
-using Microsoft.Extensions.Logging;
 
 namespace EmojiVoting.Application.Impl
 {
-    public class PollService: IPollService
+    public class PollService : IPollService
     {
         private readonly ILogger<PollService> _logger;
         private readonly IVotingRepository _repository;

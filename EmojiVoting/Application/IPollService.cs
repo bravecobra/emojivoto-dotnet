@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using EmojiVoting.Domain;
+using System.Collections.Generic;
 using System.Threading.Tasks;
-using EmojiVoting.Domain;
 
 namespace EmojiVoting.Application
 {

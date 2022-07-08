@@ -1,21 +1,21 @@
-﻿using System;
-using System.Reflection;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using EmojiSvc.Domain;
+﻿using EmojiSvc.Domain;
 using EmojiSvc.Domain.Impl;
 using EmojiSvc.Persistence;
 using EmojiSvc.Persistence.Impl;
 using EmojiSvc.Services;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using OpenTelemetry;
 using OpenTelemetry.Contrib.Extensions.AWSXRay.Trace;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
+using System;
+using System.Reflection;
 
 namespace EmojiSvc
 {

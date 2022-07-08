@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Fluxor;
+﻿using Fluxor;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using System.Threading.Tasks;
 
 namespace EmojiUI.Shared
 {
@@ -18,7 +15,7 @@ namespace EmojiUI.Shared
             _logger = logger;
         }
 
-        public override Task InitializeAsync(IStore store)
+        public override Task InitializeAsync(IDispatcher dispatcher, IStore store)
         {
             _logger.LogInformation(nameof(InitializeAsync));
             return Task.CompletedTask;

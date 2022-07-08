@@ -1,8 +1,7 @@
-﻿using System;
-using System.Threading.Tasks;
-using EmojiUI.Services;
-using EmojiUI.Services.Impl;
+﻿using EmojiUI.Services;
 using Fluxor;
+using System;
+using System.Threading.Tasks;
 
 namespace EmojiUI.Shared.Store.LeaderBoard
 {
@@ -27,7 +26,7 @@ namespace EmojiUI.Shared.Store.LeaderBoard
             }
             catch (Exception exception)
             {
-               dispatcher.Dispatch(new FetchResultsErrorAction(exception.Message)); 
+                dispatcher.Dispatch(new FetchResultsErrorAction(exception.Message));
             }
         }
     }

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace EmojiUI.Shared.Store.LeaderBoard
+﻿namespace EmojiUI.Shared.Store.LeaderBoard
 {
     public class FetchResultsErrorAction
     {

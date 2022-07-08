@@ -1,22 +1,22 @@
-﻿using System;
-using System.Reflection;
-using EmojiVoting.Application;
+﻿using EmojiVoting.Application;
 using EmojiVoting.Application.Impl;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using EmojiVoting.Domain;
 using EmojiVoting.Persistence;
 using EmojiVoting.Persistence.Impl;
 using EmojiVoting.Services;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using OpenTelemetry;
 using OpenTelemetry.Contrib.Extensions.AWSXRay.Trace;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
+using System;
+using System.Reflection;
 
 namespace EmojiVoting
 {
@@ -49,7 +49,7 @@ namespace EmojiVoting
                         .AddAspNetCoreInstrumentation(options =>
                         {
                             options.RecordException = false;
-                            options.EnableGrpcAspNetCoreSupport = true;
+                            options.EnableGrpcAspNetCoreSupport = false;
                         })
                         .AddXRayTraceId()
                         .AddAWSInstrumentation()

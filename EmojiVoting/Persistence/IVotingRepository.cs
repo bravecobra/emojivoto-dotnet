@@ -1,8 +1,6 @@
-﻿using System;
+﻿using EmojiVoting.Domain;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using EmojiVoting.Domain;
 
 namespace EmojiVoting.Persistence
 {

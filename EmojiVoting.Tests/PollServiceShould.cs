@@ -1,12 +1,11 @@
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Threading.Tasks;
 using EmojiVoting.Application.Impl;
 using EmojiVoting.Domain;
 using EmojiVoting.Persistence;
 using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace EmojiVoting.Tests
@@ -22,7 +21,7 @@ namespace EmojiVoting.Tests
             repoMock.Setup(repository => repository.AddVote(It.IsAny<Result>()));
             repoMock.Setup(repository => repository.UpdateVote(It.IsAny<Result>()));
             repoMock.Setup(repository => repository.GetResultByShortcode(It.Is<string>(s => s == choosenEmoji))).ReturnsAsync(aResult);
-            repoMock.Setup(repository => repository.GetResults()).ReturnsAsync(() => new List<Result>{aResult});
+            repoMock.Setup(repository => repository.GetResults()).ReturnsAsync(() => new List<Result> { aResult });
             var sut = new PollService(NullLogger<PollService>.Instance, repoMock.Object);
             await sut.Vote(choosenEmoji);
             await sut.Vote(choosenEmoji);
@@ -43,7 +42,7 @@ namespace EmojiVoting.Tests
             repoMock.Setup(repository => repository.AddVote(It.IsAny<Result>()));
             repoMock.Setup(repository => repository.UpdateVote(It.IsAny<Result>()));
             repoMock.Setup(repository => repository.GetResultByShortcode(It.Is<string>(s => s == choosenEmoji))).ReturnsAsync(() => null);
-            repoMock.Setup(repository => repository.GetResults()).ReturnsAsync(() => new List<Result>{ aResult });
+            repoMock.Setup(repository => repository.GetResults()).ReturnsAsync(() => new List<Result> { aResult });
             var sut = new PollService(NullLogger<PollService>.Instance, repoMock.Object);
             await sut.Vote(choosenEmoji);
             var results = await sut.Results();

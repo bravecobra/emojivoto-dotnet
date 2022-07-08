@@ -9,8 +9,8 @@ services:
       - VOTINGSVC_HOST=http://voting-svc
       - SEQ_URI=http://seq:5341
       - CONSOLE_EXPORT=false
-      # - JAEGER_HOST=jaeger
-      # - JAEGER_PORT=6831
+      - JAEGER_HOST=jaeger
+      - JAEGER_PORT=6831
       # - AWS_OTEL_URI=http://otel-collector:4317
     ports:
       - "8080:80"
@@ -18,7 +18,7 @@ services:
       - seq
       - voting-svc
       - emoji-svc
-      # - jaeger
+      - jaeger
       # - aws-otel-collector
 
   emoji-svc:
@@ -27,14 +27,14 @@ services:
     environment:
       - SEQ_URI=http://seq:5341
       - CONSOLE_EXPORT=false
-    #   - JAEGER_HOST=jaeger
-    #   - JAEGER_PORT=6831
+      - JAEGER_HOST=jaeger
+      - JAEGER_PORT=6831
     #   - AWS_OTEL_URI=http://otel-collector:4317
     ports:
       - "8081:80"
     depends_on:
       - seq
-      # - jaeger
+      - jaeger
       # - aws-otel-collector
 
   voting-svc:
@@ -46,16 +46,15 @@ services:
       - SEQ_URI=http://seq:5341
       - CONSOLE_EXPORT=false
       - SEQ_HOST=http://seq
-      # - JAEGER_HOST=jaeger
-      # - JAEGER_PORT=6831
+      - JAEGER_HOST=jaeger
+      - JAEGER_PORT=6831
       # - AWS_OTEL_URI=http://otel-collector:4317
     ports:
       - "8082:80"
     depends_on:
       - seq
-      # - jaeger
+      - jaeger
       # - aws-otel-collector
-
   vote-bot:
     image: bravecobra/emoji-votebot:stable
     container_name: votebot
@@ -64,15 +63,14 @@ services:
       - VOTING_RATE=1000
       - SEQ_URI=http://seq:5341
       - CONSOLE_EXPORT=false
-      # - JAEGER_HOST=jaeger
-      # - JAEGER_PORT=6831
+      - JAEGER_HOST=jaeger
+      - JAEGER_PORT=6831
       # - AWS_OTEL_URI=http://otel-collector:4317
     depends_on:
       - seq
       - web
-      # - jaeger
+      - jaeger
       # - aws-otel-collector
-
   seq:
     image: datalust/seq:latest
     container_name: seq
@@ -86,12 +84,12 @@ services:
          limits:
             cpus: '0.500'
             memory: 500M
-  # jaeger:
-  #   image: jaegertracing/all-in-one:latest
-  #   container_name: jaeger
-  #   ports:
-  #     - "6831:6831/udp"
-  #     - "16686:16686"
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    container_name: jaeger
+    ports:
+      - "6831:6831/udp"
+      - "16686:16686"
 
   # aws-otel-collector:
   #   image: public.ecr.aws/aws-observability/aws-otel-collector:latest

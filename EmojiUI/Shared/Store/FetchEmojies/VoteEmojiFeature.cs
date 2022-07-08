@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Fluxor;
+﻿using Fluxor;
 
 namespace EmojiUI.Shared.Store.FetchEmojies
 {

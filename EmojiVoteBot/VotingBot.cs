@@ -1,3 +1,5 @@
+using EmojiVoteBot.Services;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
@@ -5,8 +7,6 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using EmojiVoteBot.Services;
-using Microsoft.Extensions.Configuration;
 
 namespace EmojiVoteBot
 {

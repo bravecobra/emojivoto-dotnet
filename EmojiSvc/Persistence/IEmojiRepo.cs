@@ -1,6 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using EmojiSvc.Domain;
+﻿using EmojiSvc.Domain;
+using System.Collections.Generic;
 
 namespace EmojiSvc.Persistence
 {

@@ -1,8 +1,8 @@
-﻿using System;
+﻿using Emojivoto.V1;
+using Grpc.Net.Client;
+using System;
 using System.Text;
 using System.Threading.Tasks;
-using Emojivoto.V1;
-using Grpc.Net.Client;
 
 namespace EmojiClient
 {

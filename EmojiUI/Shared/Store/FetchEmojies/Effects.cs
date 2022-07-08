@@ -1,13 +1,15 @@
-﻿using System;
-using System.Threading.Tasks;
-using EmojiUI.Services;
+﻿using EmojiUI.Services;
 using Fluxor;
+using System;
+using System.Diagnostics;
+using System.Threading.Tasks;
 
 namespace EmojiUI.Shared.Store.FetchEmojies
 {
     public class Effects
     {
         private readonly IEmojiVoteService _service;
+        private static readonly ActivitySource MyActivitySource = new(nameof(Effects));
 
         public Effects(IEmojiVoteService service)
         {
@@ -17,6 +19,7 @@ namespace EmojiUI.Shared.Store.FetchEmojies
         [EffectMethod]
         public async Task HandleFetchDataAction(FetchEmojiesAction action, IDispatcher dispatcher)
         {
+            using var activity = MyActivitySource.StartActivity(nameof(Effects));
             if (action == null) throw new ArgumentNullException(nameof(action));
             if (dispatcher == null) throw new ArgumentNullException(nameof(dispatcher));
             var result = await _service.ListEmojis();
@@ -26,6 +29,7 @@ namespace EmojiUI.Shared.Store.FetchEmojies
         [EffectMethod]
         public async Task HandleVoteEmojiAction(VoteEmojiAction action, IDispatcher dispatcher)
         {
+            using var activity = MyActivitySource.StartActivity(nameof(Effects));
             if (action == null) throw new ArgumentNullException(nameof(action));
             if (dispatcher == null) throw new ArgumentNullException(nameof(dispatcher));
             try

@@ -1,10 +1,10 @@
-using System.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 using Serilog.Enrichers.Span;
 using Serilog.Exceptions;
 using Serilog.Formatting.Compact;
+using System.Diagnostics;
 
 namespace EmojiVoting
 {

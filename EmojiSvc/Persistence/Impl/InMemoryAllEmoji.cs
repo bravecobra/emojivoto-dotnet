@@ -1,10 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using EmojiSvc.Domain;
+﻿using EmojiSvc.Domain;
+using System.Collections.Generic;
 
 namespace EmojiSvc.Persistence.Impl
 {
-    public class InMemoryAllEmoji: IEmojiRepo
+    public class InMemoryAllEmoji : IEmojiRepo
     {
         private readonly List<Emoji> _emojis = new();
 

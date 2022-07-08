@@ -1,11 +1,12 @@
-﻿using System;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Net.Http;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
 
 namespace EmojiVoteBot.Services.Impl
 {
@@ -35,7 +36,8 @@ namespace EmojiVoteBot.Services.Impl
                 {
                     return await JsonSerializer.DeserializeAsync<List<Emoji>>(contentStream, new JsonSerializerOptions
                     {
-                        IgnoreNullValues = true, PropertyNameCaseInsensitive = true
+                        DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+                        PropertyNameCaseInsensitive = true
                     });
                 }
                 catch (JsonException) // Invalid JSON
@@ -64,7 +66,7 @@ namespace EmojiVoteBot.Services.Impl
                 {
                     return await JsonSerializer.DeserializeAsync<Emoji>(contentStream, new JsonSerializerOptions
                     {
-                        IgnoreNullValues = true,
+                        DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
                         PropertyNameCaseInsensitive = true
                     });
                 }

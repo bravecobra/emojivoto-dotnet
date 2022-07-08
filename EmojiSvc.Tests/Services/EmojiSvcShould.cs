@@ -1,12 +1,12 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using EmojiSvc.Domain;
 using EmojiSvc.Domain.Impl;
 using EmojiSvc.Persistence.Impl;
 using EmojiSvc.Services;
 using Emojivoto.V1;
 using Microsoft.Extensions.Logging.Abstractions;
+using System.Linq;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace EmojiSvc.Tests.Services
@@ -37,7 +37,7 @@ namespace EmojiSvc.Tests.Services
             var allEmoji = new AllEmoji(new InMemoryAllEmoji());
             var emojiSearchedFor = allEmoji.List()[3];
             var sut = new EmojiGrpcSvc(NullLogger<EmojiGrpcSvc>.Instance, allEmoji, _mapper);
-            var actual = await sut.FindByShortcode(new FindByShortcodeRequest() {Shortcode = emojiSearchedFor.Shortcode}, null!);
+            var actual = await sut.FindByShortcode(new FindByShortcodeRequest() { Shortcode = emojiSearchedFor.Shortcode }, null!);
             Assert.NotNull(actual.Emoji);
         }
 

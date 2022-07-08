@@ -1,5 +1,3 @@
-using System;
-using System.Reflection;
 using EmojiUI.Services;
 using EmojiUI.Services.Impl;
 using EmojiUI.Shared;
@@ -15,6 +13,10 @@ using OpenTelemetry;
 using OpenTelemetry.Contrib.Extensions.AWSXRay.Trace;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
+using System;
+using System.Reflection;
+using EmojiUI.Controllers;
+using EmojiUI.Shared.Store.FetchEmojies;
 
 namespace EmojiUI
 {
@@ -60,21 +62,25 @@ namespace EmojiUI
             AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true); //AWS
             var resourceBuilder = ResourceBuilder.CreateDefault()
                 .AddService(Assembly.GetEntryAssembly()?.GetName().Name)
+                .AddEnvironmentVariableDetector()
                 .AddTelemetrySdk();
-            services.AddOpenTelemetryTracing(
-                (builder) =>
+            services.AddOpenTelemetryTracing(builder =>
                 {
                     builder
                         .AddAspNetCoreInstrumentation(options =>
                         {
-                            options.RecordException = false;
-                            options.EnableGrpcAspNetCoreSupport = true;
+                            options.RecordException = true;
+                            options.EnableGrpcAspNetCoreSupport = false;
                         })
                         .AddXRayTraceId()
                         .AddAWSInstrumentation()
                         .AddHttpClientInstrumentation(options => options.RecordException = false)
                         .AddGrpcCoreInstrumentation()
                         .AddGrpcClientInstrumentation()
+                        .AddSource(
+                            nameof(Effects),
+                            nameof(EmojisController), 
+                            nameof(VoteController))
                         .SetResourceBuilder(resourceBuilder);
                     var consoleExport = _configuration.GetValue<bool>("CONSOLE_EXPORT");
                     if (consoleExport)
@@ -91,7 +97,7 @@ namespace EmojiUI
                             options.AgentPort = jaegerPort;
                         });
                     }
-                    var otelUri =_configuration["AWS_OTEL_URI"];
+                    var otelUri = _configuration["AWS_OTEL_URI"];
                     if (!string.IsNullOrEmpty(otelUri))
                     {
                         builder.AddOtlpExporter(options =>
@@ -100,6 +106,7 @@ namespace EmojiUI
                         });
                     }
                 });
+            
             Sdk.SetDefaultTextMapPropagator(new AWSXRayPropagator());
         }
 
