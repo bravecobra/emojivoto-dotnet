@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Builder;
 using System;
-using EmojiSvc.Configuration;
+using EmojiShared.Configuration;
 using EmojiVoting.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using EmojiVoting.Persistence;
@@ -23,7 +23,7 @@ namespace EmojiVoting
             // Add Metrics
             builder.Services.AddCustomMetrics(builder.Configuration, resourceBuilder);
             // Add Traces
-            builder.Services.AddCustomTracing(builder.Configuration, resourceBuilder);
+            builder.Services.AddCustomTracing(builder.Configuration, resourceBuilder, Array.Empty<string>());
 
             builder.Services.AddHealthChecks();
 
@@ -34,6 +34,7 @@ namespace EmojiVoting
             app.UseCustomErrorhandling();
             app.UseRouting();
             app.UseAuthorization();
+
             using (var scope = app.Services.CreateScope())
             {
                 var db = scope.ServiceProvider.GetRequiredService<VotingContext>();
@@ -43,7 +44,9 @@ namespace EmojiVoting
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapGrpcService<VotingGrpcSvc>();
-
+                endpoints.MapHealthChecks("/health/startup");
+                endpoints.MapHealthChecks("/healthz");
+                endpoints.MapHealthChecks("/ready");
                 endpoints.MapGet("/", async context =>
                 {
                     await context.Response.WriteAsync("Communication with gRPC endpoints must be made through a gRPC client. To learn how to create a client, visit: https://go.microsoft.com/fwlink/?linkid=2086909");
@@ -51,9 +54,6 @@ namespace EmojiVoting
             });
             app.AddMetricsEndpoint();
             app.Run();
-            // Activity.DefaultIdFormat = ActivityIdFormat.W3C;
-            // Activity.ForceDefaultIdFormat = true;
-            // CreateHostBuilder(args).Build().Run();
         }
     }
 }

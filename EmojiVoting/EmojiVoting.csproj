@@ -47,6 +47,10 @@
     <PackageReference Include="System.Text.Encodings.Web" Version="6.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\EmojiShared\EmojiShared.csproj" />
+  </ItemGroup>
+
 	<ItemGroup>
     <Protobuf Include="..\protos\Voting.proto" GrpcServices="Server">
       <Link>Protos\Voting.proto</Link>

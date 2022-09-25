@@ -1,8 +1,5 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Reflection;
-using EmojiUI.Controllers;
-using EmojiUI.Shared.Store.FetchEmojies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
@@ -20,14 +17,12 @@ using Serilog;
 using Serilog.Core.Enrichers;
 using Serilog.Enrichers.Span;
 
-namespace EmojiUI.Configuration
+namespace EmojiShared.Configuration
 {
     public static class TelemetryConfigurationExtensions
     {
-        internal const string MyApplicationMeterName = "MyApplication";
-
         public static IServiceCollection AddCustomTracing(this IServiceCollection services,
-            IConfiguration configuration, ResourceBuilder resourceBuilder)
+            IConfiguration configuration, ResourceBuilder resourceBuilder, string[] sources)
         {
             services.AddOpenTelemetryTracing(options =>
             {
@@ -52,12 +47,7 @@ namespace EmojiUI.Configuration
                         instrumentationOptions.EnableGrpcAspNetCoreSupport = true;
                     })
                     .AddSource(Assembly.GetEntryAssembly()?.GetName().Name)
-                    //TODO: Find a way to introduce these
-                    .AddSource(
-                        nameof(Effects),
-                        nameof(EmojisController),
-                        nameof(VoteController))
-                    ;
+                    .AddSource(sources);
                 var tracingExporter = configuration.GetValue<string>("UseTracingExporter").ToLowerInvariant();
                 switch (tracingExporter)
                 {
@@ -246,14 +236,15 @@ namespace EmojiUI.Configuration
         }
 
         public static IServiceCollection AddCustomMetrics(this IServiceCollection services,
-            IConfiguration configuration, ResourceBuilder resourceBuilder)
+            IConfiguration configuration, ResourceBuilder resourceBuilder, string? meterName = null)
         {
             services.AddOpenTelemetryMetrics(options =>
             {
+                
                 options.SetResourceBuilder(resourceBuilder)
                     .AddHttpClientInstrumentation()
                     .AddAspNetCoreInstrumentation()
-                    .AddMeter(MyApplicationMeterName);
+                    .AddMeter(meterName ?? Assembly.GetEntryAssembly()?.GetName().Name);
 
                 var metricsExporter = configuration.GetValue<string>("UseMetricsExporter").ToLowerInvariant();
                 switch (metricsExporter)

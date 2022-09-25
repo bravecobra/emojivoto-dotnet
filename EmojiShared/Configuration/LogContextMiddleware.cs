@@ -1,9 +1,8 @@
 ﻿using System.Diagnostics;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Primitives;
 
-namespace EmojiVoting.Configuration
+namespace EmojiShared.Configuration
 {
     public class LogContextMiddleware
     {

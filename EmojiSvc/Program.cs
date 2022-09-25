@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using EmojiShared.Configuration;
 using Microsoft.EntityFrameworkCore;
 
 namespace EmojiSvc
@@ -23,7 +24,7 @@ namespace EmojiSvc
             // Add Metrics
             builder.Services.AddCustomMetrics(builder.Configuration, resourceBuilder);
             // Add Traces
-            builder.Services.AddCustomTracing(builder.Configuration, resourceBuilder);
+            builder.Services.AddCustomTracing(builder.Configuration, resourceBuilder, Array.Empty<string>());
 
             builder.Services.AddHealthChecks();
 

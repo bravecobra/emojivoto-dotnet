@@ -5,7 +5,6 @@ using EmojiSvc.Persistence.Impl;
 using EmojiSvc.Services;
 using Emojivoto.V1;
 using Microsoft.Extensions.Logging.Abstractions;
-using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -28,7 +27,7 @@ namespace EmojiSvc.Tests.Services
         {
             var sut = new EmojiGrpcSvc(NullLogger<EmojiGrpcSvc>.Instance, new AllEmoji(new InMemoryAllEmoji()), _mapper);
             var actual = await sut.ListAll(new ListAllEmojiRequest(), null);
-            Assert.Equal(99, actual.List.Count());
+            Assert.Equal(99, actual.List.Count);
         }
 
         [Fact]

@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
+﻿using System.Reflection;
 using Microsoft.AspNetCore.Builder;
 using OpenTelemetry.Resources;
 
-namespace EmojiSvc.Configuration
+namespace EmojiShared.Configuration
 {
     public static class ResourceBuilderFactory
     {

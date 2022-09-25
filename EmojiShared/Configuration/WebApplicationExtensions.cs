@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 
-namespace EmojiSvc.Configuration
+namespace EmojiShared.Configuration
 {
     public static class WebApplicationExtensions
     {

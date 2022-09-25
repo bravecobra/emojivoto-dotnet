@@ -1,7 +1,10 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Hosting;
 using System;
+using EmojiShared.Configuration;
 using EmojiUI.Configuration;
+using EmojiUI.Controllers;
+using EmojiUI.Shared.Store.FetchEmojies;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace EmojiUI
@@ -19,7 +22,13 @@ namespace EmojiUI
             // Add Metrics
             builder.Services.AddCustomMetrics(builder.Configuration, resourceBuilder);
             // Add Traces
-            builder.Services.AddCustomTracing(builder.Configuration, resourceBuilder);
+            builder.Services.AddCustomTracing(builder.Configuration, resourceBuilder, 
+                new []
+                {
+                    nameof(Effects),
+                    nameof(EmojisController),
+                    nameof(VoteController)
+                });
 
             builder.Services.AddHealthChecks();
 
@@ -57,6 +66,9 @@ namespace EmojiUI
                 endpoints.MapControllers();
                 endpoints.MapBlazorHub();
                 endpoints.MapFallbackToPage("/_Host");
+                endpoints.MapHealthChecks("/health/startup");
+                endpoints.MapHealthChecks("/healthz");
+                endpoints.MapHealthChecks("/ready");
             });
             app.AddMetricsEndpoint();
             app.Run();

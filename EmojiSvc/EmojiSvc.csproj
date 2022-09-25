@@ -47,6 +47,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\EmojiShared\EmojiShared.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Protobuf Include="..\protos\Emoji.proto" GrpcServices="Server">
       <Link>Protos\Emoji.proto</Link>
     </Protobuf>

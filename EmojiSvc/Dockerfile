@@ -7,8 +7,10 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
+COPY ["EmojiShared/EmojiShared.csproj", "EmojiShared/"]
 COPY ["EmojiSvc/EmojiSvc.csproj", "EmojiSvc/"]
 RUN dotnet restore "EmojiSvc/EmojiSvc.csproj"
+COPY ./EmojiShared ./EmojiShared
 COPY ./EmojiSvc ./EmojiSvc
 COPY ./protos ./protos
 WORKDIR "/src/EmojiSvc"
