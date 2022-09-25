@@ -28,7 +28,7 @@ jobs:
     - name: Install GitVersion
       uses: gittools/actions/gitversion/setup@v0.9.13
       with:
-          versionSpec: '6.x'
+          versionSpec: '5.x'
       env:
         DOTNET_SYSTEM_GLOBALIZATION_INVARIANT: true
 
@@ -75,7 +75,7 @@ jobs:
     - name: Install GitVersion
       uses: gittools/actions/gitversion/setup@v0.9.13
       with:
-          versionSpec: '6.x'
+          versionSpec: '5.x'
       env:
         DOTNET_SYSTEM_GLOBALIZATION_INVARIANT: true
 
