@@ -1,10 +1,8 @@
-using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Hosting;
-using Serilog;
-using Serilog.Enrichers.Span;
-using Serilog.Exceptions;
-using Serilog.Formatting.Compact;
-using System.Diagnostics;
+using System;
+using EmojiUI.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace EmojiUI
 {
@@ -12,38 +10,56 @@ namespace EmojiUI
     {
         public static void Main(string[] args)
         {
-            Activity.DefaultIdFormat = ActivityIdFormat.W3C;
-            Activity.ForceDefaultIdFormat = true;
-            CreateHostBuilder(args).Build().Run();
-        }
+            AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
+            var builder = WebApplication.CreateBuilder(args);
+            builder.Services.AddConfigurationRoot(builder.Configuration);
+            var resourceBuilder = ResourceBuilderFactory.CreateResourceBuilder(builder);
+            // Add Logging
+            builder.AddCustomLogging(resourceBuilder);
+            // Add Metrics
+            builder.Services.AddCustomMetrics(builder.Configuration, resourceBuilder);
+            // Add Traces
+            builder.Services.AddCustomTracing(builder.Configuration, resourceBuilder);
 
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-                //.ConfigureLogging(builder => builder.AddOpenTelemetry())
-                .UseSerilog((context, loggerConfiguration) =>
-                {
-                    loggerConfiguration
-                        .ReadFrom.Configuration(context.Configuration)
-                        .Enrich.FromLogContext()
-                        .Enrich.WithAssemblyName()
-                        .Enrich.WithAssemblyVersion()
-                        .Enrich.WithAssemblyInformationalVersion()
-                        .Enrich.WithEnvironment(context.HostingEnvironment.EnvironmentName)
-                        .Enrich.WithProcessId()
-                        .Enrich.WithProcessName()
-                        .Enrich.WithThreadId()
-                        .Enrich.WithThreadName()
-                        .Enrich.WithSpan()
-                        .Enrich.WithExceptionDetails()
-                        .WriteTo.Console(new RenderedCompactJsonFormatter());
-                    if (!string.IsNullOrEmpty(context.Configuration["SEQ_URI"]))
-                    {
-                        loggerConfiguration.WriteTo.Seq(context.Configuration["SEQ_URI"]);
-                    }
-                })
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>();
-                });
+            builder.Services.AddHealthChecks();
+
+            builder.Services.AddControllers();
+            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+            var app = builder.Build();
+            app.UseMiddleware<LogContextMiddleware>();
+            app.UseCustomErrorhandling();
+            if (app.Environment.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
+            else
+            {
+                app.UseExceptionHandler("/Error");
+                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+                app.UseHsts();
+            }
+
+            app.UseHttpsRedirection();
+            app.UseStaticFiles();
+
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+            });
+
+            app.UseRouting();
+            app.UseAuthorization();
+
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+                endpoints.MapBlazorHub();
+                endpoints.MapFallbackToPage("/_Host");
+            });
+            app.AddMetricsEndpoint();
+            app.Run();
+        }
     }
 }

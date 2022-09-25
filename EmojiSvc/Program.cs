@@ -1,9 +1,11 @@
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Hosting;
-using Serilog;
-using Serilog.Exceptions;
-using Serilog.Formatting.Compact;
-using System.Diagnostics;
+using EmojiSvc.Configuration;
+using EmojiSvc.Persistence;
+using EmojiSvc.Services;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
+using System;
+using Microsoft.EntityFrameworkCore;
 
 namespace EmojiSvc
 {
@@ -11,40 +13,51 @@ namespace EmojiSvc
     {
         public static void Main(string[] args)
         {
-            Activity.DefaultIdFormat = ActivityIdFormat.W3C;
-            Activity.ForceDefaultIdFormat = true;
-            CreateHostBuilder(args).Build().Run();
-        }
+            AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true); //AWS
+            var builder = WebApplication.CreateBuilder(args);
 
-        // Additional configuration is required to successfully run gRPC on macOS.
-        // For instructions on how to configure Kestrel and gRPC clients on macOS, visit https://go.microsoft.com/fwlink/?linkid=2099682
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-                // .ConfigureLogging(builder => builder.AddOpenTelemetry())
-                .UseSerilog((context, loggerConfiguration) =>
-                {
-                    loggerConfiguration
-                        .ReadFrom.Configuration(context.Configuration)
-                        .Enrich.FromLogContext()
-                        .Enrich.WithAssemblyName()
-                        .Enrich.WithAssemblyVersion()
-                        .Enrich.WithAssemblyInformationalVersion()
-                        .Enrich.WithEnvironment(context.HostingEnvironment.EnvironmentName)
-                        .Enrich.WithProcessId()
-                        .Enrich.WithProcessName()
-                        .Enrich.WithThreadId()
-                        .Enrich.WithThreadName()
-                        .Enrich.WithExceptionDetails()
-                        .WriteTo.Console(new RenderedCompactJsonFormatter());
-                    if (!string.IsNullOrEmpty(context.Configuration["SEQ_URI"]))
-                    {
-                        loggerConfiguration.WriteTo.Seq(context.Configuration["SEQ_URI"]);
-                    }
+            builder.Services.AddConfigurationRoot(builder.Configuration);
+            var resourceBuilder = ResourceBuilderFactory.CreateResourceBuilder(builder);
+            // Add Logging
+            builder.AddCustomLogging(resourceBuilder);
+            // Add Metrics
+            builder.Services.AddCustomMetrics(builder.Configuration, resourceBuilder);
+            // Add Traces
+            builder.Services.AddCustomTracing(builder.Configuration, resourceBuilder);
 
-                })
-                .ConfigureWebHostDefaults(webBuilder =>
+            builder.Services.AddHealthChecks();
+
+            builder.Services.AddControllers();
+
+            var app = builder.Build();
+            app.UseMiddleware<LogContextMiddleware>();
+            app.UseCustomErrorhandling();
+
+            app.UseRouting();
+
+            using (var scope = app.Services.CreateScope())
+            {
+                var db = scope.ServiceProvider.GetRequiredService<EmojiDbContext>();
+                db.Database.Migrate();
+            }
+            app.UseAuthorization();
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapGrpcService<EmojiGrpcSvc>();
+
+                endpoints.MapGet("/", async context =>
                 {
-                    webBuilder.UseStartup<Startup>();
+                    await context.Response.WriteAsync("Communication with gRPC endpoints must be made through a gRPC client. To learn how to create a client, visit: https://go.microsoft.com/fwlink/?linkid=2086909");
                 });
+                endpoints.MapHealthChecks("/health/startup");
+                endpoints.MapHealthChecks("/healthz");
+                endpoints.MapHealthChecks("/ready");
+                endpoints.MapControllers();
+            });
+
+            app.AddMetricsEndpoint();
+            app.Run();
+        }
     }
 }
