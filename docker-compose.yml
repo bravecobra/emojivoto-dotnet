@@ -21,7 +21,8 @@ services:
       # - jaeger
       # - aws-otel-collector
     extra_hosts:
-      - "k8s.local:192.168.65.2"
+      - "host.docker.internal:host-gateway"
+      # - "k8s.local:192.168.65.2"
 
   emoji-svc:
     image: bravecobra/emoji-svc:stable
@@ -39,7 +40,8 @@ services:
       # - jaeger
       # - aws-otel-collector
     extra_hosts:
-      - "k8s.local:192.168.65.2"
+      - "host.docker.internal:host-gateway"
+      # - "k8s.local:192.168.65.2"
 
   voting-svc:
     image: bravecobra/emoji-voting-svc:stable
@@ -60,7 +62,8 @@ services:
       # - jaeger
       # - aws-otel-collector
     extra_hosts:
-      - "k8s.local:192.168.65.2"
+      - "host.docker.internal:host-gateway"
+      # - "k8s.local:192.168.65.2"
   vote-bot:
     image: bravecobra/emoji-votebot:stable
     container_name: votebot
@@ -78,7 +81,8 @@ services:
       # - jaeger
       # - aws-otel-
     extra_hosts:
-      - "k8s.local:192.168.65.2"
+      - "host.docker.internal:host-gateway"
+      # - "k8s.local:192.168.65.2"
   # seq:
   #   image: datalust/seq:latest
   #   container_name: seq

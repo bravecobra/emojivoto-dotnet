@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vote-bot
+  namespace: emojivoto
+  labels:
+    app.kubernetes.io/name: vote-bot
+    app.kubernetes.io/part-of: emojivoto
+    # app.kubernetes.io/version: v11
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vote-bot
+      # version: v11
+  template:
+    metadata:
+      labels:
+        app: vote-bot
+        # version: v11
+    spec:
+      containers:
+      - env:
+        - name: ASPNETCORE_ENVIRONMENT
+          value: Production
+        - name: VOTING_RATE
+          value: "1000"
+        - name: WEB_HOST
+          value: http://web-svc.emojivoto:80
+        - name: Serilog__WriteTo__0__Args__uri
+          value: "http://loki.loki:3100"
+        - name: Otlp__Endpoint
+          value: http://otel-collector-collector.opentelemetry:4318
+        image: registry.localhost:5000/emojivotebot:latest
+        name: vote-bot
+        resources:
+          requests:
+            cpu: 10m

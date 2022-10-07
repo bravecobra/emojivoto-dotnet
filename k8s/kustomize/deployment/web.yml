@@ -1,0 +1,62 @@
+kind: ServiceAccount
+apiVersion: v1
+metadata:
+  name: web
+  namespace: emojivoto
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web
+  namespace: emojivoto
+  labels:
+    app.kubernetes.io/name: web
+    app.kubernetes.io/part-of: emojivoto
+    # app.kubernetes.io/version: v11
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: web-svc
+      # version: v11
+  template:
+    metadata:
+      labels:
+        app: web-svc
+        # version: v11
+    spec:
+      serviceAccountName: web
+      containers:
+      - env:
+        - name: ASPNETCORE_ENVIRONMENT
+          value: Production
+        - name: EMOJISVC_HOST
+          value: http://emoji-svc.emojivoto:80
+        - name: VOTINGSVC_HOST
+          value: http://voting-svc.emojivoto:80
+        - name: Serilog__WriteTo__0__Args__uri
+          value: "http://loki.loki:3100"
+        - name: Otlp__Endpoint
+          value: http://otel-collector-collector.opentelemetry:4318
+        image: registry.localhost:5000/emojiui:latest
+        name: web-svc
+        ports:
+        - containerPort: 80
+          name: http
+        resources:
+          requests:
+            cpu: 100m
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: web-svc
+  namespace: emojivoto
+spec:
+  type: ClusterIP
+  selector:
+    app: web-svc
+  ports:
+  - name: http
+    port: 80
+    targetPort: 80
