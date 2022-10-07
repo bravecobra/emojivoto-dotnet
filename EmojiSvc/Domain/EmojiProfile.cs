@@ -2,7 +2,7 @@
 
 namespace EmojiSvc.Domain
 {
-    public class EmojiProfile: Profile
+    public class EmojiProfile : Profile
     {
         public EmojiProfile()
         {

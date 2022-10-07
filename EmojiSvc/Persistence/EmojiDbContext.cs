@@ -1,18 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using EmojiSvc.Domain;
+﻿using EmojiSvc.Domain;
 using Microsoft.EntityFrameworkCore;
 
 namespace EmojiSvc.Persistence
 {
-    public class EmojiDbContext: DbContext
+    public class EmojiDbContext : DbContext
     {
-        public DbSet<Emoji> Emojies { get; set; }
+        public DbSet<Emoji> Emojies { get; set; } = null!;
         public string DbPath { get; private set; }
 
-        public EmojiDbContext(DbContextOptions<EmojiDbContext> options): base(options)
+        public EmojiDbContext(DbContextOptions<EmojiDbContext> options) : base(options)
         {
             DbPath = "emojies.db";
         }

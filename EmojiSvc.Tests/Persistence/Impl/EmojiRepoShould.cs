@@ -1,5 +1,5 @@
-using System.Linq;
 using EmojiSvc.Persistence.Impl;
+using System.Linq;
 using Xunit;
 
 namespace EmojiSvc.Tests.Persistence.Impl

@@ -1,0 +1,62 @@
+kind: ServiceAccount
+apiVersion: v1
+metadata:
+  name: emoji
+  namespace: emojivoto
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: emoji
+  namespace: emojivoto
+  labels:
+    app.kubernetes.io/name: emoji
+    app.kubernetes.io/part-of: emojivoto
+    # app.kubernetes.io/version: v11
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: emoji-svc
+      # version: v11
+  template:
+    metadata:
+      labels:
+        app: emoji-svc
+        # version: v11
+    spec:
+      serviceAccountName: emoji
+      containers:
+      - env:
+        - name: ASPNETCORE_ENVIRONMENT
+          value: Production
+        - name: Serilog__WriteTo__0__Args__uri
+          value: "http://loki.loki:3100"
+        - name: Otlp__Endpoint
+          value: http://otel-collector-collector.opentelemetry:4318
+        image: registry.localhost:5000/emojisvc:latest
+        name: emoji-svc
+        ports:
+        - containerPort: 80
+          name: grpc
+        - containerPort: 88
+          name: prom
+        resources:
+          requests:
+            cpu: 100m
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: emoji-svc
+  namespace: emojivoto
+spec:
+  selector:
+    app: emoji-svc
+  ports:
+  - name: grpc
+    port: 80
+    targetPort: 80
+  - name: prom
+    port: 88
+    targetPort: 88

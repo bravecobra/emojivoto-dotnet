@@ -20,7 +20,7 @@
                     }
                     else
                     {
-                        foreach (var result in LeaderBoardState?.Value?.Results)
+                        foreach (var result in LeaderBoardState.Value?.Results!)
                         {
                             var title = $"{result.Votes} votes";
                             <div class="emoji" title="@title">

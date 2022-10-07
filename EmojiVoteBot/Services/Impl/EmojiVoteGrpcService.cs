@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using Emojivoto.V1;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Emojivoto.V1;
 
 namespace EmojiVoteBot.Services.Impl
 {
@@ -26,8 +26,8 @@ namespace EmojiVoteBot.Services.Impl
         public async Task<Emoji> FindByShortCode(string shortcode)
         {
             var response = await _emojiClient.FindByShortcodeAsync(new FindByShortcodeRequest { Shortcode = shortcode });
-            return response.Emoji != null ? 
-                new Emoji { Shortcode = response.Emoji.Shortcode, Unicode = response.Emoji.Unicode } : 
+            return response.Emoji != null ?
+                new Emoji { Shortcode = response.Emoji.Shortcode, Unicode = response.Emoji.Unicode } :
                 null;
         }
 

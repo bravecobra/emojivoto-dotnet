@@ -1,19 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using EmojiVoting.Application;
-using EmojiVoting.Domain;
 using Emojivoto.V1;
 using Grpc.Core;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace EmojiVoting.Services
 {
-    public class VotingGrpcSvc: VotingService.VotingServiceBase
+    public class VotingGrpcSvc : VotingService.VotingServiceBase
     {
         private readonly ILogger<VotingGrpcSvc> _logger;
         private readonly IPollService _pollService;

@@ -1,5 +1,4 @@
-﻿using EmojiSvc.Domain.Impl;
-using EmojiSvc.Persistence.Impl;
+﻿using EmojiSvc.Persistence.Impl;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace EmojiSvc.Migrations

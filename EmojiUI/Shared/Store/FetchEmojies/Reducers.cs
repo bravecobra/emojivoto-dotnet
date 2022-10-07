@@ -1,5 +1,5 @@
-﻿using System;
-using Fluxor;
+﻿using Fluxor;
+using System;
 
 namespace EmojiUI.Shared.Store.FetchEmojies
 {

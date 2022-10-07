@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using EmojiSvc.Domain;
+using System.Collections.Generic;
 using System.Linq;
-using EmojiSvc.Domain;
 
 namespace EmojiSvc.Persistence.Impl
 {
-    public class DatabaseEmojiRepo: IEmojiRepo
+    public class DatabaseEmojiRepo : IEmojiRepo
     {
         private readonly EmojiDbContext _dbContext;
 

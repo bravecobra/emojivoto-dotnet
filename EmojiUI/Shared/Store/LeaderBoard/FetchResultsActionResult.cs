@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using EmojiUI.Controllers.Dtos;
+﻿using EmojiUI.Controllers.Dtos;
+using System.Collections.Generic;
 
 namespace EmojiUI.Shared.Store.LeaderBoard
 {

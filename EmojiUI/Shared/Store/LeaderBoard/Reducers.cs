@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using EmojiUI.Shared.Store.FetchEmojies;
-using Fluxor;
+﻿using Fluxor;
+using System;
 
 namespace EmojiUI.Shared.Store.LeaderBoard
 {

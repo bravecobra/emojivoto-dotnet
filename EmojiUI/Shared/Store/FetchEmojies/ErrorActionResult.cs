@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using EmojiUI.Controllers.Dtos;
+﻿using EmojiUI.Controllers.Dtos;
 
 
 namespace EmojiUI.Shared.Store.FetchEmojies

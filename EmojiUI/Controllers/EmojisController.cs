@@ -1,9 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using EmojiUI.Services;
+using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
-using EmojiUI.Services;
-using Emojivoto.V1;
-using Microsoft.AspNetCore.Mvc;
 using Emoji = EmojiUI.Controllers.Dtos.Emoji;
 
 namespace EmojiUI.Controllers
@@ -13,6 +12,7 @@ namespace EmojiUI.Controllers
     public class EmojisController : ControllerBase
     {
         private readonly IEmojiVoteService _voteService;
+        private static readonly ActivitySource MyActivitySource = new ActivitySource(nameof(EmojisController));
 
         public EmojisController(IEmojiVoteService voteService)
         {
@@ -22,20 +22,19 @@ namespace EmojiUI.Controllers
         [HttpGet]
         public async Task<IEnumerable<Emoji>> ListEmojis()
         {
-            using var activity = Activity.Current?.Source.StartActivity(nameof(ListEmojis));
+            using var activity = MyActivitySource.StartActivity(nameof(ListEmojis));
             Activity.Current?.AddEvent(new ActivityEvent("ListEmojies requested"));
             return await _voteService.ListEmojis();
         }
 
         [HttpGet("{shortcode}")]
-        public async Task<Emoji> FindByShortCode(string shortcode)
+        public async Task<Emoji?> FindByShortCode(string shortcode)
         {
-            using var activity = Activity.Current?.Source.StartActivity(nameof(FindByShortCode));
+            using var activity = MyActivitySource.StartActivity(nameof(FindByShortCode));
             activity?.SetTag("vote.shortcode", shortcode);
             var response = await _voteService.FindByShortCode(shortcode);
-            return response != null
-                ? new Emoji { Shortcode = response.Shortcode, Unicode = response.Unicode }
-                : null;
+            return response != null ? 
+                new Emoji { Shortcode = response.Shortcode, Unicode = response.Unicode } : null;
         }
     }
 }

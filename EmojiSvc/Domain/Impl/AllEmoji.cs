@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using EmojiSvc.Persistence;
+using System.Collections.Generic;
 using System.Linq;
-using EmojiSvc.Persistence;
 
 namespace EmojiSvc.Domain.Impl
 {

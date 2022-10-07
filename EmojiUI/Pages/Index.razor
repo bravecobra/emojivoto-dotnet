@@ -1,5 +1,6 @@
 ﻿@page "/"
 @using EmojiUI.Shared.Store.FetchEmojies
+@using System.Diagnostics
 @inherits Fluxor.Blazor.Web.Components.FluxorComponent
 
 <div class="background">
@@ -10,11 +11,11 @@
                 {
                     @if (VoteState.Value.SelectedEmoji != null)
                     {
-                        <h1 class="headline">@VoteState.Value.SelectedEmoji.Unicode</h1>                    
+                        <h1 class="headline">@VoteState.Value.SelectedEmoji.Unicode</h1>
                     }
                     else
                     {
-                        <h1 class="headline">🗳</h1>                    
+                        <h1 class="headline">🗳</h1>
                     }
                 }
                 else
@@ -27,6 +28,7 @@
                     {
                         @VoteState.Value.Error
                         <p>We couldn't process your request.</p>
+                        <p>TraceId: @Activity.Current?.TraceId</p>
                         @if (VoteState.Value.SelectedEmoji?.Shortcode == ":doughnut:")
                         {
                             <div>
@@ -58,11 +60,14 @@
                         }
 
                         <div class="emoji-list">
-                            @foreach (var emoji in VoteState.Value.Emojies)
+                            @if (VoteState.Value.Emojies != null)
                             {
-                                <div class="emoji emoji-votable" @onclick="() => this.Dispatcher.Dispatch(new VoteEmojiAction(emoji))">
-                                    @emoji.Unicode
-                                </div>
+                                foreach (var emoji in VoteState.Value.Emojies)
+                                {
+                                    <div class="emoji emoji-votable" @onclick="@(() => this.Dispatcher.Dispatch(new VoteEmojiAction(emoji)))">
+                                        @emoji.Unicode
+                                    </div>
+                                }
                             }
                             @* <div className="footer-text"> *@
                             @*     <p>A <a href='https://buoyant.io'>Buoyant</a> social experiment</p> *@

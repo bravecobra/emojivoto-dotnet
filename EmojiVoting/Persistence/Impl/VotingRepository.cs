@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using EmojiVoting.Domain;
+using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using EmojiVoting.Domain;
-using Microsoft.EntityFrameworkCore;
 
 namespace EmojiVoting.Persistence.Impl
 {

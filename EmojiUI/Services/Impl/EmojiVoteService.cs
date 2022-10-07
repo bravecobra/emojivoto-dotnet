@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using EmojiUI.Controllers.Dtos;
+using Emojivoto.V1;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using EmojiUI.Controllers.Dtos;
-using Emojivoto.V1;
 using Emoji = EmojiUI.Controllers.Dtos.Emoji;
 
 namespace EmojiUI.Services.Impl
@@ -45,11 +45,11 @@ namespace EmojiUI.Services.Impl
             return result.AsEnumerable();
         }
 
-        public async Task<Emoji> FindByShortCode(string shortcode)
+        public async Task<Emoji?> FindByShortCode(string shortcode)
         {
             var response = await _emojiClient.FindByShortcodeAsync(new FindByShortcodeRequest { Shortcode = shortcode });
-            return response.Emoji != null ? 
-                new Emoji { Shortcode = response.Emoji.Shortcode, Unicode = response.Emoji.Unicode } : 
+            return response.Emoji != null ?
+                new Emoji { Shortcode = response.Emoji.Shortcode, Unicode = response.Emoji.Unicode } :
                 null;
         }
 
