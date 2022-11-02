@@ -5,12 +5,12 @@ WORKDIR /app
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
-COPY ["EmojiShared/EmojiShared.csproj", "EmojiShared/"]
-COPY ["EmojiVoteBot/EmojiVoteBot.csproj", "EmojiVoteBot/"]
+COPY ["src/EmojiShared/EmojiShared.csproj", "EmojiShared/"]
+COPY ["src/EmojiVoteBot/EmojiVoteBot.csproj", "EmojiVoteBot/"]
 RUN dotnet restore "EmojiVoteBot/EmojiVoteBot.csproj"
-COPY ./EmojiShared ./EmojiShared
-COPY ./EmojiVoteBot ./EmojiVoteBot
-COPY ./protos ./protos
+COPY ./src/EmojiShared ./EmojiShared
+COPY ./src/EmojiVoteBot ./EmojiVoteBot
+COPY ./src/protos ./protos
 WORKDIR "/src/EmojiVoteBot"
 RUN dotnet build "EmojiVoteBot.csproj" -c Debug -o /app/build
 
@@ -18,6 +18,7 @@ FROM build AS publish
 RUN dotnet publish "EmojiVoteBot.csproj" -c Debug -o /app/publish
 
 FROM base AS final
+RUN apt-get update && apt-get install -y procps
 WORKDIR /app
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "EmojiVoteBot.dll"]

@@ -5,17 +5,17 @@ services:
     image: emojiui:latest
     build:
       context: .
-      dockerfile: ./EmojiUI/Dockerfile
+      dockerfile: ./src/EmojiUI/Dockerfile
   emoji-svc:
     image: emojisvc:latest
     build:
       context: .
-      dockerfile: ./EmojiSvc/Dockerfile
+      dockerfile: ./src/EmojiSvc/Dockerfile
   voting-svc:
     image: emojivoting:latest
     build:
       context: .
-      dockerfile: ./EmojiVoting/Dockerfile
+      dockerfile: ./src/EmojiVoting/Dockerfile
     environment:
       - FAILURE_RATE=50
       - ARTIFICIAL_DELAY=0
@@ -23,7 +23,7 @@ services:
     image: emojivotebot:latest
     build:
       context: .
-      dockerfile: ./EmojiVoteBot/Dockerfile
+      dockerfile: ./src/EmojiVoteBot/Dockerfile
     environment:
       - WEB_HOST=http://web
       - VOTING_RATE=1000

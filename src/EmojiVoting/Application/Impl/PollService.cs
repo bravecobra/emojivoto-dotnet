@@ -1,8 +1,11 @@
 ﻿using EmojiVoting.Domain;
 using EmojiVoting.Persistence;
+using Microsoft.AspNetCore.Components.Routing;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
+using System.Diagnostics.Metrics;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace EmojiVoting.Application.Impl
@@ -35,6 +38,9 @@ namespace EmojiVoting.Application.Impl
             }
             _voteCounter++;
             //TODO: Add prometheus custom Counter metric.
+            var meter = new Meter(Assembly.GetEntryAssembly()?.GetName().Name);
+            var counter = meter.CreateCounter<int>("Votes");
+            counter.Add(1, KeyValuePair.Create<string, object?>("name", choice));
             _logger.LogInformation($"Voted for {choice}, which now has a total of {vote.Votes}");
         }
 

@@ -7,19 +7,21 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
-COPY ["EmojiShared/EmojiShared.csproj", "EmojiShared/"]
-COPY ["EmojiSvc/EmojiSvc.csproj", "EmojiSvc/"]
+COPY ["src/EmojiShared/EmojiShared.csproj", "EmojiShared/"]
+COPY ["src/EmojiSvc/EmojiSvc.csproj", "EmojiSvc/"]
 RUN dotnet restore "EmojiSvc/EmojiSvc.csproj"
-COPY ./EmojiShared ./EmojiShared
-COPY ./EmojiSvc ./EmojiSvc
-COPY ./protos ./protos
+COPY ./src/EmojiShared ./EmojiShared
+COPY ./src/EmojiSvc ./EmojiSvc
+COPY ./src/protos ./protos
 WORKDIR "/src/EmojiSvc"
+RUN ls -al .
 RUN dotnet build "EmojiSvc.csproj" -c Debug -o /app/build
 
 FROM build AS publish
 RUN dotnet publish "EmojiSvc.csproj" -c Debug -o /app/publish
 
 FROM base AS final
+RUN apt-get update && apt-get install -y procps
 WORKDIR /app
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "EmojiSvc.dll"]

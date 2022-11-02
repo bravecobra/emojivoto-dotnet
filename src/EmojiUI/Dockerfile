@@ -7,12 +7,12 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
-COPY ["EmojiShared/EmojiShared.csproj", "EmojiShared/"]
-COPY ["EmojiUI/EmojiUI.csproj", "EmojiUI/"]
+COPY ["src/EmojiShared/EmojiShared.csproj", "EmojiShared/"]
+COPY ["src/EmojiUI/EmojiUI.csproj", "EmojiUI/"]
 RUN dotnet restore "EmojiUI/EmojiUI.csproj"
-COPY ./EmojiShared ./EmojiShared
-COPY ./EmojiUI ./EmojiUI
-COPY ./protos ./protos
+COPY ./src/EmojiShared ./EmojiShared
+COPY ./src/EmojiUI ./EmojiUI
+COPY ./src/protos ./protos
 WORKDIR "/src/EmojiUI"
 RUN dotnet build "EmojiUI.csproj" -c Debug -o /app/build
 
@@ -20,6 +20,7 @@ FROM build AS publish
 RUN dotnet publish "EmojiUI.csproj" -c Debug -o /app/publish
 
 FROM base AS final
+RUN apt-get update && apt-get install -y procps
 WORKDIR /app
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "EmojiUI.dll"]
