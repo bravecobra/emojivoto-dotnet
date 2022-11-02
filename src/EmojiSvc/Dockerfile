@@ -14,7 +14,6 @@ COPY ./src/EmojiShared ./EmojiShared
 COPY ./src/EmojiSvc ./EmojiSvc
 COPY ./src/protos ./protos
 WORKDIR "/src/EmojiSvc"
-RUN ls -al .
 RUN dotnet build "EmojiSvc.csproj" -c Debug -o /app/build
 
 FROM build AS publish

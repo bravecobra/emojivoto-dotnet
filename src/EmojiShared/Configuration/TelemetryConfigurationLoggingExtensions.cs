@@ -29,7 +29,7 @@ namespace EmojiShared.Configuration
                         .ReadFrom.Configuration(builder.Configuration)
                         //.MinimumLevel.Debug()
                         //.WriteTo.Console()
-                        // .WriteTo.GrafanaLoki(builder.Configuration.GetValue<string>("Loki:Endpoint"), 
+                        // .WriteTo.GrafanaLoki(builder.Configuration.GetValue<string>("Loki:Endpoint"),
                         //     textFormatter: new LokiJsonTextFormatter(),
                         // )
                         .Enrich.FromLogContext()
@@ -140,7 +140,7 @@ namespace EmojiShared.Configuration
                                 .ReadFrom.Configuration(context.Configuration)
                                 //.MinimumLevel.Debug()
                                 //.WriteTo.Console()
-                                // .WriteTo.GrafanaLoki(builder.Configuration.GetValue<string>("Loki:Endpoint"), 
+                                // .WriteTo.GrafanaLoki(builder.Configuration.GetValue<string>("Loki:Endpoint"),
                                 //     textFormatter: new LokiJsonTextFormatter(),
                                 // )
                                 .Enrich.FromLogContext()

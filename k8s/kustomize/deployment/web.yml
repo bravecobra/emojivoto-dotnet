@@ -27,7 +27,9 @@ spec:
     spec:
       serviceAccountName: web
       containers:
-      - env:
+      - name: web-svc
+        image: registry.localhost:5000/emojiui:latest
+        env:
         - name: ASPNETCORE_ENVIRONMENT
           value: Production
         - name: EMOJISVC_HOST
@@ -38,8 +40,13 @@ spec:
           value: "http://loki.loki:3100"
         - name: Otlp__Endpoint
           value: http://otel-collector-collector.opentelemetry:4318
-        image: registry.localhost:5000/emojiui:latest
-        name: web-svc
+        - name: UseTracingExporter
+          value: otlp
+        - name: UseMetricsExporter
+          value: otlp
+        - name: UseLogExporter
+          value: loki
+        imagePullPolicy: Always
         ports:
         - containerPort: 80
           name: http

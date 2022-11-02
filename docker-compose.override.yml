@@ -3,30 +3,15 @@ version: '3'
 services:
   web:
     image: emojiui:latest
-    build:
-      context: .
-      dockerfile: ./src/EmojiUI/Dockerfile
   emoji-svc:
     image: emojisvc:latest
-    build:
-      context: .
-      dockerfile: ./src/EmojiSvc/Dockerfile
   voting-svc:
     image: emojivoting:latest
-    build:
-      context: .
-      dockerfile: ./src/EmojiVoting/Dockerfile
     environment:
       - FAILURE_RATE=50
       - ARTIFICIAL_DELAY=0
   vote-bot:
     image: emojivotebot:latest
-    build:
-      context: .
-      dockerfile: ./src/EmojiVoteBot/Dockerfile
-    environment:
-      - WEB_HOST=http://web
-      - VOTING_RATE=1000
 
   # aws-otel-collector:
   #   environment:

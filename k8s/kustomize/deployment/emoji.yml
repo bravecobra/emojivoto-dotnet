@@ -27,15 +27,22 @@ spec:
     spec:
       serviceAccountName: emoji
       containers:
-      - env:
+      - name: emoji-svc
+        image: registry.localhost:5000/emojisvc:latest
+        env:
         - name: ASPNETCORE_ENVIRONMENT
           value: Production
         - name: Serilog__WriteTo__0__Args__uri
           value: "http://loki.loki:3100"
         - name: Otlp__Endpoint
           value: http://otel-collector-collector.opentelemetry:4318
-        image: registry.localhost:5000/emojisvc:latest
-        name: emoji-svc
+        - name: UseTracingExporter
+          value: otlp
+        - name: UseMetricsExporter
+          value: otlp
+        - name: UseLogExporter
+          value: loki
+        imagePullPolicy: Always
         ports:
         - containerPort: 80
           name: grpc

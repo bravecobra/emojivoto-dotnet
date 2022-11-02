@@ -3,6 +3,9 @@ version: '3'
 services:
   web:
     image: bravecobra/emoji-ui-svc:stable
+    build:
+      context: .
+      dockerfile: ./src/EmojiUI/Dockerfile
     container_name: emoji-ui-svc
     environment:
       - EMOJISVC_HOST=http://emoji-svc
@@ -23,9 +26,11 @@ services:
     extra_hosts:
       - "host.docker.internal:host-gateway"
       # - "k8s.local:192.168.65.2"
-
   emoji-svc:
     image: bravecobra/emoji-svc:stable
+    build:
+      context: .
+      dockerfile: ./src/EmojiSvc/Dockerfile
     container_name: emoji-svc
     # environment:
     #   - SEQ_URI=http://seq:5341
@@ -42,9 +47,11 @@ services:
     extra_hosts:
       - "host.docker.internal:host-gateway"
       # - "k8s.local:192.168.65.2"
-
   voting-svc:
     image: bravecobra/emoji-voting-svc:stable
+    build:
+      context: .
+      dockerfile: ./src/EmojiVoting/Dockerfile
     container_name: voting-svc
     environment:
       - FAILURE_RATE=10
@@ -66,6 +73,9 @@ services:
       # - "k8s.local:192.168.65.2"
   vote-bot:
     image: bravecobra/emoji-votebot:stable
+    build:
+      context: .
+      dockerfile: ./src/EmojiVoteBot/Dockerfile
     container_name: votebot
     environment:
       - WEB_HOST=http://web
