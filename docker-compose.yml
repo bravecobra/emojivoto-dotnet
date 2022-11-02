@@ -10,10 +10,14 @@ services:
     environment:
       - EMOJISVC_HOST=http://emoji-svc
       - VOTINGSVC_HOST=http://voting-svc
-      # - SEQ_URI=http://seq:5341
+      # - UseMetricsExporter=default
+      # - UseTracingExporter=jaeger
+      # - UseLogExporter=seq
+      # - SEQ__URI=http://seq:5341
+      # - Jaeger__AgentHost=jaeger
+      # - Jaeger__Endpoint=http://jaeger:6831
+      # - Jaeger__AgentPort=6831
       # - CONSOLE_EXPORT=false
-      # - JAEGER_HOST=jaeger
-      # - JAEGER_PORT=6831
       # - AWS_OTEL_URI=http://otel-collector:4317
     ports:
       - "8080:80"
@@ -33,10 +37,14 @@ services:
       dockerfile: ./src/EmojiSvc/Dockerfile
     container_name: emoji-svc
     # environment:
-    #   - SEQ_URI=http://seq:5341
+    #   - UseMetricsExporter=default
+    #   - UseTracingExporter=jaeger
+    #   - UseLogExporter=seq
+    #   - SEQ__URI=http://seq:5341
+    #   - Jaeger__AgentHost=jaeger
+    #   - Jaeger__Endpoint=http://jaeger:6831
+    #   - Jaeger__AgentPort=6831
     #   - CONSOLE_EXPORT=false
-    #   - JAEGER_HOST=jaeger
-    #   - JAEGER_PORT=6831
     #   - AWS_OTEL_URI=http://otel-collector:4317
     ports:
       - "8081:80"
@@ -56,11 +64,14 @@ services:
     environment:
       - FAILURE_RATE=10
       - ARTIFICIAL_DELAY=0
-      # - SEQ_URI=http://seq:5341
+      # - UseMetricsExporter=default
+      # - UseTracingExporter=jaeger
+      # - UseLogExporter=seq
+      # - SEQ__URI=http://seq:5341
+      # - Jaeger__AgentHost=jaeger
+      # - Jaeger__Endpoint=http://jaeger:6831
+      # - Jaeger__AgentPort=6831
       # - CONSOLE_EXPORT=false
-      # - SEQ_HOST=http://seq
-      # - JAEGER_HOST=jaeger
-      # - JAEGER_PORT=6831
       # - AWS_OTEL_URI=http://otel-collector:4317
     ports:
       - "8082:80"
@@ -79,11 +90,15 @@ services:
     container_name: votebot
     environment:
       - WEB_HOST=http://web
-      - VOTING_RATE=1000
-      # - SEQ_URI=http://seq:5341
+      - VOTING_RATE=10000
+      # - UseMetricsExporter=default
+      # - UseTracingExporter=jaeger
+      # - UseLogExporter=seq
+      # - SEQ__URI=http://seq:5341
+      # - Jaeger__AgentHost=jaeger
+      # - Jaeger__Endpoint=http://jaeger:6831
+      # - Jaeger__AgentPort=6831
       # - CONSOLE_EXPORT=false
-      # - JAEGER_HOST=jaeger
-      # - JAEGER_PORT=6831
       # - AWS_OTEL_URI=http://otel-collector:4317
     depends_on:
       # - seq
@@ -93,25 +108,25 @@ services:
     extra_hosts:
       - "host.docker.internal:host-gateway"
       # - "k8s.local:192.168.65.2"
-  # seq:
-  #   image: datalust/seq:latest
-  #   container_name: seq
-  #   restart: always
-  #   ports:
-  #     - "5341:80"
-  #   environment:
-  #     - ACCEPT_EULA=Y
-  #   deploy:
-  #     resources:
-  #        limits:
-  #           cpus: '0.500'
-  #           memory: 500M
-  # jaeger:
-  #   image: jaegertracing/all-in-one:latest
-  #   container_name: jaeger
-  #   ports:
-  #     - "6831:6831/udp"
-  #     - "16686:16686"
+  seq:
+    image: datalust/seq:latest
+    container_name: seq
+    restart: always
+    ports:
+      - "5341:80"
+    environment:
+      - ACCEPT_EULA=Y
+    deploy:
+      resources:
+         limits:
+            cpus: '0.500'
+            memory: 500M
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    container_name: jaeger
+    ports:
+      - "6831:6831/udp"
+      - "16686:16686"
 
   # aws-otel-collector:
   #   image: public.ecr.aws/aws-observability/aws-otel-collector:latest

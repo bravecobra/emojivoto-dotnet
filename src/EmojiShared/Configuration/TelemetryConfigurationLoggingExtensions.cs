@@ -61,9 +61,9 @@ namespace EmojiShared.Configuration
                 }
                 case "seq":
                 {
+                    var seq_uri = builder.Configuration.GetValue<string>("Seq:Uri").ToLowerInvariant();
                     var logger = new LoggerConfiguration()
-                        .ReadFrom.Configuration(builder.Configuration)
-                        .WriteTo.Seq("http://localhost:5341")
+                        .WriteTo.Seq(seq_uri)
                         .Enrich.FromLogContext()
                         .Enrich.With(new PropertyEnricher("app", Assembly.GetEntryAssembly()?.GetName().Name!))
                         .Enrich.WithExceptionDetails()
@@ -172,9 +172,9 @@ namespace EmojiShared.Configuration
                         }
                     case "seq":
                         {
+                            var seq_uri = context.Configuration.GetValue<string>("Seq:Uri").ToLowerInvariant();
                             var logger = new LoggerConfiguration()
-                                .ReadFrom.Configuration(context.Configuration)
-                                .WriteTo.Seq("http://localhost:5341")
+                                .WriteTo.Seq(seq_uri)
                                 .Enrich.FromLogContext()
                                 .Enrich.With(new PropertyEnricher("app", Assembly.GetEntryAssembly()?.GetName().Name!))
                                 .Enrich.WithExceptionDetails()
