@@ -19,7 +19,7 @@ namespace EmojiVoteBot
                 .Run();
         }
 
-        public static IHostBuilder CreateHostBuilder(string[] args)
+        private static IHostBuilder CreateHostBuilder(string[] args)
         {
             var resourceBuilder = ResourceBuilderFactory.CreateResourceBuilder();
             return Host.CreateDefaultBuilder(args)

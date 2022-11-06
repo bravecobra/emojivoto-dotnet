@@ -57,8 +57,8 @@ namespace EmojiShared.Configuration
                     //
                     //     builder.Services.Configure<ZipkinExporterOptions>(builder.Configuration.GetSection("Zipkin"));
                     //     break;
-
-                    case "otlp":
+                    
+                    case "otlp": //applies to both opentelemetry-collector as grafana's tempo 
                         options.AddOtlpExporter(otlpOptions =>
                         {
                             otlpOptions.Protocol = OtlpExportProtocol.HttpProtobuf;
@@ -76,7 +76,6 @@ namespace EmojiShared.Configuration
             });
             services.Configure<AspNetCoreInstrumentationOptions>(configuration.GetSection("AspNetCoreInstrumentation"));
             return services;
-
         }
 
         private static void Enrich(Activity activity, string eventName, object obj)

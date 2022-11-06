@@ -1,0 +1,83 @@
+extensions:
+  health_check:
+  pprof:
+  zpages:
+
+receivers:
+  otlp:
+    protocols:
+      grpc:
+      http:
+  hostmetrics:
+    collection_interval: 10s
+    scrapers:
+      paging:
+        metrics:
+          system.paging.utilization:
+            enabled: true
+      cpu:
+        metrics:
+          system.cpu.utilization:
+            enabled: true
+      disk:
+      filesystem:
+        metrics:
+          system.filesystem.utilization:
+            enabled: true
+      load:
+      memory:
+      network:
+      processes:
+
+  filelog:
+    include_file_path: true
+    poll_interval: 500ms
+    include:
+      # Logs will be collected from the below file path. Please ensure it is correct or edit as needed.
+      - /var/log/**/*example*/*.log
+
+  prometheus:
+    config:
+      scrape_configs:
+      - job_name: 'otelcol'
+        scrape_interval: 10s
+        static_configs:
+        - targets: ['0.0.0.0:8888']
+
+processors:
+  batch:
+    # Datadog APM Intake limit is 3.2MB. Let's make sure the batches do not go over that.
+    send_batch_max_size: 1000
+    send_batch_size: 100
+    timeout: 10s
+  resourcedetection:
+    detectors: [system, env, docker]
+
+exporters:
+  logging:
+    loglevel: debug
+  datadog:
+    hostname: otel-collector-emojivoto
+    api:
+      site: ${DD_SITE}
+      key: ${DD_API_KEY}
+
+service:
+  extensions: [pprof, zpages, health_check]
+  telemetry:
+    logs:
+      level: "debug"
+  pipelines:
+    metrics:
+      receivers: [hostmetrics, otlp]
+      processors: [batch]
+      exporters: [datadog]
+    traces:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [datadog]
+    logs:
+      # This pipeline has an OTLP receiver, filelog receiver, a batch processor and a Datadog exporter.
+      receivers: [otlp, filelog]
+      processors: [batch]
+      exporters: [datadog]

@@ -1,0 +1,55 @@
+version: '3'
+
+services:
+  web:
+    image: emojiui:latest
+    environment:
+      - UseMetricsExporter=otlp
+      - UseTracingExporter=otlp
+      - UseLogExporter=otlp
+      - Otlp__Endpoint=http://otel-collector:4318
+    depends_on:
+      - loki
+      - tempo
+      - prometheus
+  emoji-svc:
+    image: emojisvc:latest
+    environment:
+      - UseMetricsExporter=otlp
+      - UseTracingExporter=otlp
+      - UseLogExporter=otlp
+      - Otlp__Endpoint=http://otel-collector:4318
+    depends_on:
+      - loki
+      - tempo
+      - prometheus
+  voting-svc:
+    image: emojivoting:latest
+    environment:
+      - UseMetricsExporter=otlp
+      - UseTracingExporter=otlp
+      - UseLogExporter=otlp
+      - Otlp__Endpoint=http://otel-collector:4318
+    depends_on:
+      - loki
+      - tempo
+      - prometheus
+  vote-bot:
+    image: emojivotebot:latest
+    environment:
+      - UseMetricsExporter=otlp
+      - UseTracingExporter=otlp
+      - UseLogExporter=otlp
+      - Otlp__Endpoint=http://otel-collector:4318
+    depends_on:
+      - loki
+      - tempo
+      - prometheus
+  otel-collector:
+    volumes:
+      - ./config/otel/otel-config-grafana.yaml:/etc/otel-collector-config.yml
+    depends_on:
+      - loki
+      - prometheus
+      - tempo
+      - grafana

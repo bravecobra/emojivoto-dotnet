@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using EmojiShared.Configuration;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting;
 
 namespace EmojiSvc
 {
@@ -33,20 +34,18 @@ namespace EmojiSvc
             var app = builder.Build();
             app.UseMiddleware<LogContextMiddleware>();
             app.UseCustomErrorhandling();
-
             app.UseRouting();
+            app.UseAuthorization();
 
             using (var scope = app.Services.CreateScope())
             {
                 var db = scope.ServiceProvider.GetRequiredService<EmojiDbContext>();
                 db.Database.Migrate();
             }
-            app.UseAuthorization();
-
+            app.AddMetricsEndpoint();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapGrpcService<EmojiGrpcSvc>();
-
                 endpoints.MapGet("/", async context =>
                 {
                     await context.Response.WriteAsync("Communication with gRPC endpoints must be made through a gRPC client. To learn how to create a client, visit: https://go.microsoft.com/fwlink/?linkid=2086909");
@@ -54,10 +53,10 @@ namespace EmojiSvc
                 endpoints.MapHealthChecks("/health/startup");
                 endpoints.MapHealthChecks("/healthz");
                 endpoints.MapHealthChecks("/ready");
-                endpoints.MapControllers();
-            });
 
-            app.AddMetricsEndpoint();
+                endpoints.MapControllers();
+
+            });
             app.Run();
         }
     }

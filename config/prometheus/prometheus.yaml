@@ -1,0 +1,13 @@
+scrape_configs:
+- job_name: 'otel-collector'
+  scrape_interval: 10s
+  static_configs:
+  - targets: ['otel-collector:8889']
+  - targets: ['otel-collector:8888']
+
+  # This job is only for the individual scenario where we let prometheus go scrape the metrics from the services directly
+- job_name: 'emoji'
+  static_configs:
+  - targets: ['emoji-ui-svc:80']
+  - targets: ['emoji-svc:81']
+  - targets: ['voting-svc:81']

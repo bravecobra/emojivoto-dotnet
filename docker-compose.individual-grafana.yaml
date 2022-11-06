@@ -1,0 +1,55 @@
+version: '3'
+
+services:
+  web:
+    image: emojiui:latest
+    environment:
+      - UseMetricsExporter=prometheus
+      - UseTracingExporter=otlp
+      - UseLogExporter=loki
+      - Loki__Endpoint=http://loki:3100
+      - Serilog__WriteTo__0__Args__uri=http://loki:3100
+      - Otlp__Endpoint=http://tempo:4318
+    depends_on:
+      - loki
+      - tempo
+      - prometheus
+  emoji-svc:
+    image: emojisvc:latest
+    environment:
+      - UseMetricsExporter=prometheus
+      - UseTracingExporter=otlp
+      - UseLogExporter=loki
+      - Loki__Endpoint=http://loki:3100
+      - Serilog__WriteTo__0__Args__uri=http://loki:3100
+      - Otlp__Endpoint=http://tempo:4318
+    depends_on:
+      - loki
+      - tempo
+      - prometheus
+  voting-svc:
+    image: emojivoting:latest
+    environment:
+      - UseMetricsExporter=prometheus
+      - UseTracingExporter=otlp
+      - UseLogExporter=loki
+      - Loki__Endpoint=http://loki:3100
+      - Serilog__WriteTo__0__Args__uri=http://loki:3100
+      - Otlp__Endpoint=http://tempo:4318
+    depends_on:
+      - loki
+      - tempo
+      - prometheus
+  vote-bot:
+    image: emojivotebot:latest
+    environment:
+      - UseMetricsExporter=prometheus
+      - UseTracingExporter=otlp
+      - UseLogExporter=loki
+      - Loki__Endpoint=http://loki:3100
+      - Serilog__WriteTo__0__Args__uri=http://loki:3100
+      - Otlp__Endpoint=http://tempo:4318
+    depends_on:
+      - loki
+      - tempo
+      - prometheus

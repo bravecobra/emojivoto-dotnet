@@ -22,7 +22,7 @@ namespace EmojiUI
             // Add Metrics
             builder.Services.AddCustomMetrics(builder.Configuration, resourceBuilder);
             // Add Traces
-            builder.Services.AddCustomTracing(builder.Configuration, resourceBuilder, 
+            builder.Services.AddCustomTracing(builder.Configuration, resourceBuilder,
                 new []
                 {
                     nameof(Effects),
@@ -60,7 +60,7 @@ namespace EmojiUI
             app.UseRouting();
             app.UseAuthorization();
 
-
+            app.AddMetricsEndpoint();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
@@ -70,7 +70,6 @@ namespace EmojiUI
                 endpoints.MapHealthChecks("/healthz");
                 endpoints.MapHealthChecks("/ready");
             });
-            app.AddMetricsEndpoint();
             app.Run();
         }
     }

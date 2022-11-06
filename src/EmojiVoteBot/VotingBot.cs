@@ -33,8 +33,7 @@ public class VotingBot : BackgroundService
             {
                 try
                 {
-                    var random = new Random();
-                    var probability = random.Next(1, 100);
+                    var probability = Random.Shared.Next(1, 100);
                     if (probability < 15)
                     {
                         activity?.SetTag("voting.shortcode", ":doughnut:");
@@ -46,7 +45,7 @@ public class VotingBot : BackgroundService
                     else
                     {
                         var availableCodes = await _service.ListEmojis();
-                        var randomEmoji = availableCodes.ElementAt(random.Next(0, 99));
+                        var randomEmoji = availableCodes.ElementAt(Random.Shared.Next(0, 99));
                         activity?.SetTag("voting.shortcode", randomEmoji.Shortcode);
                         await _service.Vote(randomEmoji.Shortcode);
                         _logger.LogInformation($"Voted for {randomEmoji.Unicode}: {randomEmoji.Shortcode}");

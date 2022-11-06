@@ -25,6 +25,7 @@ namespace EmojiSvc.Services
 
         public override Task<FindByShortcodeResponse> FindByShortcode(FindByShortcodeRequest request, ServerCallContext context)
         {
+            _logger.LogInformation($"Finding {request.Shortcode}");
             var emoji = _allEmoji.WithShortcode(request.Shortcode) ?? null;
 
             Emojivoto.V1.Emoji? result = null;

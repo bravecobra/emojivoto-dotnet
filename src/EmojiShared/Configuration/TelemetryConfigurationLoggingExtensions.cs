@@ -99,17 +99,15 @@ namespace EmojiShared.Configuration
                                 new Uri(builder.Configuration.GetValue<string>("Otlp:Endpoint") + "/v1/logs");
                             otlpOptions.ExportProcessorType = ExportProcessorType.Simple;
                         });
+                        options.IncludeFormattedMessage = true;
+                        options.ParseStateValues = true;
+                        options.IncludeScopes = true;
                     });
                     builder.Services.AddOpenTelemetryServices();
                     break;
                 }
                 default:
-                    builder.Logging.AddOpenTelemetry(options =>
-                    {
-                        options.SetResourceBuilder(resourceBuilder);
-                        options.AddConsoleExporter();
-                    });
-                    builder.Services.AddOpenTelemetryServices();
+                    builder.Logging.AddSerilog();
                     break;
             }
             return builder;

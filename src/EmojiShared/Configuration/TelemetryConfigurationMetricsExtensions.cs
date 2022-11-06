@@ -15,7 +15,6 @@ public static class TelemetryConfigurationMetricsExtensions
     {
         services.AddOpenTelemetryMetrics(options =>
         {
-
             options.SetResourceBuilder(resourceBuilder)
                 .AddHttpClientInstrumentation()
                 .AddAspNetCoreInstrumentation()
@@ -26,7 +25,10 @@ public static class TelemetryConfigurationMetricsExtensions
             switch (metricsExporter)
             {
                 case "prometheus":
-                    options.AddPrometheusExporter();
+                    options.AddPrometheusExporter(exporterOptions =>
+                    {
+                        exporterOptions.StartHttpListener = true;
+                    });
                     break;
                 case "otlp":
                     options.AddOtlpExporter(otlpOptions =>
