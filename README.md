@@ -1,8 +1,36 @@
 # emojivoto-dotnet
 
+## Description
+
 This repository contains a `.NET Core` ported version of the [EmojiVoto](https://github.com/BuoyantIO/emojivoto) project, which is written in Go. It also showcases `Opentelemetry`'s benefits through multiple scenarios using `docker-compose` and `kubernetes`.
 
-## Build docker images
+## Setup (Docker)
+
+### Enable metrics from docker engine
+
+Reference: [https://docs.docker.com/config/daemon/prometheus/#configure-docker](https://docs.docker.com/config/daemon/prometheus/#configure-docker)
+
+To configure the Docker daemon as a Prometheus target, you need to specify the metrics-address. The best way to do this is via the daemon.json, which is located at one of the following locations by default. If the file does not exist, create it.
+
+* Linux: /etc/docker/daemon.json
+* Windows Server: C:\ProgramData\docker\config\daemon.json
+* Docker Desktop for Mac / Docker Desktop for Windows: Click the Docker icon in the toolbar, select Preferences, then select Daemon. Click Advanced.
+If the file is currently empty, paste the following:
+
+```json
+{
+  "metrics-addr" : "127.0.0.1:9323",
+  "experimental" : true
+}
+```
+
+If the file is not empty, add those two keys, making sure that the resulting file is valid JSON. Be careful that every line ends with a comma (,) except for the last line.
+
+Save the file, or in the case of Docker Desktop for Mac or Docker Desktop for Windows, save the configuration. Restart Docker.
+
+Docker now exposes Prometheus-compatible metrics on port 9323.
+
+### Build docker images
 
 ```powershell
 docker-compose --profile app build
@@ -65,7 +93,7 @@ graph TD;
 ```
 
 ```powershell
-docker-compose --profile app --profile individual -f docker-compose.yaml -f docker-compose.individual.yaml up -d --remove-orphans
+docker-compose --profile app --profile individual -f docker-compose.yml -f docker-compose.individual.yaml up -d --remove-orphans
 ```
 
 Each component is reconfigured to output to each monitoring service. That means each service now outputs:
@@ -97,7 +125,7 @@ graph TD;
 ```
 
 ```powershell
-docker-compose --profile app --profile grafana -f docker-compose.yaml -f docker-compose.individual-grafana.yaml up -d --remove-orphans
+docker-compose --profile app --profile grafana -f docker-compose.yml -f docker-compose.individual-grafana.yaml up -d --remove-orphans
 ```
 
 Each component is reconfigured to output to each monitoring service. That means each service outputs:
@@ -135,7 +163,7 @@ having to reconfigure it in the application itself. Instead of configuring three
 Reconfiguring to output to opentelemetry
 
 ```powershell
-docker-compose --profile app --profile otlp -f docker-compose.yaml -f docker-compose.otlp.yaml up -d --remove-orphans
+docker-compose --profile app --profile otlp -f docker-compose.yml -f docker-compose.otlp.yaml up -d --remove-orphans
 ```
 
 ### Monitoring through opentelemetry (datadog)
@@ -164,5 +192,5 @@ graph TD;
 ```
 
 ```powershell
-docker-compose --profile app --profile datadog -f docker-compose.yaml -f docker-compose.otlp-datadog.yaml up -d --remove-orphans
+docker-compose --profile app --profile datadog -f docker-compose.yml -f docker-compose.otlp-datadog.yaml up -d --remove-orphans
 ```

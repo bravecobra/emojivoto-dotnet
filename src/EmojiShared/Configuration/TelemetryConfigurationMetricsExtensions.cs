@@ -16,9 +16,14 @@ public static class TelemetryConfigurationMetricsExtensions
         services.AddOpenTelemetryMetrics(options =>
         {
             options.SetResourceBuilder(resourceBuilder)
+                .AddRuntimeInstrumentation()
                 .AddHttpClientInstrumentation()
                 .AddAspNetCoreInstrumentation()
-                .AddEventCountersInstrumentation()
+                .AddProcessInstrumentation()
+                .AddEventCountersInstrumentation(instrumentationOptions =>
+                {
+                    instrumentationOptions.AddEventSources();
+                })
                 .AddMeter(meterName ?? Assembly.GetEntryAssembly()?.GetName().Name);
 
             var metricsExporter = configuration.GetValue<string>("UseMetricsExporter").ToLowerInvariant();

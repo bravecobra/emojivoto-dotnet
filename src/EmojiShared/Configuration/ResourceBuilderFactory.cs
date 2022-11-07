@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using Microsoft.AspNetCore.Builder;
+using OpenTelemetry.Extensions.Docker.Resources;
 using OpenTelemetry.Resources;
 
 namespace EmojiShared.Configuration
@@ -26,7 +27,8 @@ namespace EmojiShared.Configuration
                 .AddService(serviceName, serviceVersion, serviceInstanceId: Environment.MachineName)
                 .AddAttributes(attributes)
                 .AddTelemetrySdk()
-                .AddEnvironmentVariableDetector();
+                .AddEnvironmentVariableDetector()
+                .AddDetector(new DockerResourceDetector());
         }
 
         public static ResourceBuilder CreateResourceBuilder(WebApplicationBuilder builder)
@@ -49,7 +51,8 @@ namespace EmojiShared.Configuration
                 .AddService(serviceName, serviceVersion, serviceInstanceId: Environment.MachineName)
                 .AddAttributes(attributes)
                 .AddTelemetrySdk()
-                .AddEnvironmentVariableDetector();
+                .AddEnvironmentVariableDetector()
+                .AddDetector(new DockerResourceDetector());
         }
     }
 }
