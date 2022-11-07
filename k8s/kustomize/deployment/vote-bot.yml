@@ -20,7 +20,9 @@ spec:
         # version: v11
     spec:
       containers:
-      - env:
+      - name: vote-bot
+        image: registry.localhost:5000/emojivotebot:latest
+        env:
         - name: ASPNETCORE_ENVIRONMENT
           value: Production
         - name: VOTING_RATE
@@ -31,8 +33,13 @@ spec:
           value: "http://loki.loki:3100"
         - name: Otlp__Endpoint
           value: http://otel-collector-collector.opentelemetry:4318
-        image: registry.localhost:5000/emojivotebot:latest
-        name: vote-bot
+        - name: UseTracingExporter
+          value: otlp
+        - name: UseMetricsExporter
+          value: otlp
+        - name: UseLogExporter
+          value: loki
+        imagePullPolicy: Always
         resources:
           requests:
             cpu: 10m

@@ -22,5 +22,7 @@
 **/secrets.dev.yaml
 **/values.dev.yaml
 **/_Resharper.Caches
+**/.idea
+**/.vs
 LICENSE
 README.md

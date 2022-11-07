@@ -1,107 +1,186 @@
 version: '3'
-
 services:
   web:
     image: bravecobra/emoji-ui-svc:stable
+    build:
+      context: .
+      dockerfile: ./src/EmojiUI/Dockerfile
+    profiles: ["app"]
     container_name: emoji-ui-svc
     environment:
+      - ASPNETCORE_ENVIRONMENT=Production
       - EMOJISVC_HOST=http://emoji-svc
       - VOTINGSVC_HOST=http://voting-svc
-      # - SEQ_URI=http://seq:5341
-      # - CONSOLE_EXPORT=false
-      # - JAEGER_HOST=jaeger
-      # - JAEGER_PORT=6831
-      # - AWS_OTEL_URI=http://otel-collector:4317
+      - UseMetricsExporter=default
+      - UseTracingExporter=default
+      - UseLogExporter=default
     ports:
       - "8080:80"
     depends_on:
-      # - seq
       - voting-svc
       - emoji-svc
-      # - jaeger
-      # - aws-otel-collector
     extra_hosts:
       - "host.docker.internal:host-gateway"
       # - "k8s.local:192.168.65.2"
-
   emoji-svc:
     image: bravecobra/emoji-svc:stable
+    build:
+      context: .
+      dockerfile: ./src/EmojiSvc/Dockerfile
+    profiles: ["app"]
     container_name: emoji-svc
-    # environment:
-    #   - SEQ_URI=http://seq:5341
-    #   - CONSOLE_EXPORT=false
-    #   - JAEGER_HOST=jaeger
-    #   - JAEGER_PORT=6831
-    #   - AWS_OTEL_URI=http://otel-collector:4317
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - UseMetricsExporter=default
+      - UseTracingExporter=default
+      - UseLogExporter=default
     ports:
       - "8081:80"
-    # depends_on:
-      # - seq
-      # - jaeger
-      # - aws-otel-collector
+      - "8181:81"
     extra_hosts:
       - "host.docker.internal:host-gateway"
       # - "k8s.local:192.168.65.2"
-
   voting-svc:
     image: bravecobra/emoji-voting-svc:stable
+    build:
+      context: .
+      dockerfile: ./src/EmojiVoting/Dockerfile
     container_name: voting-svc
+    profiles: ["app"]
     environment:
+      - ASPNETCORE_ENVIRONMENT=Production
       - FAILURE_RATE=10
       - ARTIFICIAL_DELAY=0
-      # - SEQ_URI=http://seq:5341
-      # - CONSOLE_EXPORT=false
-      # - SEQ_HOST=http://seq
-      # - JAEGER_HOST=jaeger
-      # - JAEGER_PORT=6831
-      # - AWS_OTEL_URI=http://otel-collector:4317
+      - UseMetricsExporter=default
+      - UseTracingExporter=default
+      - UseLogExporter=default
     ports:
       - "8082:80"
-    # depends_on:
-      # - seq
-      # - jaeger
-      # - aws-otel-collector
+      - "8282:81"
     extra_hosts:
       - "host.docker.internal:host-gateway"
       # - "k8s.local:192.168.65.2"
   vote-bot:
     image: bravecobra/emoji-votebot:stable
+    build:
+      context: .
+      dockerfile: ./src/EmojiVoteBot/Dockerfile
     container_name: votebot
+    profiles: ["app"]
     environment:
+      - DOTNET_ENVIRONMENT=Production
       - WEB_HOST=http://web
-      - VOTING_RATE=1000
-      # - SEQ_URI=http://seq:5341
-      # - CONSOLE_EXPORT=false
-      # - JAEGER_HOST=jaeger
-      # - JAEGER_PORT=6831
-      # - AWS_OTEL_URI=http://otel-collector:4317
+      - VOTING_RATE=10000
+      - UseMetricsExporter=default
+      - UseTracingExporter=default
+      - UseLogExporter=default
     depends_on:
-      # - seq
       - web
-      # - jaeger
-      # - aws-otel-
     extra_hosts:
       - "host.docker.internal:host-gateway"
       # - "k8s.local:192.168.65.2"
-  # seq:
-  #   image: datalust/seq:latest
-  #   container_name: seq
-  #   restart: always
-  #   ports:
-  #     - "5341:80"
-  #   environment:
-  #     - ACCEPT_EULA=Y
-  #   deploy:
-  #     resources:
-  #        limits:
-  #           cpus: '0.500'
-  #           memory: 500M
-  # jaeger:
-  #   image: jaegertracing/all-in-one:latest
-  #   container_name: jaeger
-  #   ports:
-  #     - "6831:6831/udp"
-  #     - "16686:16686"
+
+  seq:
+    image: datalust/seq:latest
+    container_name: seq
+    profiles: ["individual"]
+    restart: always
+    ports:
+      - "5341:80"
+    environment:
+      - ACCEPT_EULA=Y
+    deploy:
+      resources:
+         limits:
+            cpus: '0.500'
+            memory: 500M
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    container_name: jaeger
+    profiles: ["individual"]
+    ports:
+      - "6831:6831/udp"
+      - "16686:16686"
+      # - 5775:5775/udp
+      # - 5778:5778
+      # - 6832:6832/udp
+      # - 9411:9411
+      # - 14268:14268
+
+  tempo:
+    image: grafana/tempo:latest
+    container_name: tempo
+    profiles: ["grafana", "otlp"]
+    command: [ "-config.file=/etc/tempo.yaml" ]
+    volumes:
+      - ./config/tempo/tempo.yaml:/etc/tempo.yaml
+      - tempo:/tmp/tempo
+    ports:
+      - "14268"  # jaeger ingest
+      - "3200"   # tempo
+      - "4317"   # otlp grpc
+      - "4318"   # otlp http
+      - "9411"   # zipkin
+
+  loki:
+    image: grafana/loki:latest
+    container_name: loki
+    profiles: ["grafana", "otlp"]
+    ports:
+      - 3100:3100
+    restart: on-failure
+    volumes:
+      - loki:/loki
+      - ./config/loki/loki-config.yaml:/etc/loki/loki-config.yaml
+
+    command: -config.file=/etc/loki/loki-config.yaml
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    profiles: ["grafana", "otlp"]
+    environment:
+      - GF_INSTALL_PLUGINS=grafana-clock-panel,grafana-simple-json-datasource,grafana-piechart-panel
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+      - GF_AUTH_DISABLE_LOGIN_FORM=true
+    ports:
+      - 3000:3000
+    restart: on-failure
+    volumes:
+      - grafana:/var/lib/grafana
+      - ./config/grafana/provisioning/:/etc/grafana/provisioning/
+    depends_on:
+      - loki
+      - prometheus
+      - tempo
+
+  prometheus:
+    container_name: prometheus
+    image: prom/prometheus:latest
+    profiles: ["individual", "otlp", "grafana"]
+    volumes:
+      - prometheus:/prometheus
+      - ./config/prometheus/prometheus.yaml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:latest
+    container_name: otel-collector
+    profiles: ["otlp", "datadog"]
+    command: ["--config=/etc/otel-collector-config.yml"]
+    # volumes:
+    #   - ./config/otel/otel-config-grafana.yaml:/etc/otel-collector-config.yml
+    ports:
+      - "4317:4317"
+      - "4318:4318"
+      - "1888:1888"   # pprof extension
+      - "8888:8888"   # Prometheus metrics exposed by the collector
+      - "8889:8889"   # Prometheus exporter metrics
+      - "13133:13133" # health_check extension
+      - "55679:55679" # zpages extension
+
 
   # aws-otel-collector:
   #   image: public.ecr.aws/aws-observability/aws-otel-collector:latest
@@ -114,7 +193,14 @@ services:
   #     - AWS_REGION=<to_be_added>
 
   #   volumes:
-  #     - ./otel-config.yaml:/etc/otel-agent-config.yaml
+  #     - ./otel-config-aws.yaml:/etc/otel-agent-config.yaml
   #     # - ~/.aws:/root/.aws
   #   ports:
   #     - "4317:4317"
+
+volumes:
+  grafana:
+  prometheus:
+  promtail:
+  loki:
+  tempo:

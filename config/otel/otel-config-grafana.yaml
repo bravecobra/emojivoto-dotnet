@@ -1,0 +1,85 @@
+extensions:
+  health_check:
+  pprof:
+  zpages:
+
+receivers:
+  otlp:
+    protocols:
+      grpc:
+        endpoint: 0.0.0.0:4317
+      http:
+        endpoint: 0.0.0.0:4318
+
+processors:
+  batch:
+  attributes:
+    actions:
+    # - action: insert
+    #   key: loki.attribute.labels
+    #   value: severity
+    - action: insert
+      key: loki.attribute.labels
+      value: http_status_code
+  resource:
+    attributes:
+#     - action: insert
+#       key: loki.attribute.labels
+#       value: http.status
+    - action: insert
+      key: loki.resource.labels
+      value: service.name
+    # - action: insert
+    #   key: loki.resource.labels
+    #   value: telemetry.sdk.language
+    # - action: insert
+    #   key: loki.resource.labels
+    #   value: telemetry.sdk.name
+    # - action: insert
+    #   key: loki.resource.labels
+    #   value: telemetry.sdk.version
+
+exporters:
+  logging:
+    loglevel: debug
+  otlp:
+    endpoint: tempo:4317
+    tls:
+      insecure: true
+  loki:
+    endpoint: http://loki:3100/loki/api/v1/push
+    format: json
+    labels:
+      attributes:
+        source: ""
+        severity: ""
+      resource:
+        container.name: "container_name"
+        host.name: "hostname"
+        service.name: "app"
+        service.version: "service_version"
+        telemetry.sdk.language: "telemetry_sdk_language"
+        telemetry.sdk.name: "telemetry_sdk_name"
+        telemetry.sdk.version: "telemetry_sdk_version"
+  prometheus:
+    endpoint: 0.0.0.0:8889
+    namespace: emojivoto
+    const_labels:
+      app: emojivoto
+service:
+  extensions: [pprof, zpages, health_check]
+  telemetry:
+    logs:
+      level: "debug"
+  pipelines:
+    traces:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [otlp]
+    metrics:
+      receivers: [otlp]
+      exporters: [prometheus]
+    logs:
+      receivers: [otlp]
+      processors: [resource, attributes]
+      exporters: [loki, logging]

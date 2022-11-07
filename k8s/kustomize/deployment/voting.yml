@@ -27,7 +27,9 @@ spec:
     spec:
       serviceAccountName: voting
       containers:
-      - env:
+      - name: voting-svc
+        image: registry.localhost:5000/emojivoting:latest
+        env:
         - name: ASPNETCORE_ENVIRONMENT
           value: Production
         - name: FAILURE_RATE
@@ -38,8 +40,13 @@ spec:
           value: "http://loki.loki:3100"
         - name: Otlp__Endpoint
           value: http://otel-collector-collector.opentelemetry:4318
-        image: registry.localhost:5000/emojivoting:latest
-        name: voting-svc
+        - name: UseTracingExporter
+          value: otlp
+        - name: UseMetricsExporter
+          value: otlp
+        - name: UseLogExporter
+          value: loki
+        imagePullPolicy: Always
         ports:
         - containerPort: 80
           name: grpc

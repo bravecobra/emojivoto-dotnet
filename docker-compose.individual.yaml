@@ -1,0 +1,67 @@
+version: '3'
+
+services:
+  web:
+    image: emojiui:latest
+    environment:
+      - UseMetricsExporter=prometheus
+      - UseTracingExporter=jaeger
+      - UseLogExporter=seq
+      - Seq__Uri=http://seq:5341
+      - Jaeger__AgentHost=jaeger
+      - Jaeger__Endpoint=http://jaeger:6831
+      - Jaeger__AgentPort=6831
+      - Loki__Endpoint=http://loki:3100
+      - Serilog__WriteTo__0__Args__uri=http://loki:3100
+    depends_on:
+      - seq
+      - jaeger
+      - prometheus
+  emoji-svc:
+    image: emojisvc:latest
+    environment:
+      - UseMetricsExporter=prometheus
+      - UseTracingExporter=jaeger
+      - UseLogExporter=seq
+      - Seq__Uri=http://seq:5341
+      - Jaeger__AgentHost=jaeger
+      - Jaeger__Endpoint=http://jaeger:6831
+      - Jaeger__AgentPort=6831
+      - Loki__Endpoint=http://loki:3100
+      - Serilog__WriteTo__0__Args__uri=http://loki:3100
+    depends_on:
+      - seq
+      - jaeger
+      - prometheus
+  voting-svc:
+    image: emojivoting:latest
+    environment:
+      - UseMetricsExporter=prometheus
+      - UseTracingExporter=jaeger
+      - UseLogExporter=seq
+      - Seq__Uri=http://seq:5341
+      - Jaeger__AgentHost=jaeger
+      - Jaeger__Endpoint=http://jaeger:6831
+      - Jaeger__AgentPort=6831
+      - Loki__Endpoint=http://loki:3100
+      - Serilog__WriteTo__0__Args__uri=http://loki:3100
+    depends_on:
+      - seq
+      - jaeger
+      - prometheus
+  vote-bot:
+    image: emojivotebot:latest
+    environment:
+      - UseMetricsExporter=prometheus
+      - UseTracingExporter=jaeger
+      - UseLogExporter=seq
+      - SEQ__URI=http://seq:5341
+      - Jaeger__AgentHost=jaeger
+      - Jaeger__Endpoint=http://jaeger:6831
+      - Jaeger__AgentPort=6831
+      - Loki__Endpoint=http://loki:3100
+      - Serilog__WriteTo__0__Args__uri=http://loki:3100
+    depends_on:
+      - seq
+      - jaeger
+      - prometheus
