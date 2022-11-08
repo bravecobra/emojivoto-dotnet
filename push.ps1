@@ -1,11 +1,14 @@
-docker tag emojisvc:latest localhost:5000/emojisvc:latest
-docker push localhost:5000/emojisvc:latest
+$GitVersion = gitversion | ConvertFrom-Json
+$Version = $GitVersion.SemVer
 
-docker tag emojivoting:latest localhost:5000/emojivoting:latest
-docker push localhost:5000/emojivoting:latest
+docker tag emojisvc:latest localhost:5000/emojisvc:$Version
+docker push localhost:5000/emojisvc:$Version
 
-docker tag emojiui:latest localhost:5000/emojiui:latest
-docker push localhost:5000/emojiui:latest
+docker tag emojivoting:latest localhost:5000/emojivoting:$Version
+docker push localhost:5000/emojivoting:$Version
 
-docker tag emojivotebot:latest localhost:5000/emojivotebot:latest
-docker push localhost:5000/emojivotebot:latest
+docker tag emojiui:latest localhost:5000/emojiui:$Version
+docker push localhost:5000/emojiui:$Version
+
+docker tag emojivotebot:latest localhost:5000/emojivotebot:$Version
+docker push localhost:5000/emojivotebot:$Version
