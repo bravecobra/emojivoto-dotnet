@@ -54,13 +54,13 @@ jobs:
       fail-fast: true
       matrix:
         include:
-          - svcProjectName: EmojiSvc
+          - svcProjectName: src/EmojiSvc
             svcDockerName: bravecobra/emoji-svc
-          - svcProjectName: EmojiVoting
+          - svcProjectName: src/EmojiVoting
             svcDockerName: bravecobra/emoji-voting-svc
-          - svcProjectName: EmojiUI
+          - svcProjectName: src/EmojiUI
             svcDockerName: bravecobra/emoji-ui-svc
-          - svcProjectName: EmojiVoteBot
+          - svcProjectName: src/EmojiVoteBot
             svcDockerName: bravecobra/emoji-votebot
     needs: [build]
     steps:
