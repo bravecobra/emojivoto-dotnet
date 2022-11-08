@@ -1,7 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Worker">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+	<Version>$(SemVer)</Version>
+	<TargetFramework>net6.0</TargetFramework>
     <UserSecretsId>dotnet-EmojiVoteBot-0BD6347B-842F-470D-A520-B5B3B79983FD</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <Nullable>enable</Nullable>

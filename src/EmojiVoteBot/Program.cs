@@ -21,7 +21,8 @@ namespace EmojiVoteBot
 
         private static IHostBuilder CreateHostBuilder(string[] args)
         {
-            var resourceBuilder = ResourceBuilderFactory.CreateResourceBuilder();
+            var hostbuilder = Host.CreateDefaultBuilder(args);
+            var resourceBuilder = ResourceBuilderFactory.CreateResourceBuilder(hostbuilder);
             return Host.CreateDefaultBuilder(args)
                 .AddCustomLogging(resourceBuilder)
                 .ConfigureServices((hostContext, services) =>

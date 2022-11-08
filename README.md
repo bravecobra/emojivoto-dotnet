@@ -32,6 +32,13 @@ Docker now exposes Prometheus-compatible metrics on port 9323.
 
 ### Build docker images
 
+Optionally we want set the version derived from the current branch
+
+```powershell
+choco install gitversion # as admin
+$env:SemVer = (gitversion | ConvertFrom-Json).SemVer
+```
+
 ```powershell
 docker-compose --profile app build
 ```

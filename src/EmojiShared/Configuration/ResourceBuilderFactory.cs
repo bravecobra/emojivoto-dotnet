@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Hosting;
 using OpenTelemetry.Extensions.Docker.Resources;
 using OpenTelemetry.Resources;
 
@@ -7,7 +8,7 @@ namespace EmojiShared.Configuration
 {
     public static class ResourceBuilderFactory
     {
-        public static ResourceBuilder CreateResourceBuilder()
+        public static ResourceBuilder CreateResourceBuilder(IHostBuilder builder)
         {
             var entryAssembly = Assembly.GetEntryAssembly();
             var entryAssemblyName = entryAssembly?.GetName();
@@ -15,16 +16,20 @@ namespace EmojiShared.Configuration
                 .OfType<AssemblyInformationalVersionAttribute>()
                 .FirstOrDefault();
             var serviceName = entryAssemblyName?.Name;
-            var serviceVersion = versionAttribute?.InformationalVersion ?? entryAssemblyName?.Version?.ToString();
+            var serviceVersion = versionAttribute?.InformationalVersion ?? entryAssemblyName?.Version?.ToString() ?? "unknown";
+            var environment = Environment.GetEnvironmentVariable("DOTNET_ENVIRONMENT") ?? "none";
             var attributes = new Dictionary<string, object>
             {
                 ["host.name"] = Environment.MachineName,
                 ["os.description"] = System.Runtime.InteropServices.RuntimeInformation.OSDescription,
-                //["deployment.environment"] = environment.EnvironmentName.ToLowerInvariant()
+                ["deployment.environment"] = environment,
+                ["env"] = environment,
+                ["version"] = serviceVersion,
+                ["service"] = serviceName,
             };
 
             return ResourceBuilder.CreateDefault()
-                .AddService(serviceName, serviceVersion, serviceInstanceId: Environment.MachineName)
+                .AddService(serviceName, null ,serviceVersion, serviceInstanceId: Environment.MachineName)
                 .AddAttributes(attributes)
                 .AddTelemetrySdk()
                 .AddEnvironmentVariableDetector()
@@ -39,16 +44,21 @@ namespace EmojiShared.Configuration
                 .OfType<AssemblyInformationalVersionAttribute>()
                 .FirstOrDefault();
             var serviceName = entryAssemblyName?.Name;
-            var serviceVersion = versionAttribute?.InformationalVersion ?? entryAssemblyName?.Version?.ToString();
+            var serviceVersion = versionAttribute?.InformationalVersion ?? entryAssemblyName?.Version?.ToString() ?? "unknown";
+            var environment = builder.Environment.EnvironmentName.ToLowerInvariant();
             var attributes = new Dictionary<string, object>
             {
                 ["host.name"] = Environment.MachineName,
                 ["os.description"] = System.Runtime.InteropServices.RuntimeInformation.OSDescription,
-                ["deployment.environment"] = builder.Environment.EnvironmentName.ToLowerInvariant()
+                ["deployment.environment"] = environment,
+                ["env"] = environment,
+                ["version"] = serviceVersion,
+                ["service"] = serviceName,
+                ["application_type"] = "web" //autodetection datadog
             };
 
             return ResourceBuilder.CreateDefault()
-                .AddService(serviceName, serviceVersion, serviceInstanceId: Environment.MachineName)
+                .AddService(serviceName, null, serviceVersion, serviceInstanceId: Environment.MachineName)
                 .AddAttributes(attributes)
                 .AddTelemetrySdk()
                 .AddEnvironmentVariableDetector()
