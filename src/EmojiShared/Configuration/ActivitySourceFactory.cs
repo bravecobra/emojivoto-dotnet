@@ -5,8 +5,10 @@ namespace EmojiShared.Configuration;
 
 public static class ActivitySourceFactory
 {
-    public static ActivitySource CreateActivitySource()
+    private static ActivitySource? _current;
+
+    public static ActivitySource GetActivitySource()
     {
-        return new ActivitySource(Assembly.GetEntryAssembly()?.GetName().Name!);
+        return _current ??= new ActivitySource(Assembly.GetEntryAssembly()?.GetName().Name!);
     }
 }

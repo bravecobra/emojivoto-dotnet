@@ -15,11 +15,12 @@ RUN dotnet restore "EmojiVoting/EmojiVoting.csproj"
 COPY ./src/EmojiShared ./EmojiShared
 COPY ./src/EmojiVoting ./EmojiVoting
 COPY ./src/protos ./protos
+COPY ./.git ./.git
 WORKDIR "/src/EmojiVoting"
-RUN dotnet build "EmojiVoting.csproj" -c Debug -o /app/build
+RUN dotnet build "EmojiVoting.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "EmojiVoting.csproj" -c Debug -o /app/publish
+RUN dotnet publish "EmojiVoting.csproj" -c Release -o /app/publish
 
 FROM base AS final
 RUN apt-get update && apt-get install -y procps

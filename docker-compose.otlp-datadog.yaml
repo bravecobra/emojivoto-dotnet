@@ -47,3 +47,4 @@ services:
       - DD_SITE=${DD_SITE}
     volumes:
       - ./config/otel/otel-config-datadog.yaml:/etc/otel-collector-config.yml
+      - //var/run/docker.sock:/var/run/docker.sock

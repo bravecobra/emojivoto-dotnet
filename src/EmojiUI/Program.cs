@@ -13,6 +13,7 @@ namespace EmojiUI
     {
         public static void Main(string[] args)
         {
+            //To allow grpc HTTP2 traffic over non-SSL
             AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
             var builder = WebApplication.CreateBuilder(args);
             builder.Services.AddConfigurationRoot(builder.Configuration);

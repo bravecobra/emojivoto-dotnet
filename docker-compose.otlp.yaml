@@ -48,6 +48,7 @@ services:
   otel-collector:
     volumes:
       - ./config/otel/otel-config-grafana.yaml:/etc/otel-collector-config.yml
+      - //var/run/docker.sock:/var/run/docker.sock
     depends_on:
       - loki
       - prometheus

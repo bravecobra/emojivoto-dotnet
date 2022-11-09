@@ -27,7 +27,7 @@ namespace EmojiShared.Configuration
                 ["version"] = serviceVersion,
                 ["service"] = serviceName,
             };
-
+            ActivitySourceFactory.GetActivitySource();
             return ResourceBuilder.CreateDefault()
                 .AddService(serviceName, null ,serviceVersion, serviceInstanceId: Environment.MachineName)
                 .AddAttributes(attributes)

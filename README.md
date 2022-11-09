@@ -177,7 +177,7 @@ docker-compose --profile app --profile otlp -f docker-compose.yml -f docker-comp
 
 Now instead having to run that monitoring backend outselves, we can also choose to output to a cloud service like [Datadog](https://datadoghq.com) or [Splunk](https://www.splunk.com/). This example shows exporting to Datadog.
 
-> Make sure you create an `.env` file with your `DD_API_KEY` and `DD_SITE` values.
+> Make sure you create an `.env` file with your `DD_API_KEY` and `DD_SITE` values. This setup will then automatically fill in in the required place.
 
 ```mermaid
 graph TD;

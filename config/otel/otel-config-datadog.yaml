@@ -37,6 +37,17 @@ receivers:
     include:
       # Logs will be collected from the below file path. Please ensure it is correct or edit as needed.
       - /var/log/**/*example*/*.log
+  docker_stats:
+    collection_interval: 2s
+    timeout: 20s
+    api_version: 1.24
+    container_labels_to_metric_labels:
+      com.docker.compose.service: service.name
+    # excluded_images:
+    #   - undesired-container
+    #   - /.*undesired.*/
+    #   - another-*-container
+    provide_per_core_cpu_metrics: true
 
   prometheus:
     config:
@@ -91,7 +102,7 @@ service:
       level: "debug"
   pipelines:
     metrics:
-      receivers: [hostmetrics, otlp, prometheus]
+      receivers: [hostmetrics, otlp, prometheus, docker_stats]
       processors: [batch]
       exporters: [datadog]
     traces:

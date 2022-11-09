@@ -15,11 +15,12 @@ RUN dotnet restore "EmojiSvc/EmojiSvc.csproj"
 COPY ./src/EmojiShared ./EmojiShared
 COPY ./src/EmojiSvc ./EmojiSvc
 COPY ./src/protos ./protos
+COPY ./.git ./.git
 WORKDIR "/src/EmojiSvc"
-RUN dotnet build "EmojiSvc.csproj" -c Debug -o /app/build
+RUN dotnet build "EmojiSvc.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "EmojiSvc.csproj" -c Debug -o /app/publish
+RUN dotnet publish "EmojiSvc.csproj" -c Release -o /app/publish
 
 FROM base AS final
 RUN apt-get update && apt-get install -y procps

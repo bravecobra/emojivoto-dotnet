@@ -28,8 +28,7 @@ public class VotingBot : BackgroundService
     {
         while (!stoppingToken.IsCancellationRequested)
         {
-            var activitySource = ActivitySourceFactory.CreateActivitySource();
-            using var activity = activitySource.StartActivity(nameof(VotingBot), ActivityKind.Producer);
+            using var activity = ActivitySourceFactory.GetActivitySource().StartActivity(ActivityKind.Producer);
             {
                 try
                 {
@@ -59,7 +58,7 @@ public class VotingBot : BackgroundService
                     _logger.LogError(e, "Failed to vote");
                 }
             }
-            var votingRate = _configuration.GetValue<int>("VOTING_RATE", 1000);
+            var votingRate = _configuration.GetValue("VOTING_RATE", 1000);
             await Task.Delay(votingRate, stoppingToken);
         }
     }
