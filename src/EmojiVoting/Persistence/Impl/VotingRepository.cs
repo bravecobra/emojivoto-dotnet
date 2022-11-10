@@ -15,7 +15,7 @@ namespace EmojiVoting.Persistence.Impl
         {
             _context = context;
         }
-        public async Task<Result> GetResultByShortcode(string shortcode)
+        public async Task<Result?> GetResultByShortcode(string shortcode)
         {
             return await _context.Results.Where(result => result.Shortcode == shortcode).FirstOrDefaultAsync();
         }

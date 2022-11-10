@@ -8,7 +8,6 @@ receivers:
     protocols:
       grpc:
       http:
-
   # Get the metrics of the otel-collector itself
   hostmetrics:
     collection_interval: 10s
@@ -30,7 +29,6 @@ receivers:
       memory:
       network:
       processes:
-
   filelog:
     include_file_path: true
     poll_interval: 500ms
@@ -43,12 +41,7 @@ receivers:
     api_version: 1.24
     container_labels_to_metric_labels:
       com.docker.compose.service: service.name
-    # excluded_images:
-    #   - undesired-container
-    #   - /.*undesired.*/
-    #   - another-*-container
     provide_per_core_cpu_metrics: true
-
   prometheus:
     config:
       scrape_configs:
@@ -57,20 +50,7 @@ receivers:
         static_configs:
         - targets: ['0.0.0.0:8888']
         - targets: ['0.0.0.0:8889']
-      # - job_name: 'emoji'
-      #   static_configs:
-      #   - targets: ['emoji-ui-svc:80']
-      #   - targets: ['emoji-svc:81']
-      #   - targets: ['voting-svc:81']
-      # - job_name: 'prometheus'
-      #   # metrics_path defaults to '/metrics'
-      #   # scheme defaults to 'http'.
-      #   static_configs:
-      #     - targets: ['host.docker.internal:9090'] # Only works on Docker Desktop for Windows
-
       - job_name: 'docker'
-              # metrics_path defaults to '/metrics'
-              # scheme defaults to 'http'.
         static_configs:
           - targets: ['host.docker.internal:9323']
 

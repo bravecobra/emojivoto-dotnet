@@ -34,8 +34,8 @@ namespace EmojiShared.Configuration
                     {
                         await context.Response.WriteAsync(JsonSerializer.Serialize(new
                         {
-                            StatusCode = context.Response.StatusCode,
-                            Message = contextFeature.Error.Message,
+                            context.Response.StatusCode,
+                            contextFeature.Error.Message,
                             TraceID = Activity.Current?.TraceId.ToString(),
                         }));
                     }

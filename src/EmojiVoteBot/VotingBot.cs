@@ -37,9 +37,11 @@ public class VotingBot : BackgroundService
                     {
                         activity?.SetTag("voting.shortcode", ":doughnut:");
                         var doughnut = await _service.FindByShortCode(":doughnut:");
-
-                        await _service.Vote(doughnut.Shortcode);
-                        _logger.LogInformation($"Forced voting for {doughnut.Unicode}: {doughnut.Shortcode} ");
+                        if (doughnut != null)
+                        {
+                            await _service.Vote(doughnut.Shortcode);
+                            _logger.LogInformation("Forced voting for {UniCode}: {Shortcode}", doughnut.Unicode, doughnut.Shortcode);
+                        }
                     }
                     else
                     {
@@ -47,7 +49,7 @@ public class VotingBot : BackgroundService
                         var randomEmoji = availableCodes.ElementAt(Random.Shared.Next(0, 99));
                         activity?.SetTag("voting.shortcode", randomEmoji.Shortcode);
                         await _service.Vote(randomEmoji.Shortcode);
-                        _logger.LogInformation($"Voted for {randomEmoji.Unicode}: {randomEmoji.Shortcode}");
+                        _logger.LogInformation("Voted for {Unicode}: {Shortcode}", randomEmoji.Unicode, randomEmoji.Shortcode);
                     }
 
                     _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);

@@ -8,7 +8,9 @@ namespace EmojiShared.Configuration
 {
     public static class ResourceBuilderFactory
     {
+#pragma warning disable IDE0060 // Remove unused parameter
         public static ResourceBuilder CreateResourceBuilder(IHostBuilder builder)
+#pragma warning restore IDE0060 // Remove unused parameter
         {
             var entryAssembly = Assembly.GetEntryAssembly();
             var entryAssemblyName = entryAssembly?.GetName();
@@ -25,7 +27,7 @@ namespace EmojiShared.Configuration
                 ["deployment.environment"] = environment,
                 ["env"] = environment,
                 ["version"] = serviceVersion,
-                ["service"] = serviceName,
+                ["service"] = serviceName ?? "unknown",
             };
             ActivitySourceFactory.GetActivitySource();
             return ResourceBuilder.CreateDefault()
@@ -53,7 +55,7 @@ namespace EmojiShared.Configuration
                 ["deployment.environment"] = environment,
                 ["env"] = environment,
                 ["version"] = serviceVersion,
-                ["service"] = serviceName,
+                ["service"] = serviceName ?? "unknown",
                 ["application_type"] = "web" //autodetection datadog
             };
 

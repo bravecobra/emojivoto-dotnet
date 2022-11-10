@@ -62,9 +62,9 @@ namespace EmojiShared.Configuration
                 }
                 case "seq":
                 {
-                    var seq_uri = builder.Configuration.GetValue<string>("Seq:Uri").ToLowerInvariant();
+                    var seqUri = builder.Configuration.GetValue<string>("Seq:Uri").ToLowerInvariant();
                     var logger = new LoggerConfiguration()
-                        .WriteTo.Seq(seq_uri)
+                        .WriteTo.Seq(seqUri)
                         .Enrich.FromLogContext()
                         .Enrich.With(new PropertyEnricher("app", Assembly.GetEntryAssembly()?.GetName().Name!))
                         .Enrich.With(new PropertyEnricher("version", Assembly.GetEntryAssembly()?.GetName().Version?.ToString()))
@@ -172,9 +172,9 @@ namespace EmojiShared.Configuration
                         }
                     case "seq":
                         {
-                            var seq_uri = context.Configuration.GetValue<string>("Seq:Uri").ToLowerInvariant();
+                            var seqUri = context.Configuration.GetValue<string>("Seq:Uri").ToLowerInvariant();
                             var logger = new LoggerConfiguration()
-                                .WriteTo.Seq(seq_uri)
+                                .WriteTo.Seq(seqUri)
                                 .Enrich.FromLogContext()
                                 .Enrich.With(new PropertyEnricher("app", Assembly.GetEntryAssembly()?.GetName().Name!))
                                 .Enrich.WithExceptionDetails()

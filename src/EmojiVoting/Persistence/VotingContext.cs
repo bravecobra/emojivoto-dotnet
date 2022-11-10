@@ -5,7 +5,7 @@ namespace EmojiVoting.Persistence
 {
     public class VotingContext : DbContext
     {
-        public DbSet<Result> Results { get; set; }
+        public DbSet<Result> Results { get; set; } = null!;
         public string DbPath { get; private set; }
 
         public VotingContext(DbContextOptions<VotingContext> options) : base(options)

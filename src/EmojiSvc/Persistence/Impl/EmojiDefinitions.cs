@@ -4,7 +4,7 @@ namespace EmojiSvc.Persistence.Impl
 {
     public static class EmojiDefinitions
     {
-        public static Dictionary<string, string> CodeMap =
+        public static readonly Dictionary<string, string> CodeMap =
             new()
             {
                 [":+1:"] = "\U0001f44d",
