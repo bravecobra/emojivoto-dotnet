@@ -43,7 +43,7 @@ Save the file, or in the case of Docker Desktop for Mac or Docker Desktop for Wi
 
 Docker now exposes Prometheus-compatible metrics on port 9323.
 
-> You only need to enable this if you want metrics from the underlying docker daemon.
+> You only need to enable this if you want metrics from the underlying docker daemon, pulled by the opentelemetry-collector.
 
 ### Compile
 
