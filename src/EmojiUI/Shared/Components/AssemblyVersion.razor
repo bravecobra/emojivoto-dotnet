@@ -1,0 +1,6 @@
+﻿@using System.Diagnostics
+@AssemblyVersionAsString
+
+@code {
+    private string AssemblyVersionAsString => FileVersionInfo.GetVersionInfo(GetType().Assembly.Location).ProductVersion ?? "unknown";
+}

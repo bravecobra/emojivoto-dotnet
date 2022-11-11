@@ -1,4 +1,5 @@
 ﻿@page "/"
+@using EmojiUI.Shared.Components
 @using EmojiUI.Shared.Store.FetchEmojies
 @using System.Diagnostics
 @inherits Fluxor.Blazor.Web.Components.FluxorComponent
@@ -51,6 +52,7 @@
                     else
                     {
                         <h1>EMOJI VOTE</h1>
+                        <p>(<AssemblyVersion />)</p>
                         <p>Tap to vote for your favorite emoji below</p>
 
                         <NavLink href="/leaderboard"><div class="btn btn-blue">View the leaderboard</div></NavLink>
