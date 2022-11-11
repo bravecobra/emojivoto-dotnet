@@ -117,7 +117,6 @@ Task("Docker-Build")
       File = file.FullPath,
       BuildArg = new []{ $"SemVer={gitVersion.SemVer}" },
       Tag = new []{ $"{imageName}:{gitVersion.SemVer}" , $"{imageName}:latest"}
-     //  Tag=tags
     };
     DockerBuild(settings, ".");
   }
