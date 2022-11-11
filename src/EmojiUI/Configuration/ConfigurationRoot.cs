@@ -37,6 +37,7 @@ namespace EmojiUI.Configuration
             });
             services.AddFluxor(o => o
                 .ScanAssemblies(typeof(Program).Assembly)
+                .WithLifetime(StoreLifetime.Scoped)
                 .UseRouting()
                 .UseReduxDevTools()
                 .AddMiddleware<LoggingMiddleware>());

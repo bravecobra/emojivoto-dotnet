@@ -23,7 +23,7 @@ namespace EmojiVoteBot.Services.Impl
             return result.AsEnumerable();
         }
 
-        public async Task<Emoji> FindByShortCode(string shortcode)
+        public async Task<Emoji?> FindByShortCode(string shortcode)
         {
             var response = await _emojiClient.FindByShortcodeAsync(new FindByShortcodeRequest { Shortcode = shortcode });
             return response.Emoji != null ?

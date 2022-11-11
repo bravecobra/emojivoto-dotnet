@@ -23,7 +23,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EmojiUI", "src\EmojiUI\Emoj
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EmojiVoteBot", "src\EmojiVoteBot\EmojiVoteBot.csproj", "{28BF8E5A-60FA-434B-9146-F546EE576EFE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmojiShared", "src\EmojiShared\EmojiShared.csproj", "{83149C95-DE08-4C7C-A435-97A23219C35F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EmojiShared", "src\EmojiShared\EmojiShared.csproj", "{83149C95-DE08-4C7C-A435-97A23219C35F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

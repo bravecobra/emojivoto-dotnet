@@ -1,6 +1,5 @@
 ﻿using EmojiVoting.Domain;
 using EmojiVoting.Persistence;
-using Microsoft.AspNetCore.Components.Routing;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Diagnostics.Metrics;
@@ -14,8 +13,6 @@ namespace EmojiVoting.Application.Impl
     {
         private readonly ILogger<PollService> _logger;
         private readonly IVotingRepository _repository;
-        //private readonly ConcurrentDictionary<string, Result> _votes = new(); //TODO: Move to persistence layer
-        private int _voteCounter = 0;
 
         public PollService(ILogger<PollService> logger, IVotingRepository repository)
         {
@@ -36,12 +33,12 @@ namespace EmojiVoting.Application.Impl
                 vote = new Result { Votes = 1, Shortcode = choice };
                 await _repository.AddVote(vote);
             }
-            _voteCounter++;
+
             //TODO: Add prometheus custom Counter metric.
-            var meter = new Meter(Assembly.GetEntryAssembly()?.GetName().Name);
+            var meter = new Meter(Assembly.GetEntryAssembly()?.GetName().Name ?? "EmojiVoting");
             var counter = meter.CreateCounter<int>("Votes");
             counter.Add(1, KeyValuePair.Create<string, object?>("name", choice));
-            _logger.LogInformation($"Voted for {choice}, which now has a total of {vote.Votes}");
+            _logger.LogInformation("Voted for {choice}, which now has a total of {vote.Votes}", choice, vote.Votes);
         }
 
         public async Task<List<Result>> Results()

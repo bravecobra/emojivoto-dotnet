@@ -2,7 +2,20 @@
 
 ## Description
 
-This repository contains a `.NET Core` ported version of the [EmojiVoto](https://github.com/BuoyantIO/emojivoto) project, which is written in Go. It also showcases `Opentelemetry`'s benefits through multiple scenarios using `docker-compose` and `kubernetes`.
+This repository contains a `.NET Core` ported version of the [EmojiVoto](https://github.com/BuoyantIO/emojivoto) project (written in Go). It also showcases `Opentelemetry`'s benefits through multiple scenarios using `docker-compose` and `kubernetes`.
+
+```mermaid
+graph LR;
+  subgraph EmojiVoto
+  VoteBot --REST--> EmojiUI;
+  EmojiUI --gRPC--> EmojiSvc;
+  EmojiUI --gRPC--> EmojiVoting;
+  end
+  style VoteBot fill:#fcba03,color:#000
+  style EmojiUI fill:#03fc28,color:#000
+  style EmojiSvc fill:#03fc28,color:#000
+  style EmojiVoting fill:#03fc28,color:#000
+```
 
 ## Setup (Docker)
 
@@ -12,8 +25,8 @@ Reference: [https://docs.docker.com/config/daemon/prometheus/#configure-docker](
 
 To configure the Docker daemon as a Prometheus target, you need to specify the metrics-address. The best way to do this is via the daemon.json, which is located at one of the following locations by default. If the file does not exist, create it.
 
-* Linux: /etc/docker/daemon.json
-* Windows Server: C:\ProgramData\docker\config\daemon.json
+* Linux: `/etc/docker/daemon.json`
+* Windows Server: `C:\ProgramData\docker\config\daemon.json`
 * Docker Desktop for Mac / Docker Desktop for Windows: Click the Docker icon in the toolbar, select Preferences, then select Daemon. Click Advanced.
 If the file is currently empty, paste the following:
 
@@ -30,17 +43,26 @@ Save the file, or in the case of Docker Desktop for Mac or Docker Desktop for Wi
 
 Docker now exposes Prometheus-compatible metrics on port 9323.
 
+> You only need to enable this if you want metrics from the underlying docker daemon, pulled by the opentelemetry-collector.
+
+### Compile
+
+```powershell
+.\build.ps1 --target Docker-Build
+```
+
 ### Build docker images
 
 ```powershell
-docker-compose --profile app build
+.\build.ps1 --target Docker-Build
 ```
 
 ## Different monitoring scenarios
 
 ### No monitoring, just console logging
 
-Without passing extra parameters/environment vars, this setup does only basic console logging.
+Without passing extra parameters/environment vars, this setup does only basic console logging. This is the use case of many applications today that don't have any monitoring in place and just for file logging. You forces you to go fetch the logs from the servers where the application is running and spitting through endless lines of logs to find a clue of what is going on. In multithreaded apps that's even harder as you get the loglines ordered by timestamp, so threads get merged together in the logfiles.
+
 The profile `app` is passed to only deploy the services of the app itself.
 
 ```powershell
@@ -52,18 +74,24 @@ but without any means of observability, except that console output.
 
 ```mermaid
 graph TD;
-    emojiui-->|logs|console;
-    emojiui-->|traces|?;
-    emojiui-->|metrics|?;
-    emojisvc-->|logs|console;
-    emojisvc-->|traces|?;
-    emojisvc-->|metrics|?;
-    votingsvc-->|logs|console;
-    votingsvc-->|traces|?;
-    votingsvc-->|metrics|?;
-    votebot-->|logs|console;
-    votebot-->|traces|?;
-    votebot-->|metrics|?;
+  subgraph EmojiVoto
+    VoteBot --REST--> EmojiUI
+    EmojiUI --gRPC--> EmojiSvc
+    EmojiUI --gRPC--> EmojiVoting
+  end
+  subgraph Monitoring
+    Console
+  end
+  EmojiUI -.logs.-> Console;
+  EmojiSvc -.logs.-> Console;
+  EmojiVoting -.logs.-> Console;
+  VoteBot -.logs.-> Console;
+
+  style VoteBot fill:#fcba03,color:#000
+  style EmojiUI fill:#03fc28,color:#000
+  style EmojiSvc fill:#03fc28,color:#000
+  style EmojiVoting fill:#03fc28,color:#000
+  style Console fill:#0356fc,color:#000
 ```
 
 To bring the app back down
@@ -74,26 +102,44 @@ docker-compose down
 
 ### Monitoring to individual services (jaeger, seq, prometheus)
 
-Providing extra environment variables through `docker-compose.individual.yaml`, the app can be reconfigured to start outputting to the individual services `seq`, `jaeger` and `prometheus`.
-
-```mermaid
-graph TD;
-    emojiui-->|logs|seq;
-    emojiui-->|traces|jaeger;
-    emojiui-->|metrics|prometheus;
-    emojisvc-->|logs|seq;
-    emojisvc-->|traces|jaeger;
-    emojisvc-->|metrics|prometheus;
-    votingsvc-->|logs|seq;
-    votingsvc-->|traces|jaeger;
-    votingsvc-->|metrics|prometheus;
-    votebot-->|logs|seq;
-    votebot-->|traces|jaeger;
-    votebot-->|metrics|prometheus;
-```
+Providing extra environment variables through `docker-compose.individual.yaml`, the app can be reconfigured to start outputting to those individual services `seq`, `jaeger` and `prometheus`.
 
 ```powershell
 docker-compose --profile app --profile individual -f docker-compose.yml -f docker-compose.individual.yaml up -d --remove-orphans
+```
+
+```mermaid
+graph TD;
+  subgraph EmojiVoto
+    VoteBot --REST--> EmojiUI
+    EmojiUI --gRPC--> EmojiSvc
+    EmojiUI --gRPC--> EmojiVoting
+  end
+    subgraph Monitoring
+      Seq
+      Jaeger
+      Prometheus
+    end
+    EmojiUI -.logs.-> Seq;
+    EmojiUI -.traces.-> Jaeger;
+    EmojiUI -.metrics.-> Prometheus;
+    EmojiSvc -.logs.-> Seq;
+    EmojiSvc -.traces.-> Jaeger;
+    EmojiSvc -.metrics.-> Prometheus;
+    EmojiVoting -.logs.-> Seq;
+    EmojiVoting -.traces.-> Jaeger;
+    EmojiVoting -.metrics.-> Prometheus;
+    VoteBot -.logs.-> Seq;
+    VoteBot -.traces.-> Jaeger;
+    VoteBot -.metrics.-> Prometheus;
+
+  style VoteBot fill:#fcba03,color:#000
+  style EmojiUI fill:#03fc28,color:#000
+  style EmojiSvc fill:#03fc28,color:#000
+  style EmojiVoting fill:#03fc28,color:#000
+  style Seq fill:#0356fc,color:#000
+  style Jaeger fill:#0356fc,color:#000
+  style Prometheus fill:#0356fc,color:#000
 ```
 
 Each component is reconfigured to output to each monitoring service. That means each service now outputs:
@@ -106,22 +152,41 @@ Although we have some observability now, we still need to reconfigure each servi
 
 ### Monitoring to individual services (loki, tempo, prometheus)
 
-We could also reconfigure to output to other services like `loki`, `tempo` and `prometheus`, but we need to do that by adjusting each component individually.
+It would also be nice to see some corrolation between those services, like searching for the corresponding log-entries for a given TraceId.
+We could reconfigure to output to other services that do just that like `Loki`, `Tempo` and `Prometheus` (made by Grafana), but we need to do that by adjusting each component individually.
 
 ```mermaid
 graph TD;
-    emojiui-->|logs|loki;
-    emojiui-->|traces|tempo;
-    emojiui-->|metrics|prometheus;
-    emojisvc-->|logs|loki;
-    emojisvc-->|traces|tempo;
-    emojisvc-->|metrics|prometheus;
-    votingsvc-->|logs|loki;
-    votingsvc-->|traces|tempo;
-    votingsvc-->|metrics|prometheus;
-    votebot-->|logs|loki;
-    votebot-->|traces|tempo;
-    votebot-->|metrics|prometheus;
+  subgraph EmojiVoto
+    VoteBot --REST--> EmojiUI
+    EmojiUI --gRPC--> EmojiSvc
+    EmojiUI --gRPC--> EmojiVoting
+  end
+    EmojiUI -.logs.-> Loki
+    EmojiUI -.traces.-> Tempo
+    EmojiUI -.metrics.-> Prometheus
+    EmojiSvc -.logs.-> Loki
+    EmojiSvc -.traces.-> Tempo
+    EmojiSvc -.metrics.-> Prometheus
+    EmojiVoting -.logs.-> Loki
+    EmojiVoting -.traces.-> Tempo
+    EmojiVoting -.metrics.-> Prometheus
+    VoteBot -.logs.-> Loki
+    VoteBot -.traces.-> Tempo
+    VoteBot -.metrics.-> Prometheus
+  subgraph one
+    Loki <--> Tempo
+    Prometheus <--> Loki
+    Tempo <--> Prometheus
+  end
+
+  style VoteBot fill:#fcba03,color:#000
+  style EmojiUI fill:#03fc28,color:#000
+  style EmojiSvc fill:#03fc28,color:#000
+  style EmojiVoting fill:#03fc28,color:#000
+  style Loki fill:#0356fc,color:#000
+  style Tempo fill:#0356fc,color:#000
+  style Prometheus fill:#0356fc,color:#000
 ```
 
 ```powershell
@@ -130,9 +195,9 @@ docker-compose --profile app --profile grafana -f docker-compose.yml -f docker-c
 
 Each component is reconfigured to output to each monitoring service. That means each service outputs:
 
-* metrics on an endpoint which is scraped by `prometheus`
-* traces to `tempo`
-* logs directly to `loki`
+* logs directly to `Loki`
+* traces to `Tempo`
+* metrics on an endpoint which is scraped by `Prometheus`
 
 Downside is still that we heave to reconfigure each service to get monitoring up and running.
 
@@ -140,21 +205,39 @@ Downside is still that we heave to reconfigure each service to get monitoring up
 
 ```mermaid
 graph TD;
-    emojiui-->|logs|opentelemetry-collector;
-    emojiui-->|traces|opentelemetry-collector;
-    emojiui-->|metrics|opentelemetry-collector;
-    emojisvc-->|logs|opentelemetry-collector;
-    emojisvc-->|traces|opentelemetry-collector;
-    emojisvc-->|metrics|opentelemetry-collector;
-    votingsvc-->|logs|opentelemetry-collector;
-    votingsvc-->|traces|opentelemetry-collector;
-    votingsvc-->|metrics|opentelemetry-collector;
-    votebot-->|logs|opentelemetry-collector;
-    votebot-->|traces|opentelemetry-collector;
-    votebot-->|metrics|opentelemetry-collector;
-    opentelemetry-collector-->|logs|loki
-    opentelemetry-collector-->|traces|tempo
-    opentelemetry-collector-->|metrics|prometheus
+  subgraph EmojiVoto
+    VoteBot --REST--> EmojiUI
+    EmojiUI --gRPC--> EmojiSvc
+    EmojiUI --gRPC--> EmojiVoting
+  end
+    EmojiUI -.logs.-> OpenTelemetry;
+    EmojiUI -.traces.-> OpenTelemetry;
+    EmojiUI -.metrics.-> OpenTelemetry;
+    EmojiSvc -.logs.-> OpenTelemetry;
+    EmojiSvc -.traces.-> OpenTelemetry;
+    EmojiSvc -.metrics.-> OpenTelemetry;
+    EmojiVoting -.logs.-> OpenTelemetry;
+    EmojiVoting -.traces.-> OpenTelemetry
+    EmojiVoting -.metrics.-> OpenTelemetry
+    VoteBot -.logs.-> OpenTelemetry
+    VoteBot -.traces.-> OpenTelemetry
+    VoteBot -.metrics.-> OpenTelemetry
+  subgraph Monitoring
+    OpenTelemetry -.logs.-> Loki
+    OpenTelemetry -.traces.-> Tempo
+    OpenTelemetry -.metrics.-> Prometheus
+    Loki <--> Tempo
+    Tempo <--> Prometheus
+    Prometheus <--> Loki
+  end
+  style VoteBot fill:#fcba03,color:#000
+  style EmojiUI fill:#03fc28,color:#000
+  style EmojiSvc fill:#03fc28,color:#000
+  style EmojiVoting fill:#03fc28,color:#000
+  style OpenTelemetry fill:#0356fc,color:#000
+  style Loki fill:#0356fc,color:#000
+  style Tempo fill:#0356fc,color:#000
+  style Prometheus fill:#0356fc,color:#000
 ```
 
 We let the app output to just one component: `opentelemetry-collector`. From there we then can decide where each output should go without
@@ -170,25 +253,38 @@ docker-compose --profile app --profile otlp -f docker-compose.yml -f docker-comp
 
 Now instead having to run that monitoring backend outselves, we can also choose to output to a cloud service like [Datadog](https://datadoghq.com) or [Splunk](https://www.splunk.com/). This example shows exporting to Datadog.
 
-> Make sure you create an `.env` file with your `DD_API_KEY` and `DD_SITE` values.
+> Make sure you create an `.env` file with your `DD_API_KEY` and `DD_SITE` values. This setup will then automatically fill in in the required place.
 
 ```mermaid
 graph TD;
-    emojiui-->|logs|opentelemetry-collector;
-    emojiui-->|traces|opentelemetry-collector;
-    emojiui-->|metrics|opentelemetry-collector;
-    emojisvc-->|logs|opentelemetry-collector;
-    emojisvc-->|traces|opentelemetry-collector;
-    emojisvc-->|metrics|opentelemetry-collector;
-    votingsvc-->|logs|opentelemetry-collector;
-    votingsvc-->|traces|opentelemetry-collector;
-    votingsvc-->|metrics|opentelemetry-collector;
-    votebot-->|logs|opentelemetry-collector;
-    votebot-->|traces|opentelemetry-collector;
-    votebot-->|metrics|opentelemetry-collector;
-    opentelemetry-collector-->|logs|datadog
-    opentelemetry-collector-->|traces|datadog
-    opentelemetry-collector-->|metrics|datadog
+  subgraph EmojiVoto
+    VoteBot --REST--> EmojiUI
+    EmojiUI --gRPC--> EmojiSvc
+    EmojiUI --gRPC--> EmojiVoting
+  end
+    EmojiUI -.logs.-> OpenTelemetry
+    EmojiUI -.traces.-> OpenTelemetry
+    EmojiUI -.metrics.-> OpenTelemetry
+    EmojiSvc -.logs.-> OpenTelemetry
+    EmojiSvc -.traces.-> OpenTelemetry
+    EmojiSvc -.metrics.-> OpenTelemetry
+    EmojiVoting -.logs.-> OpenTelemetry
+    EmojiVoting -.traces.-> OpenTelemetry
+    EmojiVoting -.metrics.-> OpenTelemetry
+    VoteBot -.logs.-> OpenTelemetry
+    VoteBot -.traces.-> OpenTelemetry
+    VoteBot -.metrics.-> OpenTelemetry
+  subgraph Monitoring
+    OpenTelemetry -.logs.-> DataDog
+    OpenTelemetry -.traces.-> DataDog
+    OpenTelemetry -.metrics.-> DataDog
+  end
+  style VoteBot fill:#fcba03,color:#000
+  style EmojiUI fill:#03fc28,color:#000
+  style EmojiSvc fill:#03fc28,color:#000
+  style EmojiVoting fill:#03fc28,color:#000
+  style DataDog fill:#0356fc,color:#000
+  style OpenTelemetry fill:#0356fc,color:#000
 ```
 
 ```powershell

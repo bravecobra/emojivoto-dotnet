@@ -1,10 +1,13 @@
 version: '3'
+
 services:
   web:
     image: bravecobra/emoji-ui-svc:stable
     build:
       context: .
       dockerfile: ./src/EmojiUI/Dockerfile
+      args:
+        - SemVer=${SemVer}
     profiles: ["app"]
     container_name: emoji-ui-svc
     environment:
@@ -27,6 +30,8 @@ services:
     build:
       context: .
       dockerfile: ./src/EmojiSvc/Dockerfile
+      args:
+        - SemVer=${SemVer}
     profiles: ["app"]
     container_name: emoji-svc
     environment:
@@ -45,6 +50,8 @@ services:
     build:
       context: .
       dockerfile: ./src/EmojiVoting/Dockerfile
+      args:
+        - SemVer=${SemVer}
     container_name: voting-svc
     profiles: ["app"]
     environment:
@@ -65,6 +72,8 @@ services:
     build:
       context: .
       dockerfile: ./src/EmojiVoteBot/Dockerfile
+      args:
+        - SemVer=${SemVer}
     container_name: votebot
     profiles: ["app"]
     environment:

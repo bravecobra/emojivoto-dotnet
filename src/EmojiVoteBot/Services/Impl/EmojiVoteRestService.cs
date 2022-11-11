@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using EmojiShared.Configuration;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -24,11 +25,11 @@ namespace EmojiVoteBot.Services.Impl
         }
         public async Task<IEnumerable<Emoji>> ListEmojis()
         {
-            using var activity = Activity.Current?.Source.StartActivity(nameof(ListEmojis));
+            using var activity = ActivitySourceFactory.GetActivitySource().StartActivity();
             using var client = _clientFactory.CreateClient();
             var response = await client.GetAsync(new Uri($"{_configuration["WEB_HOST"]}/api/Emojis"));
             response.EnsureSuccessStatusCode();
-            if (response.Content is object && response.Content.Headers.ContentType?.MediaType == "application/json")
+            if (response.Content is not null && response.Content.Headers.ContentType?.MediaType == "application/json")
             {
                 var contentStream = await response.Content.ReadAsStreamAsync();
 
@@ -38,8 +39,8 @@ namespace EmojiVoteBot.Services.Impl
                     {
                         DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
                         PropertyNameCaseInsensitive = true
-                    });
-                }
+                    }) ?? new List<Emoji>();}
+                
                 catch (JsonException) // Invalid JSON
                 {
                     _logger.LogError("Invalid JSON.");
@@ -49,16 +50,16 @@ namespace EmojiVoteBot.Services.Impl
             {
                 _logger.LogError("HTTP Response was invalid and cannot be deserialised.");
             }
-            return null;
+            return new List<Emoji>();
         }
 
-        public async Task<Emoji> FindByShortCode(string shortcode)
+        public async Task<Emoji?> FindByShortCode(string shortcode)
         {
-            using var activity = Activity.Current?.Source.StartActivity(nameof(FindByShortCode));
+            using var activity = ActivitySourceFactory.GetActivitySource().StartActivity();
             using var client = _clientFactory.CreateClient();
             var response = await client.GetAsync(new Uri($"{_configuration["WEB_HOST"]}/api/Emojis/{shortcode}"));
             response.EnsureSuccessStatusCode();
-            if (response.Content is object && response.Content.Headers.ContentType?.MediaType == "application/json")
+            if (response.Content.Headers.ContentType?.MediaType == "application/json")
             {
                 var contentStream = await response.Content.ReadAsStreamAsync();
 
@@ -84,11 +85,11 @@ namespace EmojiVoteBot.Services.Impl
 
         public async Task<bool> Vote(string choice)
         {
-            using var activity = Activity.Current?.Source.StartActivity(nameof(Vote));
+            using var activity = ActivitySourceFactory.GetActivitySource().StartActivity();
             using var client = _clientFactory.CreateClient();
             var response = await client.PostAsync(new Uri($"{_configuration["WEB_HOST"]}/api/Vote?choice={choice}"), new StringContent(string.Empty));
             response.EnsureSuccessStatusCode();
-            _logger.LogInformation(response.StatusCode.ToString());
+            _logger.LogInformation("StatusCode: {StatusCode}", response.StatusCode.ToString());
             return true;
         }
     }

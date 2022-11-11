@@ -1,5 +1,4 @@
-﻿using EmojiUI.Shared.Store;
-using EmojiUI.Shared.Store.FetchEmojies;
+﻿using EmojiUI.Shared.Store.FetchEmojies;
 using Fluxor;
 using Microsoft.AspNetCore.Components;
 

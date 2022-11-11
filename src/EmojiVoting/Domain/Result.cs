@@ -4,8 +4,7 @@ namespace EmojiVoting.Domain
 {
     public class Result
     {
-        [Key]
-        public string Shortcode { get; set; }
+        [Key] public string Shortcode { get; init; } = null!;
         public int Votes { get; set; }
     }
 }

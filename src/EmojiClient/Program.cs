@@ -8,7 +8,8 @@ namespace EmojiClient
 {
     static class Program
     {
-        static async Task Main(string[] args)
+        static async Task Main()
+
         {
             Console.OutputEncoding = Encoding.UTF8;
             using var channel = GrpcChannel.ForAddress("https://localhost:5001");
