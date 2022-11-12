@@ -46,7 +46,11 @@ jobs:
     - name: Test .NET solution
       run: |
         dotnet --version
-        dotnet test ./EmojiVoto.sln --configuration Release
+        dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=opencover ./EmojiVoto.sln --configuration Release
+
+    - name: CodeCov
+      uses: codecov/codecov-action@v1
+
   publish:
     name: Publish Docker image
     runs-on: ubuntu-latest
