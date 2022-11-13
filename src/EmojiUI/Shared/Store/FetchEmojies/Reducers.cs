@@ -1,5 +1,7 @@
 ﻿using Fluxor;
 using System;
+// ReSharper disable UnusedMember.Global
+// ReSharper disable UnusedType.Global
 
 namespace EmojiUI.Shared.Store.FetchEmojies
 {

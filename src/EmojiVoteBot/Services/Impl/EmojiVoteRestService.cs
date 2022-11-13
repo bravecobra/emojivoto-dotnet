@@ -3,7 +3,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Net.Http;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -29,7 +28,7 @@ namespace EmojiVoteBot.Services.Impl
             using var client = _clientFactory.CreateClient();
             var response = await client.GetAsync(new Uri($"{_configuration["WEB_HOST"]}/api/Emojis"));
             response.EnsureSuccessStatusCode();
-            if (response.Content is not null && response.Content.Headers.ContentType?.MediaType == "application/json")
+            if (response.Content.Headers.ContentType?.MediaType == "application/json")
             {
                 var contentStream = await response.Content.ReadAsStreamAsync();
 

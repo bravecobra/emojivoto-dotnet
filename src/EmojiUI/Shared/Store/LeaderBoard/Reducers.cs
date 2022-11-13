@@ -1,8 +1,10 @@
 ﻿using Fluxor;
 using System;
+// ReSharper disable UnusedMember.Global
 
 namespace EmojiUI.Shared.Store.LeaderBoard
 {
+    // ReSharper disable once UnusedType.Global
     public class Reducers
     {
         [ReducerMethod]

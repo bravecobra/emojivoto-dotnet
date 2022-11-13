@@ -3,12 +3,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EmojiVoting.Persistence
 {
-    public class VotingContext : DbContext
+    public class VotingDbContext : DbContext
     {
         public DbSet<Result> Results { get; set; } = null!;
         public string DbPath { get; private set; }
 
-        public VotingContext(DbContextOptions<VotingContext> options) : base(options)
+        public VotingDbContext(DbContextOptions<VotingDbContext> options) : base(options)
         {
             DbPath = "voting.db";
         }

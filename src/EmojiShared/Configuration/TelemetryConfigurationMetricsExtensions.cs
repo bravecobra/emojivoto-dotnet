@@ -26,7 +26,7 @@ public static class TelemetryConfigurationMetricsExtensions
                 })
                 .AddMeter(meterName ?? Assembly.GetEntryAssembly()?.GetName().Name);
 
-            var metricsExporter = configuration.GetValue<string>("UseMetricsExporter").ToLowerInvariant();
+            var metricsExporter = configuration.GetValue<string>("UseMetricsExporter")!.ToLowerInvariant();
             switch (metricsExporter)
             {
                 case "prometheus":

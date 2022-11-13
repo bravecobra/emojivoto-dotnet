@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 namespace EmojiUI.Shared
 {
     // ReSharper disable once ClassNeverInstantiated.Global
-    public class LoggingMiddleware : Fluxor.Middleware
+    public class LoggingMiddleware : Middleware
     {
         private readonly ILogger<LoggingMiddleware> _logger;
 

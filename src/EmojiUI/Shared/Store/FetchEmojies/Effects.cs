@@ -2,7 +2,6 @@
 using EmojiUI.Services;
 using Fluxor;
 using System;
-using System.Diagnostics;
 using System.Threading.Tasks;
 
 namespace EmojiUI.Shared.Store.FetchEmojies
@@ -17,6 +16,7 @@ namespace EmojiUI.Shared.Store.FetchEmojies
         }
 
         [EffectMethod]
+        // ReSharper disable once UnusedMember.Global
         public async Task HandleFetchDataAction(FetchEmojiesAction action, IDispatcher dispatcher)
         {
             using var activity = ActivitySourceFactory.GetActivitySource().StartActivity(nameof(Effects));
@@ -27,6 +27,7 @@ namespace EmojiUI.Shared.Store.FetchEmojies
         }
 
         [EffectMethod]
+        // ReSharper disable once UnusedMember.Global
         public async Task HandleVoteEmojiAction(VoteEmojiAction action, IDispatcher dispatcher)
         {
             using var activity = ActivitySourceFactory.GetActivitySource().StartActivity(nameof(Effects));

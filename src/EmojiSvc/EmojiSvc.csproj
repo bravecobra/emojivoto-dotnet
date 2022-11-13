@@ -2,7 +2,7 @@
 
   <PropertyGroup>
 	<Version>$(SemVer)</Version>
-	<TargetFramework>net6.0</TargetFramework>
+	<TargetFramework>net7.0</TargetFramework>
     <UserSecretsId>d4a78b91-8beb-42f8-9575-4bdbd385a62a</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
 	<Nullable>enable</Nullable>
@@ -16,15 +16,15 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Grpc.AspNetCore" Version="2.49.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.11" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="6.0.11" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.11">
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="7.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.17.0" />
     <PackageReference Include="OpenTelemetry.Api" Version="1.3.1" />
-    <PackageReference Include="OpenTelemetry.Contrib.Instrumentation.AWS" Version="1.0.1" />
+    <PackageReference Include="OpenTelemetry.Contrib.Instrumentation.AWS" Version="1.0.2" />
     <PackageReference Include="OpenTelemetry.Contrib.Instrumentation.EntityFrameworkCore" Version="1.0.0-beta2" />
     <PackageReference Include="OpenTelemetry.Contrib.Instrumentation.GrpcCore" Version="1.0.0-beta3" />
     <PackageReference Include="OpenTelemetry.Exporter.Console" Version="1.3.1" />
@@ -48,7 +48,7 @@
     <PackageReference Include="Serilog.Exceptions" Version="8.4.0" />
     <PackageReference Include="Serilog.Sinks.Grafana.Loki" Version="8.0.1" />
     <PackageReference Include="Serilog.Sinks.Seq" Version="5.2.1" />
-    <PackageReference Include="System.Text.Encodings.Web" Version="6.0.0" />
+    <PackageReference Include="System.Text.Encodings.Web" Version="7.0.0" />
   </ItemGroup>
 
   <ItemGroup>

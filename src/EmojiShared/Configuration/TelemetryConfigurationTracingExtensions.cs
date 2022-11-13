@@ -41,7 +41,7 @@ namespace EmojiShared.Configuration
                     })
                     .AddSource(Assembly.GetEntryAssembly()?.GetName().Name)
                     .AddSource(sources);
-                var tracingExporter = configuration.GetValue<string>("UseTracingExporter").ToLowerInvariant();
+                var tracingExporter = configuration.GetValue<string>("UseTracingExporter")!.ToLowerInvariant();
                 switch (tracingExporter)
                 {
                     case "jaeger":

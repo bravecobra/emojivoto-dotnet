@@ -12,7 +12,7 @@ namespace EmojiShared.Configuration
     {
         public static WebApplication AddMetricsEndpoint(this WebApplication app)
         {
-            var metricsExporter = app.Configuration.GetValue<string>("UseMetricsExporter").ToLowerInvariant();
+            var metricsExporter = app.Configuration.GetValue<string>("UseMetricsExporter")!.ToLowerInvariant();
 
             if (metricsExporter == "prometheus")
             {

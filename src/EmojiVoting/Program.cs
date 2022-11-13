@@ -37,7 +37,7 @@ namespace EmojiVoting
 
             using (var scope = app.Services.CreateScope())
             {
-                var db = scope.ServiceProvider.GetRequiredService<VotingContext>();
+                var db = scope.ServiceProvider.GetRequiredService<VotingDbContext>();
                 db.Database.Migrate();
             }
             app.AddMetricsEndpoint();

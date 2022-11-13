@@ -2,9 +2,11 @@
 using Fluxor;
 using System;
 using System.Threading.Tasks;
+// ReSharper disable UnusedMember.Global
 
 namespace EmojiUI.Shared.Store.LeaderBoard
 {
+    // ReSharper disable once UnusedType.Global
     public class Effects
     {
         private readonly IEmojiVoteService _service;
