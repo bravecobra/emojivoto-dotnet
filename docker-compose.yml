@@ -122,7 +122,7 @@ services:
     profiles: ["grafana", "otlp"]
     command: [ "-config.file=/etc/tempo.yaml" ]
     volumes:
-      - ./config/tempo/tempo.yaml:/etc/tempo.yaml
+      - ./docker-compose/config/tempo/tempo.yaml:/etc/tempo.yaml
       - tempo:/tmp/tempo
     ports:
       - "14268"  # jaeger ingest
@@ -140,7 +140,7 @@ services:
     restart: on-failure
     volumes:
       - loki:/loki
-      - ./config/loki/loki-config.yaml:/etc/loki/loki-config.yaml
+      - ./docker-compose/config/loki/loki-config.yaml:/etc/loki/loki-config.yaml
 
     command: -config.file=/etc/loki/loki-config.yaml
 
@@ -158,7 +158,7 @@ services:
     restart: on-failure
     volumes:
       - grafana:/var/lib/grafana
-      - ./config/grafana/provisioning/:/etc/grafana/provisioning/
+      - ./docker-compose/config/grafana/provisioning/:/etc/grafana/provisioning/
     depends_on:
       - loki
       - prometheus
@@ -170,7 +170,7 @@ services:
     profiles: ["individual", "otlp", "grafana"]
     volumes:
       - prometheus:/prometheus
-      - ./config/prometheus/prometheus.yaml:/etc/prometheus/prometheus.yml
+      - ./docker-compose/config/prometheus/prometheus.yaml:/etc/prometheus/prometheus.yml
     ports:
       - "9090:9090"
 
@@ -179,8 +179,6 @@ services:
     container_name: otel-collector
     profiles: ["otlp", "datadog"]
     command: ["--config=/etc/otel-collector-config.yml"]
-    # volumes:
-    #   - ./config/otel/otel-config-grafana.yaml:/etc/otel-collector-config.yml
     ports:
       - "4317:4317"
       - "4318:4318"

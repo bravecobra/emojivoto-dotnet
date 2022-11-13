@@ -26,7 +26,7 @@ namespace EmojiSvc.Tests.Services
         public async Task ReturnAllEmojis()
         {
             var sut = new EmojiGrpcSvc(NullLogger<EmojiGrpcSvc>.Instance, new AllEmoji(new InMemoryAllEmoji()), _mapper);
-            var actual = await sut.ListAll(new ListAllEmojiRequest(), null);
+            var actual = await sut.ListAll(new ListAllEmojiRequest(), null!);
             Assert.Equal(99, actual.List.Count);
         }
 

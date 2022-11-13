@@ -3,48 +3,54 @@ version: '3'
 services:
   web:
     image: emojiui:latest
-    hostname: web
     environment:
       - UseMetricsExporter=otlp
       - UseTracingExporter=otlp
       - UseLogExporter=otlp
       - Otlp__Endpoint=http://otel-collector:4318
     depends_on:
-      - otel-collector
+      - loki
+      - tempo
+      - prometheus
   emoji-svc:
     image: emojisvc:latest
-    hostname: emoji-svc
     environment:
       - UseMetricsExporter=otlp
       - UseTracingExporter=otlp
       - UseLogExporter=otlp
       - Otlp__Endpoint=http://otel-collector:4318
     depends_on:
-      - otel-collector
+      - loki
+      - tempo
+      - prometheus
   voting-svc:
     image: emojivoting:latest
-    hostname: voting-svc
     environment:
       - UseMetricsExporter=otlp
       - UseTracingExporter=otlp
       - UseLogExporter=otlp
       - Otlp__Endpoint=http://otel-collector:4318
     depends_on:
-      - otel-collector
+      - loki
+      - tempo
+      - prometheus
   vote-bot:
     image: emojivotebot:latest
-    hostname: vote-bot
     environment:
       - UseMetricsExporter=otlp
       - UseTracingExporter=otlp
       - UseLogExporter=otlp
       - Otlp__Endpoint=http://otel-collector:4318
     depends_on:
-      - otel-collector
+      - loki
+      - tempo
+      - prometheus
   otel-collector:
-    environment:
-      - DD_API_KEY=${DD_API_KEY}
-      - DD_SITE=${DD_SITE}
     volumes:
-      - ./config/otel/otel-config-datadog.yaml:/etc/otel-collector-config.yml
+      - ./docker-compose/config/otel/otel-config-grafana.yaml:/etc/otel-collector-config.yml
       - //var/run/docker.sock:/var/run/docker.sock
+    depends_on:
+      - loki
+      - prometheus
+      - tempo
+      - grafana

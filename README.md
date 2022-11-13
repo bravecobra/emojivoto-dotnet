@@ -1,4 +1,4 @@
-# emojivoto-dotnet
+# EmojiVoto-dotnet
 
 ## Description
 
@@ -44,12 +44,6 @@ Save the file, or in the case of Docker Desktop for Mac or Docker Desktop for Wi
 Docker now exposes Prometheus-compatible metrics on port 9323.
 
 > You only need to enable this if you want metrics from the underlying docker daemon, pulled by the opentelemetry-collector.
-
-### Compile
-
-```powershell
-.\build.ps1 --target Docker-Build
-```
 
 ### Build docker images
 
@@ -105,7 +99,7 @@ docker-compose down
 Providing extra environment variables through `docker-compose.individual.yaml`, the app can be reconfigured to start outputting to those individual services `seq`, `jaeger` and `prometheus`.
 
 ```powershell
-docker-compose --profile app --profile individual -f docker-compose.yml -f docker-compose.individual.yaml up -d --remove-orphans
+docker-compose --profile app --profile individual -f docker-compose.yml -f ./docker-compose/docker-compose.individual.yaml up -d --remove-orphans
 ```
 
 ```mermaid
@@ -190,7 +184,7 @@ graph TD;
 ```
 
 ```powershell
-docker-compose --profile app --profile grafana -f docker-compose.yml -f docker-compose.individual-grafana.yaml up -d --remove-orphans
+docker-compose --profile app --profile grafana -f docker-compose.yml -f ./docker-compose/docker-compose.individual-grafana.yaml up -d --remove-orphans
 ```
 
 Each component is reconfigured to output to each monitoring service. That means each service outputs:
@@ -246,7 +240,7 @@ having to reconfigure it in the application itself. Instead of configuring three
 Reconfiguring to output to opentelemetry
 
 ```powershell
-docker-compose --profile app --profile otlp -f docker-compose.yml -f docker-compose.otlp.yaml up -d --remove-orphans
+docker-compose --profile app --profile otlp -f docker-compose.yml -f ./docker-compose/docker-compose.otlp.yaml up -d --remove-orphans
 ```
 
 ### Monitoring through opentelemetry (datadog)
@@ -288,5 +282,5 @@ graph TD;
 ```
 
 ```powershell
-docker-compose --profile app --profile datadog -f docker-compose.yml -f docker-compose.otlp-datadog.yaml up -d --remove-orphans
+docker-compose --profile app --profile datadog -f docker-compose.yml -f ./docker-compose/docker-compose.otlp-datadog.yaml up -d --remove-orphans
 ```
