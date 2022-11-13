@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace EmojiVoting.Migrations
 {
-    [DbContext(typeof(VotingContext))]
+    [DbContext(typeof(VotingDbContext))]
     partial class VotingContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

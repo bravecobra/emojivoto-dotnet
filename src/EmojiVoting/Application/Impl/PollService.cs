@@ -33,8 +33,6 @@ namespace EmojiVoting.Application.Impl
                 vote = new Result { Votes = 1, Shortcode = choice };
                 await _repository.AddVote(vote);
             }
-
-            //TODO: Add prometheus custom Counter metric.
             var meter = new Meter(Assembly.GetEntryAssembly()?.GetName().Name ?? "EmojiVoting");
             var counter = meter.CreateCounter<int>("Votes");
             counter.Add(1, KeyValuePair.Create<string, object?>("name", choice));

@@ -1,6 +1,5 @@
 ﻿using EmojiUI.Controllers.Dtos;
 
-
 namespace EmojiUI.Shared.Store.FetchEmojies
 {
     public class VoteEmojiAction

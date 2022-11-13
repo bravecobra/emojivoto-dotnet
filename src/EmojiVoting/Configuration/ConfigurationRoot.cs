@@ -17,7 +17,7 @@ namespace EmojiVoting.Configuration
             services.AddTransient<IPollService, PollService>();
             services.AddSingleton(configuration);
             services.AddAutoMapper(typeof(VotingProfile));
-            services.AddDbContext<VotingContext>(builder =>
+            services.AddDbContext<VotingDbContext>(builder =>
             {
                 builder.UseSqlite(configuration.GetConnectionString("DefaultConnection"));
                 builder.EnableSensitiveDataLogging();

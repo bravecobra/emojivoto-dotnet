@@ -20,7 +20,7 @@ namespace EmojiShared.Configuration
         public static WebApplicationBuilder AddCustomLogging(this WebApplicationBuilder builder, ResourceBuilder resourceBuilder)
         {
             builder.Logging.ClearProviders();
-            var logExporter = builder.Configuration.GetValue<string>("UseLogExporter").ToLowerInvariant();
+            var logExporter = builder.Configuration.GetValue<string>("UseLogExporter")!.ToLowerInvariant();
             switch (logExporter)
             {
                 case "loki":
@@ -62,7 +62,7 @@ namespace EmojiShared.Configuration
                 }
                 case "seq":
                 {
-                    var seqUri = builder.Configuration.GetValue<string>("Seq:Uri").ToLowerInvariant();
+                    var seqUri = builder.Configuration.GetValue<string>("Seq:Uri")!.ToLowerInvariant();
                     var logger = new LoggerConfiguration()
                         .WriteTo.Seq(seqUri)
                         .Enrich.FromLogContext()
@@ -131,7 +131,7 @@ namespace EmojiShared.Configuration
             builder.ConfigureLogging((context, loggingBuilder) =>
             {
                 loggingBuilder.ClearProviders();
-                var logExporter = context.Configuration.GetValue<string>("UseLogExporter").ToLowerInvariant();
+                var logExporter = context.Configuration.GetValue<string>("UseLogExporter")?.ToLowerInvariant();
                 switch (logExporter)
                 {
                     case "loki":
@@ -172,7 +172,7 @@ namespace EmojiShared.Configuration
                         }
                     case "seq":
                         {
-                            var seqUri = context.Configuration.GetValue<string>("Seq:Uri").ToLowerInvariant();
+                            var seqUri = context.Configuration.GetValue<string>("Seq:Uri")!.ToLowerInvariant();
                             var logger = new LoggerConfiguration()
                                 .WriteTo.Seq(seqUri)
                                 .Enrich.FromLogContext()

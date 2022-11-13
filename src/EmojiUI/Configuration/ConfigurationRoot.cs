@@ -21,13 +21,13 @@ namespace EmojiUI.Configuration
             services.AddTransient<IEmojiVoteService, EmojiVoteService>();
             services.AddGrpcClient<EmojiService.EmojiServiceClient>(o =>
             {
-                var emojisvcurl = configuration["EMOJISVC_HOST"];
+                var emojisvcurl = configuration["EMOJISVC_HOST"]!;
                 o.Address = new Uri(emojisvcurl);
             });
 
             services.AddGrpcClient<VotingService.VotingServiceClient>(o =>
             {
-                var emojisvcurl = configuration["VOTINGSVC_HOST"];
+                var emojisvcurl = configuration["VOTINGSVC_HOST"]!;
                 o.Address = new Uri(emojisvcurl);
             });
 

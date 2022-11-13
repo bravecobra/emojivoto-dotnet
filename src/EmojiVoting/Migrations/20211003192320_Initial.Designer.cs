@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace EmojiVoting.Migrations
 {
-    [DbContext(typeof(VotingContext))]
+    [DbContext(typeof(VotingDbContext))]
     [Migration("20211003192320_Initial")]
     partial class Initial
     {
