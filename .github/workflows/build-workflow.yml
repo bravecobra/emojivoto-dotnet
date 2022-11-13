@@ -76,6 +76,11 @@ jobs:
         git config remote.origin.url https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
         git fetch --prune --unshallow
 
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@master
+      with:
+        dotnet-version: 7.0.x
+
     - name: Install GitVersion
       uses: gittools/actions/gitversion/setup@v0.9.15
       with:
