@@ -64,3 +64,4 @@ $RECYCLE.BIN/
 *.user
 .env
 tools
+.idea

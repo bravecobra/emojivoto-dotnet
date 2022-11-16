@@ -31,8 +31,8 @@ namespace EmojiShared.Configuration
                         instrumentationOptions.SetDbStatementForStoredProcedure = true;
                         instrumentationOptions.SetDbStatementForText = true;
                     })
-                    // .AddXRayTraceId()
-                    // .AddAWSInstrumentation()
+                    .AddXRayTraceId()
+                    .AddAWSInstrumentation()
                     .AddAspNetCoreInstrumentation(instrumentationOptions =>
                     {
                         instrumentationOptions.Enrich = Enrich;
@@ -105,20 +105,19 @@ namespace EmojiShared.Configuration
             {
                 return "1.0";
             }
-            else if (HttpProtocol.IsHttp11(protocol))
+            if (HttpProtocol.IsHttp11(protocol))
             {
                 return "1.1";
             }
-            else if (HttpProtocol.IsHttp2(protocol))
+            if (HttpProtocol.IsHttp2(protocol))
             {
                 return "2.0";
             }
-            else if (HttpProtocol.IsHttp3(protocol))
+            if (HttpProtocol.IsHttp3(protocol))
             {
                 return "3.0";
             }
-            else
-                throw new InvalidOperationException($"Protocol {protocol} not recognised.");
+            throw new InvalidOperationException($"Protocol {protocol} not recognised.");
         }
     }
 }
