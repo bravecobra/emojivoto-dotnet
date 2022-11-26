@@ -27,11 +27,6 @@ namespace EmojiShared.Configuration
                 {
                     var logger = new LoggerConfiguration()
                         .ReadFrom.Configuration(builder.Configuration)
-                        //.MinimumLevel.Debug()
-                        //.WriteTo.Console()
-                        // .WriteTo.GrafanaLoki(builder.Configuration.GetValue<string>("Loki:Endpoint"),
-                        //     textFormatter: new LokiJsonTextFormatter(),
-                        // )
                         .Enrich.FromLogContext()
                         .Enrich.With(new PropertyEnricher("app", Assembly.GetEntryAssembly()?.GetName().Name!))
                         .Enrich.With(new PropertyEnricher("version", Assembly.GetEntryAssembly()?.GetName().Version?.ToString()))

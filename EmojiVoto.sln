@@ -5,8 +5,6 @@ VisualStudioVersion = 17.4.32916.344
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EmojiSvc", "src\EmojiSvc\EmojiSvc.csproj", "{91E43A64-33EA-43F9-A269-AE2574874165}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EmojiClient", "src\EmojiClient\EmojiClient.csproj", "{DDDAB268-FF91-4A5A-94EF-CEEF57E35A61}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EmojiSvc.Tests", "src\EmojiSvc.Tests\EmojiSvc.Tests.csproj", "{15287F9A-B3C6-46D8-A769-2B0F2FAEBBA9}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EmojiVoting", "src\EmojiVoting\EmojiVoting.csproj", "{54412D52-17D8-46F1-997A-F1F3F0EACDCB}"
@@ -44,10 +42,6 @@ Global
 		{91E43A64-33EA-43F9-A269-AE2574874165}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{91E43A64-33EA-43F9-A269-AE2574874165}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{91E43A64-33EA-43F9-A269-AE2574874165}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DDDAB268-FF91-4A5A-94EF-CEEF57E35A61}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DDDAB268-FF91-4A5A-94EF-CEEF57E35A61}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DDDAB268-FF91-4A5A-94EF-CEEF57E35A61}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DDDAB268-FF91-4A5A-94EF-CEEF57E35A61}.Release|Any CPU.Build.0 = Release|Any CPU
 		{15287F9A-B3C6-46D8-A769-2B0F2FAEBBA9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{15287F9A-B3C6-46D8-A769-2B0F2FAEBBA9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{15287F9A-B3C6-46D8-A769-2B0F2FAEBBA9}.Release|Any CPU.ActiveCfg = Release|Any CPU
