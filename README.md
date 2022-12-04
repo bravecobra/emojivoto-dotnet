@@ -17,35 +17,7 @@ graph LR;
   style EmojiVoting fill:#03fc28,color:#000
 ```
 
-## Setup (Docker)
-
-### Enable metrics from docker engine
-
-Reference: [https://docs.docker.com/config/daemon/prometheus/#configure-docker](https://docs.docker.com/config/daemon/prometheus/#configure-docker)
-
-To configure the Docker daemon as a Prometheus target, you need to specify the metrics-address. The best way to do this is via the daemon.json, which is located at one of the following locations by default. If the file does not exist, create it.
-
-* Linux: `/etc/docker/daemon.json`
-* Windows Server: `C:\ProgramData\docker\config\daemon.json`
-* Docker Desktop for Mac / Docker Desktop for Windows: Click the Docker icon in the toolbar, select Preferences, then select Daemon. Click Advanced.
-If the file is currently empty, paste the following:
-
-```json
-{
-  "metrics-addr" : "127.0.0.1:9323",
-  "experimental" : true
-}
-```
-
-If the file is not empty, add those two keys, making sure that the resulting file is valid JSON. Be careful that every line ends with a comma (,) except for the last line.
-
-Save the file, or in the case of Docker Desktop for Mac or Docker Desktop for Windows, save the configuration. Restart Docker.
-
-Docker now exposes Prometheus-compatible metrics on port 9323.
-
-> You only need to enable this if you want metrics from the underlying docker daemon, pulled by the opentelemetry-collector.
-
-### Build docker images
+## Build docker images
 
 ```powershell
 .\build.ps1 --target Docker-Build
@@ -138,9 +110,9 @@ graph TD;
 
 Each component is reconfigured to output to each monitoring service. That means each service now outputs:
 
-* metrics on an endpoint which is then scraped by `prometheus`
-* traces to `jaeger`
-* logs directly to `seq`
+* metrics on an endpoint which is then scraped by `prometheus` at [http://localhost:9090](http://localhost:9090)
+* traces to `jaeger` at [http://localhost:16686](http://localhost:16686)
+* logs directly to `seq` at [http://localhost:5341](http://localhost:5341)
 
 Although we have some observability now, we still need to reconfigure each service.
 
@@ -192,6 +164,8 @@ Each component is reconfigured to output to each monitoring service. That means 
 * logs directly to `Loki`
 * traces to `Tempo`
 * metrics on an endpoint which is scraped by `Prometheus`
+
+All these services can be accessed through Grafana [http://localhost:3000](http://localhost:3000)
 
 Downside is still that we heave to reconfigure each service to get monitoring up and running.
 
@@ -284,3 +258,29 @@ graph TD;
 ```powershell
 docker-compose --profile app --profile datadog -f docker-compose.yml -f ./docker-compose/docker-compose.otlp-datadog.yaml up -d --remove-orphans
 ```
+
+## Enable metrics from docker engine for docker_stats
+
+Reference: [https://docs.docker.com/config/daemon/prometheus/#configure-docker](https://docs.docker.com/config/daemon/prometheus/#configure-docker)
+
+To configure the Docker daemon as a Prometheus target, you need to specify the metrics-address. The best way to do this is via the daemon.json, which is located at one of the following locations by default. If the file does not exist, create it.
+
+* Linux: `/etc/docker/daemon.json`
+* Windows Server: `C:\ProgramData\docker\config\daemon.json`
+* Docker Desktop for Mac / Docker Desktop for Windows: Click the Docker icon in the toolbar, select Preferences, then select Daemon. Click Advanced.
+If the file is currently empty, paste the following:
+
+```json
+{
+  "metrics-addr" : "127.0.0.1:9323",
+  "experimental" : true
+}
+```
+
+If the file is not empty, add those two keys, making sure that the resulting file is valid JSON. Be careful that every line ends with a comma (,) except for the last line.
+
+Save the file, or in the case of Docker Desktop for Mac or Docker Desktop for Windows, save the configuration. Restart Docker.
+
+Docker now exposes Prometheus-compatible metrics on port 9323.
+
+> You only need to enable this if you want metrics from the underlying docker daemon, pulled by the opentelemetry-collector.
