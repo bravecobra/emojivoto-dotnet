@@ -13,9 +13,13 @@ namespace EmojiShared.Configuration
             _next = next;
         }
 
+        /// <summary>
+        /// Appends the TraceID to the response headers
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns></returns>
         public Task InvokeAsync(HttpContext context)
         {
-            //Append the TraceID to the response headers
             context.Response.Headers.Add("TraceID", new StringValues(Activity.Current?.TraceId.ToString()));
             return _next(context);
         }

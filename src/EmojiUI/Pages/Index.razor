@@ -36,7 +36,9 @@
                                 <p class="doughnut-explanation">For the sake of this demo, voting for 🍩<br />randomly returns an error.
                                 </p>
                                 <p>
-                                    <NavLink class="nav-link" href="/" @onclick="() => Dispatcher.Dispatch(new ResetAction())" ><div class="btn btn-white">Pick another</div></NavLink>
+                                    <NavLink class="nav-link" href="/" @onclick="() => Dispatcher.Dispatch(new ResetAction())">
+                                        <div class="btn btn-white">Pick another</div>
+                                    </NavLink>
                                 </p>
                             </div>
                         }
@@ -44,7 +46,7 @@
                     }
                     else if (VoteState.Value.SelectedEmoji != null){
                         <div>
-                        <p>See how you stack up against others</p>
+                            <p>See how you stack up against others</p>
                             <NavLink href="/leaderboard"><div class="btn btn-blue">View the leaderboard</div></NavLink>
                             <NavLink class="nav-link" href="/" @onclick="() => Dispatcher.Dispatch(new ResetAction())" ><div class="btn btn-white">Pick another one</div></NavLink>
                         </div>
@@ -71,13 +73,13 @@
                                     </div>
                                 }
                             }
-                            @* <div className="footer-text"> *@
-                            @*     <p>A <a href='https://buoyant.io'>Buoyant</a> social experiment</p> *@
-                            @*     <p>© 2017 Buoyant, Inc. All Rights Reserved.</p> *@
-                            @* </div> *@
                         </div>
                     }
                 </div >
+                @* <div className="footer-text"> *@
+                @*     <p>A <a href='https://buoyant.io'>Buoyant</a> social experiment</p> *@
+                @*     <p>© 2017 Buoyant, Inc. All Rights Reserved.</p> *@
+                @* </div> *@                
             </div>
         </div>
     </div>

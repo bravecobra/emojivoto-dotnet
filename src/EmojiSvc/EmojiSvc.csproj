@@ -60,4 +60,10 @@
       <Link>Protos\Emoji.proto</Link>
     </Protobuf>
   </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="appsettings.Development.json">
+      <DependentUpon>appsettings.json</DependentUpon>
+    </Content>
+  </ItemGroup>
 </Project>

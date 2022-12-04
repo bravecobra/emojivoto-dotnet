@@ -15,7 +15,7 @@ namespace EmojiVoting.Tests
         [Fact]
         public async Task CaptureVotesForAnEmoji_GivenEmojiHasBeenVotedFor()
         {
-            var choosenEmoji = ":winning";
+            const string choosenEmoji = ":winning";
             var repoMock = new Mock<IVotingRepository>();
             var aResult = new Result() { Shortcode = choosenEmoji, Votes = 1 };
             repoMock.Setup(repository => repository.AddVote(It.IsAny<Result>()));
