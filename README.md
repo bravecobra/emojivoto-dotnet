@@ -19,6 +19,8 @@ graph LR;
 
 ## Build docker images
 
+Have your docker engine running. Then run:
+
 ```powershell
 .\build.ps1 --target Docker-Build
 ```
@@ -27,7 +29,7 @@ graph LR;
 
 ### No monitoring, just console logging
 
-Without passing extra parameters/environment vars, this setup does only basic console logging. This is the use case of many applications today that don't have any monitoring in place and just for file logging. You forces you to go fetch the logs from the servers where the application is running and spitting through endless lines of logs to find a clue of what is going on. In multithreaded apps that's even harder as you get the loglines ordered by timestamp, so threads get merged together in the logfiles.
+Without passing extra parameters/environment vars, this setup does only basic console logging. This is the use case of many applications today that don't have any monitoring in place and just for file logging. You forces you to go fetch the logs from the servers where the application is running and spitting through endless lines of logs to find a clue of what is going on. In multithreaded apps that's even harder as you get the log lines ordered by timestamp, so threads get merged together in the log files.
 
 The profile `app` is passed to only deploy the services of the app itself.
 
@@ -118,7 +120,7 @@ Although we have some observability now, we still need to reconfigure each servi
 
 ### Monitoring to individual services (loki, tempo, prometheus)
 
-It would also be nice to see some corrolation between those services, like searching for the corresponding log-entries for a given TraceId.
+It would also be nice to see some correlation between those services, like searching for the corresponding log-entries for a given TraceId.
 We could reconfigure to output to other services that do just that like `Loki`, `Tempo` and `Prometheus` (made by Grafana), but we need to do that by adjusting each component individually.
 
 ```mermaid
@@ -219,7 +221,7 @@ docker-compose --profile app --profile otlp -f docker-compose.yml -f ./docker-co
 
 ### Monitoring through opentelemetry (datadog)
 
-Now instead having to run that monitoring backend outselves, we can also choose to output to a cloud service like [Datadog](https://datadoghq.com) or [Splunk](https://www.splunk.com/). This example shows exporting to Datadog.
+Now instead having to run that monitoring backend ourselves, we can also choose to output to a cloud service like [Datadog](https://datadoghq.com) or [Splunk](https://www.splunk.com/). This example shows exporting to Datadog.
 
 > Make sure you create an `.env` file with your `DD_API_KEY` and `DD_SITE` values. This setup will then automatically fill in in the required place.
 
