@@ -41,6 +41,10 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v3
+    - name: Fetch all history for all tags and branches
+      run: |
+        git config remote.origin.url https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
+        git fetch --prune --unshallow
 
     # Initializes the CodeQL tools for scanning.
     - name: Initialize CodeQL
