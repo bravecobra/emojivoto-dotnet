@@ -25,7 +25,7 @@
     <PackageReference Include="OpenTelemetry.Extensions.Docker" Version="1.0.0-beta.1" />
     <PackageReference Include="OpenTelemetry.Extensions.Hosting" Version="1.0.0-rc9.4" />
     <PackageReference Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.0.0-rc9.4" />
-    <PackageReference Include="OpenTelemetry.Instrumentation.EventCounters" Version="1.0.0-alpha.1" />
+    <PackageReference Include="OpenTelemetry.Instrumentation.EventCounters" Version="1.0.0-alpha.2" />
     <PackageReference Include="OpenTelemetry.Instrumentation.GrpcNetClient" Version="1.0.0-rc9.4" />
     <PackageReference Include="OpenTelemetry.Instrumentation.Http" Version="1.0.0-rc9.4" />
     <PackageReference Include="OpenTelemetry.Instrumentation.Process" Version="0.1.0-alpha.1" />
