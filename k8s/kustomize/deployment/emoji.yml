@@ -28,7 +28,7 @@ spec:
       serviceAccountName: emoji
       containers:
       - name: emoji-svc
-        image: registry.localhost:5000/emojisvc:latest
+        image: registry.localhost:5000/bravecobra/emojisvc:latest
         env:
         - name: ASPNETCORE_ENVIRONMENT
           value: Production
@@ -49,8 +49,12 @@ spec:
         - containerPort: 88
           name: prom
         resources:
+          limits:
+            cpu: 200m
+            memory: 300Mi
           requests:
             cpu: 100m
+            memory: 200Mi
 ---
 apiVersion: v1
 kind: Service

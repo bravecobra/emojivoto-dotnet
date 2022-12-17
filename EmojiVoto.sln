@@ -13,17 +13,16 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EmojiVoting.Tests", "src\Em
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Misc", "Misc", "{80853468-DDD4-4FF7-8D13-C4EB6FE83412}"
 	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
 		.github\workflows\build-workflow.yml = .github\workflows\build-workflow.yml
-		README.md = README.md
 		build.cake = build.cake
 		build.ps1 = build.ps1
 		build.sh = build.sh
-		cake.config = cake.config
 		deploy.ps1 = deploy.ps1
 		GitVersion.yml = GitVersion.yml
 		global.json = global.json
 		push.ps1 = push.ps1
-		.editorconfig = .editorconfig
+		README.md = README.md
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EmojiUI", "src\EmojiUI\EmojiUI.csproj", "{591966B8-F8A9-4416-A3A1-CC6105B93C8A}"

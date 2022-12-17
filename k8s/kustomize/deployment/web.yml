@@ -28,7 +28,7 @@ spec:
       serviceAccountName: web
       containers:
       - name: web-svc
-        image: registry.localhost:5000/emojiui:latest
+        image: registry.localhost:5000/bravecobra/emojiui:latest
         env:
         - name: ASPNETCORE_ENVIRONMENT
           value: Production
@@ -51,8 +51,12 @@ spec:
         - containerPort: 80
           name: http
         resources:
+          limits:
+            cpu: 200m
+            memory: 300Mi
           requests:
             cpu: 100m
+            memory: 200Mi
 ---
 apiVersion: v1
 kind: Service

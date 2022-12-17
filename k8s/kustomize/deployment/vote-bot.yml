@@ -21,7 +21,7 @@ spec:
     spec:
       containers:
       - name: vote-bot
-        image: registry.localhost:5000/emojivotebot:latest
+        image: registry.localhost:5000/bravecobra/emojivotebot:latest
         env:
         - name: ASPNETCORE_ENVIRONMENT
           value: Production
@@ -41,5 +41,9 @@ spec:
           value: loki
         imagePullPolicy: Always
         resources:
+          limits:
+            cpu: 200m
+            memory: 300Mi
           requests:
-            cpu: 10m
+            cpu: 100m
+            memory: 200Mi

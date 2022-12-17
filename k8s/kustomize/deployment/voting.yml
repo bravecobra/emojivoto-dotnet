@@ -28,7 +28,7 @@ spec:
       serviceAccountName: voting
       containers:
       - name: voting-svc
-        image: registry.localhost:5000/emojivoting:latest
+        image: registry.localhost:5000/bravecobra/emojivoting:latest
         env:
         - name: ASPNETCORE_ENVIRONMENT
           value: Production
@@ -53,8 +53,12 @@ spec:
         - containerPort: 88
           name: prom
         resources:
+          limits:
+            cpu: 200m
+            memory: 300Mi
           requests:
             cpu: 100m
+            memory: 200Mi
 ---
 apiVersion: v1
 kind: Service
