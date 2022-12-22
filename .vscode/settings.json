@@ -1,9 +1,14 @@
 {
     "cSpell.words": [
+    ],
+    "cSpell.ignoreWords": [
         "ASPNETCORE",
+        "Voto",
         "bravecobra",
         "emojivotebot",
+        "emojivoto",
+        "linkerd",
         "otlp",
-        "Voto"
+        "traefik"
     ]
 }
