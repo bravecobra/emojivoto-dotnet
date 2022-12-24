@@ -4,7 +4,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using OpenTelemetry;
 using OpenTelemetry.Exporter;
 using OpenTelemetry.Logs;
 using OpenTelemetry.Resources;
@@ -17,7 +16,7 @@ namespace EmojiShared.Configuration
 {
     public static class TelemetryConfigurationLoggingExtensions
     {
-        public static WebApplicationBuilder AddCustomLogging(this WebApplicationBuilder builder, ResourceBuilder resourceBuilder)
+        public static WebApplicationBuilder AddCustomLogging(this WebApplicationBuilder builder)
         {
             builder.Logging.ClearProviders();
             var logExporter = builder.Configuration.GetValue<string>("UseLogExporter")!.ToLowerInvariant();
@@ -88,13 +87,13 @@ namespace EmojiShared.Configuration
                 {
                     builder.Logging.AddOpenTelemetry(options =>
                     {
+                        var resourceBuilder = ResourceBuilderFactory.ConfigureResourceBuilder(ResourceBuilder.CreateDefault());
                         options.SetResourceBuilder(resourceBuilder);
                         options.AddOtlpExporter(otlpOptions =>
                         {
                             otlpOptions.Protocol = OtlpExportProtocol.HttpProtobuf;
-                            otlpOptions.Endpoint =
-                                new Uri(builder.Configuration.GetValue<string>("Otlp:Endpoint") + "/v1/logs");
-                            otlpOptions.ExportProcessorType = ExportProcessorType.Simple;
+                            otlpOptions.Endpoint = new Uri(builder.Configuration.GetValue<string>("Otlp:Endpoint") + "/v1/logs");
+                            //otlpOptions.ExportProcessorType = ExportProcessorType.Simple;
                         });
                         options.IncludeFormattedMessage = true;
                         options.ParseStateValues = true;
@@ -121,11 +120,12 @@ namespace EmojiShared.Configuration
             return services;
         }
 
-        public static IHostBuilder AddCustomLogging(this IHostBuilder builder, ResourceBuilder resourceBuilder)
+        public static IHostBuilder AddCustomLogging(this IHostBuilder builder)
         {
             builder.ConfigureLogging((context, loggingBuilder) =>
             {
                 loggingBuilder.ClearProviders();
+                
                 var logExporter = context.Configuration.GetValue<string>("UseLogExporter")?.ToLowerInvariant();
                 switch (logExporter)
                 {
@@ -197,15 +197,14 @@ namespace EmojiShared.Configuration
                         }
                     case "otlp":
                         {
+                            var resourceBuilder = ResourceBuilderFactory.ConfigureResourceBuilder(ResourceBuilder.CreateDefault());
                             loggingBuilder.AddOpenTelemetry(options =>
                             {
                                 options.SetResourceBuilder(resourceBuilder);
                                 options.AddOtlpExporter(otlpOptions =>
                                 {
                                     otlpOptions.Protocol = OtlpExportProtocol.HttpProtobuf;
-                                    otlpOptions.Endpoint =
-                                        new Uri(context.Configuration.GetValue<string>("Otlp:Endpoint") + "/v1/logs");
-                                    otlpOptions.ExportProcessorType = ExportProcessorType.Simple;
+                                    otlpOptions.Endpoint = new Uri(context.Configuration.GetValue<string>("Otlp:Endpoint")! + "/v1/logs");
                                 });
                             });
 
@@ -214,6 +213,7 @@ namespace EmojiShared.Configuration
                     default:
                         loggingBuilder.AddOpenTelemetry(options =>
                         {
+                            var resourceBuilder = ResourceBuilderFactory.ConfigureResourceBuilder(ResourceBuilder.CreateDefault());
                             options.SetResourceBuilder(resourceBuilder);
                             options.AddConsoleExporter();
                         });
@@ -222,7 +222,5 @@ namespace EmojiShared.Configuration
             });
             return builder;
         }
-
-
     }
 }

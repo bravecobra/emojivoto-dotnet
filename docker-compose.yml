@@ -170,12 +170,12 @@ services:
     profiles: ["individual", "otlp", "grafana"]
     volumes:
       - prometheus:/prometheus
-      - ./docker-compose/config/prometheus/prometheus.yaml:/etc/prometheus/prometheus.yml
+      - ./docker-compose/config/prometheus/prometheus.individual.yaml:/etc/prometheus/prometheus.yml
     ports:
       - "9090:9090"
 
   otel-collector:
-    image: otel/opentelemetry-collector-contrib:0.67.0
+    image: otel/opentelemetry-collector-contrib:0.68.0
     container_name: otel-collector
     profiles: ["otlp", "datadog"]
     command: ["--config=/etc/otel-collector-config.yml"]
@@ -187,7 +187,6 @@ services:
       - "8889:8889"   # Prometheus exporter metrics
       - "13133:13133" # health_check extension
       - "55679:55679" # zpages extension
-
 
   # aws-otel-collector:
   #   image: public.ecr.aws/aws-observability/aws-otel-collector:latest
