@@ -23,6 +23,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Misc", "Misc", "{80853468-D
 		global.json = global.json
 		push.ps1 = push.ps1
 		README.md = README.md
+		renovate.json = renovate.json
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EmojiUI", "src\EmojiUI\EmojiUI.csproj", "{591966B8-F8A9-4416-A3A1-CC6105B93C8A}"
@@ -30,6 +31,17 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EmojiVoteBot", "src\EmojiVoteBot\EmojiVoteBot.csproj", "{28BF8E5A-60FA-434B-9146-F546EE576EFE}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EmojiShared", "src\EmojiShared\EmojiShared.csproj", "{83149C95-DE08-4C7C-A435-97A23219C35F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".config", ".config", "{A64CDCE9-2297-4559-971C-CC884E58CE25}"
+	ProjectSection(SolutionItems) = preProject
+		.config\dotnet-tools.json = .config\dotnet-tools.json
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{D1888220-58E4-4BE7-A4F6-63B4A4435A69}"
+	ProjectSection(SolutionItems) = preProject
+		.github\dependabot.yml = .github\dependabot.yml
+		.github\release.yml = .github\release.yml
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -68,6 +80,10 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{A64CDCE9-2297-4559-971C-CC884E58CE25} = {80853468-DDD4-4FF7-8D13-C4EB6FE83412}
+		{D1888220-58E4-4BE7-A4F6-63B4A4435A69} = {80853468-DDD4-4FF7-8D13-C4EB6FE83412}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3167FBE7-F712-475C-BF1D-4A3500A66BDE}

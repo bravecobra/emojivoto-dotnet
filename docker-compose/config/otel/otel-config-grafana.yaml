@@ -7,20 +7,18 @@ receivers:
   otlp:
     protocols:
       grpc:
-        endpoint: 0.0.0.0:4317
       http:
-        endpoint: 0.0.0.0:4318
-  docker_stats:
-    collection_interval: 2s
-    timeout: 20s
-    api_version: 1.24
-    container_labels_to_metric_labels:
-      com.docker.compose.service: service.name
-    # excluded_images:
-    #   - undesired-container
-    #   - /.*undesired.*/
-    #   - another-*-container
-    provide_per_core_cpu_metrics: true
+  # docker_stats:
+  #   collection_interval: 2s
+  #   timeout: 20s
+  #   api_version: 1.24
+  #   container_labels_to_metric_labels:
+  #     com.docker.compose.service: service.name
+  #   # excluded_images:
+  #   #   - undesired-container
+  #   #   - /.*undesired.*/
+  #   #   - another-*-container
+  #   provide_per_core_cpu_metrics: true
 
 processors:
   batch:
@@ -88,7 +86,7 @@ service:
       processors: [batch]
       exporters: [otlp]
     metrics:
-      receivers: [otlp, docker_stats]
+      receivers: [otlp]
       exporters: [prometheus]
     logs:
       receivers: [otlp]

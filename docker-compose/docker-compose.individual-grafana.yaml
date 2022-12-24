@@ -53,3 +53,8 @@ services:
       - loki
       - tempo
       - prometheus
+
+  prometheus:
+    volumes:
+      - prometheus:/prometheus
+      - ./docker-compose/config/prometheus/prometheus.individual.yaml:/etc/prometheus/prometheus.yml

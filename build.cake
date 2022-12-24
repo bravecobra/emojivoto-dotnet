@@ -32,7 +32,7 @@ var projectPaths = projects.Select(project => project.GetDirectory().ToString())
 var dockerFiles = GetFiles("./**/Dockerfile");
 GitVersion gitVersion;
 var artifactsDir = "./Artifacts";
-var coverageThreshold = 100;
+var coverageThreshold = 60;
 
 Task("Clean")
 .Does(() => {
@@ -102,8 +102,8 @@ Task("Test")
       Configuration = "Release",
       ArgumentCustomization = args => args.Append("/p:CollectCoverage=true")
                                              .Append("/p:CoverletOutputFormat=opencover")
-                                             .Append("/p:ThresholdType=line")
-                                             .Append($"/p:Threshold={coverageThreshold}")
+                                             //.Append("/p:ThresholdType=line")
+                                             //.Append($"/p:Threshold={coverageThreshold}")
    };
    DotNetTest("./EmojiVoto.sln", testSettings);
 });
