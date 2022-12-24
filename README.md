@@ -118,6 +118,10 @@ Each component is reconfigured to output to each monitoring service. That means 
 
 Although we have some observability now, we still need to reconfigure each service.
 
+```powershell
+docker-compose --profile app --profile individual -f docker-compose.yml -f ./docker-compose/docker-compose.individual.yaml down
+```
+
 ### Monitoring to individual services (loki, tempo, prometheus)
 
 It would also be nice to see some correlation between those services, like searching for the corresponding log-entries for a given TraceId.
@@ -170,6 +174,10 @@ Each component is reconfigured to output to each monitoring service. That means 
 All these services can be accessed through Grafana [http://localhost:3000](http://localhost:3000)
 
 Downside is still that we heave to reconfigure each service to get monitoring up and running.
+
+```powershell
+docker-compose --profile app --profile grafana -f docker-compose.yml -f ./docker-compose/docker-compose.individual-grafana.yaml down
+```
 
 ### Monitoring through opentelemetry (grafana backend)
 
@@ -259,6 +267,12 @@ graph TD;
 
 ```powershell
 docker-compose --profile app --profile datadog -f docker-compose.yml -f ./docker-compose/docker-compose.otlp-datadog.yaml up -d --remove-orphans
+```
+
+To bring it back down
+
+```powershell
+docker-compose --profile app --profile datadog -f docker-compose.yml -f ./docker-compose/docker-compose.otlp-datadog.yaml down
 ```
 
 ## Enable metrics from docker engine for docker_stats

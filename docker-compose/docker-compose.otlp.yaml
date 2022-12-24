@@ -12,6 +12,7 @@ services:
       - loki
       - tempo
       - prometheus
+      - otel-collector
   emoji-svc:
     image: emojisvc:latest
     environment:
@@ -23,6 +24,7 @@ services:
       - loki
       - tempo
       - prometheus
+      - otel-collector
   voting-svc:
     image: emojivoting:latest
     environment:
@@ -34,6 +36,7 @@ services:
       - loki
       - tempo
       - prometheus
+      - otel-collector
   vote-bot:
     image: emojivotebot:latest
     environment:
@@ -45,6 +48,7 @@ services:
       - loki
       - tempo
       - prometheus
+      - otel-collector
   otel-collector:
     volumes:
       - ./docker-compose/config/otel/otel-config-grafana.yaml:/etc/otel-collector-config.yml
@@ -54,3 +58,7 @@ services:
       - prometheus
       - tempo
       - grafana
+  prometheus:
+    volumes:
+      - prometheus:/prometheus
+      - ./docker-compose/config/prometheus/prometheus.grafana.yaml:/etc/prometheus/prometheus.yml

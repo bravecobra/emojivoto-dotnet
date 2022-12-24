@@ -17,13 +17,10 @@ namespace EmojiVoting
             AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
             var builder = WebApplication.CreateBuilder(args);
             builder.Services.AddConfigurationRoot(builder.Configuration);
-            var resourceBuilder = ResourceBuilderFactory.CreateResourceBuilder(builder);
             // Add Logging
-            builder.AddCustomLogging(resourceBuilder);
-            // Add Metrics
-            builder.Services.AddCustomMetrics(builder.Configuration, resourceBuilder);
-            // Add Traces
-            builder.Services.AddCustomTracing(builder.Configuration, resourceBuilder, Array.Empty<string>());
+            builder.AddCustomLogging();
+            // Add Telemetry
+            builder.Services.AddCustomTelemetry(builder.Configuration, Array.Empty<string>());
 
             builder.Services.AddHealthChecks();
 

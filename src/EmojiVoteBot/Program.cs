@@ -21,15 +21,12 @@ namespace EmojiVoteBot
 
         private static IHostBuilder CreateHostBuilder(string[] args)
         {
-            var hostbuilder = Host.CreateDefaultBuilder(args);
-            var resourceBuilder = ResourceBuilderFactory.CreateResourceBuilder(hostbuilder);
             return Host.CreateDefaultBuilder(args)
-                .AddCustomLogging(resourceBuilder)
+                .AddCustomLogging()
                 .ConfigureServices((hostContext, services) =>
                 {
                     services.AddOpenTelemetryServices();
-                    services.AddCustomMetrics(hostContext.Configuration, resourceBuilder);
-                    services.AddCustomTracing(hostContext.Configuration, resourceBuilder, new []{ nameof(VotingBot)});
+                    services.AddCustomTelemetry(hostContext.Configuration, new []{ nameof(VotingBot)});
 
                     services.AddHttpClient();
                     services.AddTransient<IEmojiVoteService, EmojiVoteRestService>();
