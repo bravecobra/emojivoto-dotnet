@@ -39,7 +39,7 @@ jobs:
 
       - name: Letting the bot vote
         run: |
-          sleep 60
+          sleep 120
 
       - name: Run newman tests
         uses: matt-ball/newman-action@master
