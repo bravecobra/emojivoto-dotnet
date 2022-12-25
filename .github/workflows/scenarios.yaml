@@ -40,7 +40,7 @@ jobs:
       - name: Letting the bot vote
         if: ${{ matrix.profile != 'individual' }}
         run: |
-          sleep 60
+          sleep 90
 
       - name: Run newman tests
         uses: matt-ball/newman-action@master
