@@ -1,0 +1,36 @@
+name: Scenarios
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - master
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  docker-run:
+    strategy:
+      matrix:
+        profile: [individual, grafana, otlp]
+    runs-on: ubuntu-latest
+    steps:
+      # need checkout before using compose-action
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Build images
+        run: |
+          ./build.sh --target=Docker-Build
+
+      - name: Docker-compose up
+        run: |
+          docker-compose --profile app --profile ${{ matrix.profile }} -f docker-compose.yml -f ./docker-compose/docker-compose.${{ matrix.profile }}.yaml up -d --remove-orphans
+
+      - name: Letting the bot vote
+        run: |
+          sleep 30
+
+      - name: Docker-compose down
+        run: |
+          docker-compose --profile app --profile ${{ matrix.profile }} -f docker-compose.yml -f ./docker-compose/docker-compose.${{ matrix.profile }}.yaml down --volumes

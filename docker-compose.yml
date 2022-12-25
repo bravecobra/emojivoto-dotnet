@@ -79,7 +79,7 @@ services:
     environment:
       - DOTNET_ENVIRONMENT=Production
       - WEB_HOST=http://web
-      - VOTING_RATE=10000
+      - VOTING_RATE=5000
       - UseMetricsExporter=default
       - UseTracingExporter=default
       - UseLogExporter=default
@@ -93,6 +93,8 @@ services:
     image: datalust/seq:latest
     container_name: seq
     profiles: ["individual"]
+    networks:
+      monitoring: null
     restart: always
     ports:
       - "5341:80"
@@ -107,6 +109,8 @@ services:
     image: jaegertracing/all-in-one:latest
     container_name: jaeger
     profiles: ["individual"]
+    networks:
+      monitoring: null
     ports:
       - "6831:6831/udp"
       - "16686:16686"
@@ -121,6 +125,8 @@ services:
     container_name: tempo
     profiles: ["grafana", "otlp"]
     command: [ "-config.file=/etc/tempo.yaml" ]
+    networks:
+      monitoring: null
     volumes:
       - ./docker-compose/config/tempo/tempo.yaml:/etc/tempo.yaml
       - tempo:/tmp/tempo
@@ -135,6 +141,8 @@ services:
     image: grafana/loki:latest
     container_name: loki
     profiles: ["grafana", "otlp"]
+    networks:
+      monitoring: null
     ports:
       - 3100:3100
     restart: on-failure
@@ -148,6 +156,8 @@ services:
     image: grafana/grafana:latest
     container_name: grafana
     profiles: ["grafana", "otlp"]
+    networks:
+      monitoring: null
     environment:
       - GF_INSTALL_PLUGINS=grafana-clock-panel,grafana-simple-json-datasource,grafana-piechart-panel
       - GF_AUTH_ANONYMOUS_ENABLED=true
@@ -168,6 +178,8 @@ services:
     container_name: prometheus
     image: prom/prometheus:latest
     profiles: ["individual", "otlp", "grafana"]
+    networks:
+      monitoring: null
     volumes:
       - prometheus:/prometheus
       - ./docker-compose/config/prometheus/prometheus.individual.yaml:/etc/prometheus/prometheus.yml
@@ -179,6 +191,8 @@ services:
     container_name: otel-collector
     profiles: ["otlp", "datadog"]
     command: ["--config=/etc/otel-collector-config.yml"]
+    networks:
+      monitoring: null
     ports:
       - "4317:4317"
       - "4318:4318"
@@ -210,3 +224,7 @@ volumes:
   promtail:
   loki:
   tempo:
+
+networks:
+  monitoring:
+    driver: bridge
