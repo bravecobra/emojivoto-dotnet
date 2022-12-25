@@ -45,7 +45,7 @@ jobs:
         uses: matt-ball/newman-action@master
         if: ${{ matrix.profile != 'individual' }}
         with:
-          collection: ./tests/EmojiVoto.postman_collection.json
+          collection: ./tests/${{ matrix.profile }}/EmojiVoto.postman_collection.json
 
       - name: Docker-compose down
         run: |
