@@ -66,7 +66,6 @@ namespace EmojiShared.Configuration
                             {
                                 otlpOptions.Protocol = OtlpExportProtocol.HttpProtobuf;
                                 otlpOptions.Endpoint = new Uri(configuration.GetValue<string>("Otlp:Endpoint")! + "/v1/traces"); // 
-                                Console.WriteLine(otlpOptions.Endpoint);
                             });
                             break;
                         default:

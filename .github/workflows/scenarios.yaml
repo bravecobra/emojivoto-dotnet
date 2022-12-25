@@ -41,6 +41,12 @@ jobs:
         run: |
           sleep 30
 
+      - name: Run newman tests
+        uses: matt-ball/newman-action@master
+        if: ${{ matrix.profile != 'individual' }}
+        with:
+          collection: ./tests/EmojiVoto.postman_collection.json
+
       - name: Docker-compose down
         run: |
           docker-compose --profile app --profile ${{ matrix.profile }} -f docker-compose.yml -f ./docker-compose/docker-compose.${{ matrix.profile }}.yaml down --volumes

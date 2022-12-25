@@ -9,6 +9,8 @@ services:
       args:
         - SemVer=${SemVer}
     profiles: ["app"]
+    networks:
+      monitoring: null
     container_name: emoji-ui-svc
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
@@ -34,6 +36,8 @@ services:
         - SemVer=${SemVer}
     profiles: ["app"]
     container_name: emoji-svc
+    networks:
+      monitoring: null
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
       - UseMetricsExporter=default
@@ -54,6 +58,8 @@ services:
         - SemVer=${SemVer}
     container_name: voting-svc
     profiles: ["app"]
+    networks:
+      monitoring: null
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
       - FAILURE_RATE=10
@@ -76,6 +82,8 @@ services:
         - SemVer=${SemVer}
     container_name: votebot
     profiles: ["app"]
+    networks:
+      monitoring: null
     environment:
       - DOTNET_ENVIRONMENT=Production
       - WEB_HOST=http://web
@@ -132,7 +140,7 @@ services:
       - tempo:/tmp/tempo
     ports:
       - "14268"  # jaeger ingest
-      - "3200"   # tempo
+      - "3200:3200"   # tempo
       - "4317"   # otlp grpc
       - "4318"   # otlp http
       - "9411"   # zipkin
