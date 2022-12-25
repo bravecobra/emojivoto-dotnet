@@ -14,6 +14,7 @@ namespace EmojiVoting
     {
         public static void Main(string[] args)
         {
+            //To allow grpc HTTP2 traffic over non-SSL
             AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
             var builder = WebApplication.CreateBuilder(args);
             builder.Services.AddConfigurationRoot(builder.Configuration);
@@ -38,16 +39,13 @@ namespace EmojiVoting
                 db.Database.Migrate();
             }
             app.AddMetricsEndpoint();
-            app.UseEndpoints(endpoints =>
+            app.MapGrpcService<VotingGrpcSvc>();
+            app.MapHealthChecks("/health/startup");
+            app.MapHealthChecks("/healthz");
+            app.MapHealthChecks("/ready");
+            app.MapGet("/", async context =>
             {
-                endpoints.MapGrpcService<VotingGrpcSvc>();
-                endpoints.MapHealthChecks("/health/startup");
-                endpoints.MapHealthChecks("/healthz");
-                endpoints.MapHealthChecks("/ready");
-                endpoints.MapGet("/", async context =>
-                {
-                    await context.Response.WriteAsync("Communication with gRPC endpoints must be made through a gRPC client. To learn how to create a client, visit: https://go.microsoft.com/fwlink/?linkid=2086909");
-                });
+                await context.Response.WriteAsync("Communication with gRPC endpoints must be made through a gRPC client. To learn how to create a client, visit: https://go.microsoft.com/fwlink/?linkid=2086909");
             });
             app.Run();
         }
