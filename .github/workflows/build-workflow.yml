@@ -168,6 +168,25 @@ jobs:
           find . -type f -name '*.tar' -exec docker load --input {} \;
           docker image ls -a
 
+      - name: Docker-compose up
+        run: |
+          TAG=ci docker-compose --profile app --profile ${{ matrix.profile }} -f docker-compose.yml -f ./docker-compose/docker-compose.${{ matrix.profile }}.yaml up -d --remove-orphans
+
+      - name: Letting the bot vote
+        if: ${{ matrix.profile != 'individual' }}
+        run: |
+          sleep 90
+
+      - name: Run newman tests
+        uses: matt-ball/newman-action@master
+        if: ${{ matrix.profile != 'individual' }}
+        with:
+          collection: ./tests/${{ matrix.profile }}/EmojiVoto.postman_collection.json
+
+      - name: Docker-compose down
+        run: |
+          TAG=ci docker-compose --profile app --profile ${{ matrix.profile }} -f docker-compose.yml -f ./docker-compose/docker-compose.${{ matrix.profile }}.yaml down --volumes
+
   release:
     runs-on: ubuntu-latest
     name: Generate Release
