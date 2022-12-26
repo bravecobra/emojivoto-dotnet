@@ -167,7 +167,7 @@ jobs:
         run: |
           ls -al /tmp
           for filename in /tmp/*.tar; do
-            docker load --input /tmp/$filename.tar
+            docker load --input $filename
           done
           docker image ls -a
   release:
