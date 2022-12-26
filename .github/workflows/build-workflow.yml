@@ -122,13 +122,24 @@ jobs:
 
     - name: Build and push ${{ matrix.svcName }} image
       uses: docker/build-push-action@v3
-      # if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop' ||  contains(github.ref, 'refs/tags') || contains(github.ref, 'refs/heads/release') || contains(github.ref, 'refs/heads/hotfix')
+      if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop' || contains(github.ref, 'refs/tags') || contains(github.ref, 'refs/heads/release') || contains(github.ref, 'refs/heads/hotfix')
       env:
         SemVer: ${{ steps.gitversion.outputs.semVer }}
       with:
         context: .
         file: src/${{ matrix.svcName }}/Dockerfile
-        push: ${{ github.event_name != 'pull_request' }}
+        push: true
+        tags: ${{ steps.meta.outputs.tags }}
+        labels: ${{ steps.meta.outputs.labels }}
+
+    - name: Build and push ${{ matrix.svcName }} image
+      uses: docker/build-push-action@v3
+      # if: github.ref != 'refs/heads/master' || github.ref != 'refs/heads/develop' || !contains(github.ref, 'refs/tags') || !contains(github.ref, 'refs/heads/release') || contains(github.ref, 'refs/heads/hotfix')
+      env:
+        SemVer: ${{ steps.gitversion.outputs.semVer }}
+      with:
+        context: .
+        file: src/${{ matrix.svcName }}/Dockerfile
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
         outputs: type=docker,dest=/tmp/${{ matrix.svcName }}.tar
