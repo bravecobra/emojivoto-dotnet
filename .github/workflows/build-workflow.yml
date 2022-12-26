@@ -13,7 +13,7 @@ permissions:
 
 jobs:
   build:
-    name: Build
+    name: Build and Test
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
@@ -163,10 +163,7 @@ jobs:
 
       - name: Load Docker image
         run: |
-          ls -al
-          for filename in *.tar; do
-            docker load --input $filename
-          done
+          find . -type f -name '*.tar' -exec docker load --input {} \;
           docker image ls -a
 
   release:
