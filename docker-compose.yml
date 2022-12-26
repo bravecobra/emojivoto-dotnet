@@ -78,7 +78,7 @@ services:
       # - "k8s.local:192.168.65.2"
 
   seq:
-    image: datalust/seq:latest
+    image: datalust/seq:2022.1.7929
     container_name: seq
     profiles: ["individual"]
     networks:
@@ -94,7 +94,7 @@ services:
             cpus: '0.500'
             memory: 500M
   jaeger:
-    image: jaegertracing/all-in-one:latest
+    image: jaegertracing/all-in-one:1.39.0
     container_name: jaeger
     profiles: ["individual"]
     networks:
@@ -109,7 +109,7 @@ services:
       # - 14268:14268
 
   tempo:
-    image: grafana/tempo:latest
+    image: grafana/tempo:1.5.0
     container_name: tempo
     profiles: ["grafana", "otlp"]
     command: [ "-config.file=/etc/tempo.yaml" ]
@@ -126,7 +126,7 @@ services:
       - "9411"   # zipkin
 
   loki:
-    image: grafana/loki:latest
+    image: grafana/loki:2.7.0
     container_name: loki
     profiles: ["grafana", "otlp"]
     networks:
@@ -141,7 +141,7 @@ services:
     command: -config.file=/etc/loki/loki-config.yaml
 
   grafana:
-    image: grafana/grafana:latest
+    image: grafana/grafana:9.3.2
     container_name: grafana
     profiles: ["grafana", "otlp"]
     networks:
@@ -164,7 +164,7 @@ services:
 
   prometheus:
     container_name: prometheus
-    image: prom/prometheus:latest
+    image: prom/prometheus:v2.40.7
     profiles: ["individual", "otlp", "grafana"]
     networks:
       monitoring: null
