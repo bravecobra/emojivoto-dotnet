@@ -113,7 +113,14 @@ Task("Docker-Build")
 .Does(() => {
   foreach(var file in dockerFiles)
   {
-    var imageName = file.GetDirectory().Segments[file.GetDirectory().Segments.Length-1].ToLowerInvariant();
+    var imageLookup = new Dictionary<string, string>(){
+        {"EmojiUI","bravecobra/emoji-ui-svc" },
+        {"EmojiSvc","bravecobra/emoji-svc" },
+        {"EmojiVoting","bravecobra/emoji-voting-svc" },
+        {"EmojiVoteBot","bravecobra/emoji-votebot" },
+    };
+    var directory = file.GetDirectory().Segments[file.GetDirectory().Segments.Length-1];
+    var imageName = imageLookup[directory];
     var settings = new DockerImageBuildSettings {
       File = file.FullPath,
       BuildArg = new []{ $"SemVer={gitVersion.SemVer}" },

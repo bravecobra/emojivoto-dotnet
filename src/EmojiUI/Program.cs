@@ -59,15 +59,12 @@ namespace EmojiUI
             app.UseAuthorization();
 
             app.AddMetricsEndpoint();
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-                endpoints.MapBlazorHub();
-                endpoints.MapFallbackToPage("/_Host");
-                endpoints.MapHealthChecks("/health/startup");
-                endpoints.MapHealthChecks("/healthz");
-                endpoints.MapHealthChecks("/ready");
-            });
+            app.MapControllers();
+            app.MapBlazorHub();
+            app.MapFallbackToPage("/_Host");
+            app.MapHealthChecks("/health/startup");
+            app.MapHealthChecks("/healthz");
+            app.MapHealthChecks("/ready");
             app.Run();
         }
     }

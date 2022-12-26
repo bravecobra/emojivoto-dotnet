@@ -65,8 +65,8 @@ namespace EmojiShared.Configuration
                             options.AddOtlpExporter("traces", otlpOptions =>
                             {
                                 otlpOptions.Protocol = OtlpExportProtocol.HttpProtobuf;
-                                otlpOptions.Endpoint = new Uri(configuration.GetValue<string>("Otlp:Endpoint")! + "/v1/traces"); // 
-                                Console.WriteLine(otlpOptions.Endpoint);
+                                otlpOptions.Endpoint = new Uri(configuration.GetValue<string>("Otlp:Endpoint")! + "/v1/traces");
+                                otlpOptions.ExportProcessorType = ExportProcessorType.Simple;
                             });
                             break;
                         default:
@@ -99,6 +99,7 @@ namespace EmojiShared.Configuration
                             {
                                 otlpOptions.Protocol = OtlpExportProtocol.HttpProtobuf;
                                 otlpOptions.Endpoint = new Uri(configuration.GetValue<string>("Otlp:Endpoint")!+ "/v1/metrics");
+                                otlpOptions.ExportProcessorType = ExportProcessorType.Simple;
                             });
                             break;
                         default:

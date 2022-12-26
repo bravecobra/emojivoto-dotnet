@@ -14,7 +14,8 @@ namespace EmojiSvc
     {
         public static void Main(string[] args)
         {
-            AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true); //AWS
+            //To allow grpc HTTP2 traffic over non-SSL
+            AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
             var builder = WebApplication.CreateBuilder(args);
 
             builder.Services.AddConfigurationRoot(builder.Configuration);
@@ -39,19 +40,13 @@ namespace EmojiSvc
                 db.Database.Migrate();
             }
             app.AddMetricsEndpoint();
-            app.UseEndpoints(endpoints =>
+            app.MapGrpcService<EmojiGrpcSvc>();
+            app.MapHealthChecks("/health/startup");
+            app.MapHealthChecks("/healthz");
+            app.MapHealthChecks("/ready");
+            app.MapGet("/", async context =>
             {
-                endpoints.MapGrpcService<EmojiGrpcSvc>();
-                endpoints.MapGet("/", async context =>
-                {
-                    await context.Response.WriteAsync("Communication with gRPC endpoints must be made through a gRPC client. To learn how to create a client, visit: https://go.microsoft.com/fwlink/?linkid=2086909");
-                });
-                endpoints.MapHealthChecks("/health/startup");
-                endpoints.MapHealthChecks("/healthz");
-                endpoints.MapHealthChecks("/ready");
-
-                endpoints.MapControllers();
-
+                await context.Response.WriteAsync("Communication with gRPC endpoints must be made through a gRPC client. To learn how to create a client, visit: https://go.microsoft.com/fwlink/?linkid=2086909");
             });
             app.Run();
         }
