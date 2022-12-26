@@ -111,6 +111,7 @@ jobs:
         tags: |
           type=raw,enable=${{ github.ref == 'refs/heads/develop' }},value=latest
           type=raw,enable=${{ github.ref == 'refs/heads/master' }},value=stable
+          type=raw,value=ci
           type=semver,pattern={{version}},value=${{ steps.gitversion.outputs.semVer }}
 
     - name: Login to DockerHub
@@ -151,6 +152,7 @@ jobs:
         path: ${{ matrix.svcName }}.tar
 
   docker-run:
+    name: Test Docker-Compose scenarios
     runs-on: ubuntu-latest
     needs: [publish]
     steps:

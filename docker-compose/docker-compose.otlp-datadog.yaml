@@ -2,7 +2,7 @@ version: '3'
 
 services:
   web:
-    image: emojiui:latest
+    image: emojiui:${TAG:-latest}
     hostname: web
     environment:
       - UseMetricsExporter=otlp
@@ -12,7 +12,7 @@ services:
     depends_on:
       - otel-collector
   emoji-svc:
-    image: emojisvc:latest
+    image: emojisvc:${TAG:-latest}
     hostname: emoji-svc
     environment:
       - UseMetricsExporter=otlp
@@ -22,7 +22,7 @@ services:
     depends_on:
       - otel-collector
   voting-svc:
-    image: emojivoting:latest
+    image: emojivoting:${TAG:-latest}
     hostname: voting-svc
     environment:
       - UseMetricsExporter=otlp
@@ -32,7 +32,7 @@ services:
     depends_on:
       - otel-collector
   vote-bot:
-    image: emojivotebot:latest
+    image: emojivotebot:${TAG:-latest}
     hostname: vote-bot
     environment:
       - UseMetricsExporter=otlp

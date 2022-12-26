@@ -2,7 +2,7 @@ version: '3'
 
 services:
   web:
-    image: emojiui:latest
+    image: emojiui:${TAG:-latest}
     environment:
       - UseMetricsExporter=prometheus
       - UseTracingExporter=otlp
@@ -15,7 +15,7 @@ services:
       - tempo
       - prometheus
   emoji-svc:
-    image: emojisvc:latest
+    image: emojisvc:${TAG:-latest}
     environment:
       - UseMetricsExporter=prometheus
       - UseTracingExporter=otlp
@@ -28,7 +28,7 @@ services:
       - tempo
       - prometheus
   voting-svc:
-    image: emojivoting:latest
+    image: emojivoting:${TAG:-latest}
     environment:
       - UseMetricsExporter=prometheus
       - UseTracingExporter=otlp
@@ -41,7 +41,7 @@ services:
       - tempo
       - prometheus
   vote-bot:
-    image: emojivotebot:latest
+    image: emojivotebot:${TAG:-latest}
     environment:
       - UseMetricsExporter=prometheus
       - UseTracingExporter=otlp
