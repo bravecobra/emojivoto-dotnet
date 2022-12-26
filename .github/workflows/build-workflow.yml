@@ -135,7 +135,6 @@ jobs:
 
     - name: Build and push ${{ matrix.svcName }} image
       uses: docker/build-push-action@v3
-      # if: github.ref != 'refs/heads/master' || github.ref != 'refs/heads/develop' || !contains(github.ref, 'refs/tags') || !contains(github.ref, 'refs/heads/release') || contains(github.ref, 'refs/heads/hotfix')
       env:
         SemVer: ${{ steps.gitversion.outputs.semVer }}
       with:
@@ -155,6 +154,9 @@ jobs:
     name: Test Docker-Compose scenarios
     runs-on: ubuntu-latest
     needs: [publish]
+    strategy:
+      matrix:
+        profile: [individual, grafana, otlp]
     steps:
       # need checkout before using compose-action
       - name: Checkout
