@@ -65,15 +65,14 @@ jobs:
       fail-fast: true
       matrix:
         include:
-          - svcProjectName: src/EmojiSvc
+          - svcName: EmojiSvc
             svcDockerName: bravecobra/emoji-svc
-          - svcProjectName: src/EmojiVoting
+          - svcName: EmojiVoting
             svcDockerName: bravecobra/emoji-voting-svc
-          - svcProjectName: src/EmojiUI
+          - svcName: EmojiUI
             svcDockerName: bravecobra/emoji-ui-svc
-          - svcProjectName: src/EmojiVoteBot
+          - svcName: EmojiVoteBot
             svcDockerName: bravecobra/emoji-votebot
-    needs: [build]
     steps:
     - name: Checkout
       uses: actions/checkout@v3
@@ -121,20 +120,45 @@ jobs:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-    - name: Build and push ${{ matrix.svcProjectName }} image
+    - name: Build and push ${{ matrix.svcName }} image
       uses: docker/build-push-action@v3
       # if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop' ||  contains(github.ref, 'refs/tags') || contains(github.ref, 'refs/heads/release') || contains(github.ref, 'refs/heads/hotfix')
       env:
         SemVer: ${{ steps.gitversion.outputs.semVer }}
       with:
         context: .
-        file: ${{ matrix.svcProjectName }}/Dockerfile
+        file: src/${{ matrix.svcName }}/Dockerfile
         push: ${{ github.event_name != 'pull_request' }}
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
-        cache-from: type=gha
-        cache-to: type=gha,mode=max
+        outputs: type=docker,dest=/tmp/${{ matrix.svcName }}.tar
 
+    - name: Upload artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: ${{ matrix.svcName }}
+        path: /tmp/${{ matrix.svcName }}.tar
+
+  docker-run:
+    runs-on: ubuntu-latest
+    needs: [publish]
+    steps:
+      # need checkout before using compose-action
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Download artifact
+        uses: actions/download-artifact@v2
+        # with:
+        #   path: /tmp
+
+      - name: Load Docker image
+        run: |
+          ls -al /tmp
+          for filename in /tmp/*.tar; do
+            docker load --input /tmp/$filename.tar
+          done
+          docker image ls -a
   release:
     runs-on: ubuntu-latest
     name: Generate Release
