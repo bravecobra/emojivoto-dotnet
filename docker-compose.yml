@@ -3,11 +3,6 @@ version: '3'
 services:
   web:
     image: bravecobra/emoji-ui-svc:stable
-    # build:
-    #   context: .
-    #   dockerfile: ./src/EmojiUI/Dockerfile
-    #   args:
-    #     - SemVer=${SemVer}
     profiles: ["app"]
     networks:
       monitoring: null
@@ -29,11 +24,6 @@ services:
       # - "k8s.local:192.168.65.2"
   emoji-svc:
     image: bravecobra/emoji-svc:stable
-    # build:
-    #   context: .
-    #   dockerfile: ./src/EmojiSvc/Dockerfile
-    #   args:
-    #     - SemVer=${SemVer}
     profiles: ["app"]
     container_name: emoji-svc
     networks:
@@ -51,11 +41,6 @@ services:
       # - "k8s.local:192.168.65.2"
   voting-svc:
     image: bravecobra/emoji-voting-svc:stable
-    # build:
-    #   context: .
-    #   dockerfile: ./src/EmojiVoting/Dockerfile
-    #   args:
-    #     - SemVer=${SemVer}
     container_name: voting-svc
     profiles: ["app"]
     networks:
@@ -75,11 +60,6 @@ services:
       # - "k8s.local:192.168.65.2"
   vote-bot:
     image: bravecobra/emoji-votebot:stable
-    # build:
-    #   context: .
-    #   dockerfile: ./src/EmojiVoteBot/Dockerfile
-    #   args:
-    #     - SemVer=${SemVer}
     container_name: votebot
     profiles: ["app"]
     networks:

@@ -2,7 +2,7 @@ version: '3'
 
 services:
   web:
-    image: emojiui:${TAG:-latest}
+    image: bravecobra/emoji-ui-svc:${TAG:-latest}
     environment:
       - UseMetricsExporter=prometheus
       - UseTracingExporter=otlp
@@ -15,7 +15,7 @@ services:
       - tempo
       - prometheus
   emoji-svc:
-    image: emojisvc:${TAG:-latest}
+    image: bravecobra/emoji-svc:${TAG:-latest}
     environment:
       - UseMetricsExporter=prometheus
       - UseTracingExporter=otlp
@@ -28,7 +28,7 @@ services:
       - tempo
       - prometheus
   voting-svc:
-    image: emojivoting:${TAG:-latest}
+    image: bravecobra/emoji-voting-svc:${TAG:-latest}
     environment:
       - UseMetricsExporter=prometheus
       - UseTracingExporter=otlp
@@ -41,7 +41,7 @@ services:
       - tempo
       - prometheus
   vote-bot:
-    image: emojivotebot:${TAG:-latest}
+    image: bravecobra/emoji-votebot:${TAG:-latest}
     environment:
       - UseMetricsExporter=prometheus
       - UseTracingExporter=otlp
