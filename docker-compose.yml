@@ -3,12 +3,9 @@ version: '3'
 services:
   web:
     image: bravecobra/emoji-ui-svc:stable
-    build:
-      context: .
-      dockerfile: ./src/EmojiUI/Dockerfile
-      args:
-        - SemVer=${SemVer}
     profiles: ["app"]
+    networks:
+      monitoring: null
     container_name: emoji-ui-svc
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
@@ -27,13 +24,10 @@ services:
       # - "k8s.local:192.168.65.2"
   emoji-svc:
     image: bravecobra/emoji-svc:stable
-    build:
-      context: .
-      dockerfile: ./src/EmojiSvc/Dockerfile
-      args:
-        - SemVer=${SemVer}
     profiles: ["app"]
     container_name: emoji-svc
+    networks:
+      monitoring: null
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
       - UseMetricsExporter=default
@@ -47,13 +41,10 @@ services:
       # - "k8s.local:192.168.65.2"
   voting-svc:
     image: bravecobra/emoji-voting-svc:stable
-    build:
-      context: .
-      dockerfile: ./src/EmojiVoting/Dockerfile
-      args:
-        - SemVer=${SemVer}
     container_name: voting-svc
     profiles: ["app"]
+    networks:
+      monitoring: null
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
       - FAILURE_RATE=10
@@ -69,17 +60,14 @@ services:
       # - "k8s.local:192.168.65.2"
   vote-bot:
     image: bravecobra/emoji-votebot:stable
-    build:
-      context: .
-      dockerfile: ./src/EmojiVoteBot/Dockerfile
-      args:
-        - SemVer=${SemVer}
     container_name: votebot
     profiles: ["app"]
+    networks:
+      monitoring: null
     environment:
       - DOTNET_ENVIRONMENT=Production
       - WEB_HOST=http://web
-      - VOTING_RATE=10000
+      - VOTING_RATE=5000
       - UseMetricsExporter=default
       - UseTracingExporter=default
       - UseLogExporter=default
@@ -90,9 +78,11 @@ services:
       # - "k8s.local:192.168.65.2"
 
   seq:
-    image: datalust/seq:latest
+    image: datalust/seq:2022.1.7929
     container_name: seq
     profiles: ["individual"]
+    networks:
+      monitoring: null
     restart: always
     ports:
       - "5341:80"
@@ -104,9 +94,11 @@ services:
             cpus: '0.500'
             memory: 500M
   jaeger:
-    image: jaegertracing/all-in-one:latest
+    image: jaegertracing/all-in-one:1.40.0
     container_name: jaeger
     profiles: ["individual"]
+    networks:
+      monitoring: null
     ports:
       - "6831:6831/udp"
       - "16686:16686"
@@ -117,24 +109,28 @@ services:
       # - 14268:14268
 
   tempo:
-    image: grafana/tempo:latest
+    image: grafana/tempo:1.5.0
     container_name: tempo
     profiles: ["grafana", "otlp"]
     command: [ "-config.file=/etc/tempo.yaml" ]
+    networks:
+      monitoring: null
     volumes:
       - ./docker-compose/config/tempo/tempo.yaml:/etc/tempo.yaml
       - tempo:/tmp/tempo
     ports:
       - "14268"  # jaeger ingest
-      - "3200"   # tempo
+      - "3200:3200"   # tempo
       - "4317"   # otlp grpc
       - "4318"   # otlp http
       - "9411"   # zipkin
 
   loki:
-    image: grafana/loki:latest
+    image: grafana/loki:2.7.1
     container_name: loki
     profiles: ["grafana", "otlp"]
+    networks:
+      monitoring: null
     ports:
       - 3100:3100
     restart: on-failure
@@ -145,9 +141,11 @@ services:
     command: -config.file=/etc/loki/loki-config.yaml
 
   grafana:
-    image: grafana/grafana:latest
+    image: grafana/grafana:9.3.2
     container_name: grafana
     profiles: ["grafana", "otlp"]
+    networks:
+      monitoring: null
     environment:
       - GF_INSTALL_PLUGINS=grafana-clock-panel,grafana-simple-json-datasource,grafana-piechart-panel
       - GF_AUTH_ANONYMOUS_ENABLED=true
@@ -166,8 +164,10 @@ services:
 
   prometheus:
     container_name: prometheus
-    image: prom/prometheus:latest
+    image: prom/prometheus:v2.41.0
     profiles: ["individual", "otlp", "grafana"]
+    networks:
+      monitoring: null
     volumes:
       - prometheus:/prometheus
       - ./docker-compose/config/prometheus/prometheus.individual.yaml:/etc/prometheus/prometheus.yml
@@ -179,6 +179,8 @@ services:
     container_name: otel-collector
     profiles: ["otlp", "datadog"]
     command: ["--config=/etc/otel-collector-config.yml"]
+    networks:
+      monitoring: null
     ports:
       - "4317:4317"
       - "4318:4318"
@@ -210,3 +212,7 @@ volumes:
   promtail:
   loki:
   tempo:
+
+networks:
+  monitoring:
+    driver: bridge

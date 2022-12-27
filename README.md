@@ -65,7 +65,7 @@ graph TD;
 To bring the app back down
 
 ```powershell
-docker-compose down
+docker-compose down --volumes
 ```
 
 ### Monitoring to individual services (jaeger, seq, prometheus)
@@ -119,7 +119,7 @@ Each component is reconfigured to output to each monitoring service. That means 
 Although we have some observability now, we still need to reconfigure each service.
 
 ```powershell
-docker-compose --profile app --profile individual -f docker-compose.yml -f ./docker-compose/docker-compose.individual.yaml down
+docker-compose --profile app --profile individual -f docker-compose.yml -f ./docker-compose/docker-compose.individual.yaml down --volumes
 ```
 
 ### Monitoring to individual services (loki, tempo, prometheus)
@@ -162,7 +162,7 @@ graph TD;
 ```
 
 ```powershell
-docker-compose --profile app --profile grafana -f docker-compose.yml -f ./docker-compose/docker-compose.individual-grafana.yaml up -d --remove-orphans
+docker-compose --profile app --profile grafana -f docker-compose.yml -f ./docker-compose/docker-compose.grafana.yaml up -d --remove-orphans
 ```
 
 Each component is reconfigured to output to each monitoring service. That means each service outputs:
@@ -176,7 +176,7 @@ All these services can be accessed through Grafana [http://localhost:3000](http:
 Downside is still that we heave to reconfigure each service to get monitoring up and running.
 
 ```powershell
-docker-compose --profile app --profile grafana -f docker-compose.yml -f ./docker-compose/docker-compose.individual-grafana.yaml down
+docker-compose --profile app --profile grafana -f docker-compose.yml -f ./docker-compose/docker-compose.grafana.yaml down --volumes
 ```
 
 ### Monitoring through opentelemetry (grafana backend)
@@ -227,6 +227,10 @@ Reconfiguring to output to opentelemetry
 docker-compose --profile app --profile otlp -f docker-compose.yml -f ./docker-compose/docker-compose.otlp.yaml up -d --remove-orphans
 ```
 
+```powershell
+docker-compose --profile app --profile otlp -f docker-compose.yml -f ./docker-compose/docker-compose.otlp.yaml down --volumes
+```
+
 ### Monitoring through opentelemetry (datadog)
 
 Now instead having to run that monitoring backend ourselves, we can also choose to output to a cloud service like [Datadog](https://datadoghq.com) or [Splunk](https://www.splunk.com/). This example shows exporting to Datadog.
@@ -272,7 +276,7 @@ docker-compose --profile app --profile datadog -f docker-compose.yml -f ./docker
 To bring it back down
 
 ```powershell
-docker-compose --profile app --profile datadog -f docker-compose.yml -f ./docker-compose/docker-compose.otlp-datadog.yaml down
+docker-compose --profile app --profile datadog -f docker-compose.yml -f ./docker-compose/docker-compose.otlp-datadog.yaml down --volumes
 ```
 
 ## Enable metrics from docker engine for docker_stats

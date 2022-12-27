@@ -1,0 +1,421 @@
+{
+	"info": {
+		"_postman_id": "d0199506-c00a-49a6-b77f-85aa5662df82",
+		"name": "EmojiVoto",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "456142"
+	},
+	"item": [
+		{
+			"name": "Prometheus",
+			"item": [
+				{
+					"name": "Promethues has traces",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", () => {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"the data.result should have entries\", () => {\r",
+									"    pm.expect(pm.response.json().data.result).to.be.not.empty;\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:9090/api/v1/query?query=emojivoto_Votes",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9090",
+							"path": [
+								"api",
+								"v1",
+								"query"
+							],
+							"query": [
+								{
+									"key": "query",
+									"value": "emojivoto_Votes"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Tempo",
+			"item": [
+				{
+					"name": "Tempo has traces of EmojiSvc",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", () => {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"the traces should have entries\", () => {\r",
+									"    pm.expect(pm.response.json().traces).to.be.not.empty;\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3200/api/search?tags=service.name%3DEmojiSvc",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3200",
+							"path": [
+								"api",
+								"search"
+							],
+							"query": [
+								{
+									"key": "tags",
+									"value": "service.name%3DEmojiSvc"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Tempo has traces of EmojiUI",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", () => {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"the traces should have entries\", () => {\r",
+									"    pm.expect(pm.response.json().traces).to.be.not.empty;\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3200/api/search?tags=service.name%3DEmojiUI",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3200",
+							"path": [
+								"api",
+								"search"
+							],
+							"query": [
+								{
+									"key": "tags",
+									"value": "service.name%3DEmojiUI"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Tempo has traces of EmojiVoteBot",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", () => {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"the traces should have entries\", () => {\r",
+									"    pm.expect(pm.response.json().traces).to.be.not.empty;\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3200/api/search?tags=service.name%3DEmojiVoteBot",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3200",
+							"path": [
+								"api",
+								"search"
+							],
+							"query": [
+								{
+									"key": "tags",
+									"value": "service.name%3DEmojiVoteBot"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Tempo has traces of EmojiVoting",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", () => {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"the traces should have entries\", () => {\r",
+									"    pm.expect(pm.response.json().traces).to.be.not.empty;\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3200/api/search?tags=service.name%3DEmojiVoting",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3200",
+							"path": [
+								"api",
+								"search"
+							],
+							"query": [
+								{
+									"key": "tags",
+									"value": "service.name%3DEmojiVoting"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Loki",
+			"item": [
+				{
+					"name": "Loki has logs of EmojiSvc",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", () => {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"the data.result should have entries\", () => {\r",
+									"    pm.expect(pm.response.json().data.result).to.be.not.empty;\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3100/loki/api/v1/query?query={app=\"EmojiSvc\"} | json",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3100",
+							"path": [
+								"loki",
+								"api",
+								"v1",
+								"query"
+							],
+							"query": [
+								{
+									"key": "query",
+									"value": "{app=\"EmojiSvc\"} | json"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Loki has logs of EmojiVoting",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", () => {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"the data.result should have entries\", () => {\r",
+									"    pm.expect(pm.response.json().data.result).to.be.not.empty;\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3100/loki/api/v1/query?query={app=\"EmojiVoting\"} | json",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3100",
+							"path": [
+								"loki",
+								"api",
+								"v1",
+								"query"
+							],
+							"query": [
+								{
+									"key": "query",
+									"value": "{app=\"EmojiVoting\"} | json"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Loki has logs of EmojiUI",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", () => {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"the data.result should have entries\", () => {\r",
+									"    pm.expect(pm.response.json().data.result).to.be.not.empty;\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3100/loki/api/v1/query?query={app=\"EmojiUI\"} | json",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3100",
+							"path": [
+								"loki",
+								"api",
+								"v1",
+								"query"
+							],
+							"query": [
+								{
+									"key": "query",
+									"value": "{app=\"EmojiUI\"} | json"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Loki has logs of EmojiVoteBot",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", () => {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"the data.result should have entries\", () => {\r",
+									"    pm.expect(pm.response.json().data.result).to.be.not.empty;\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3100/loki/api/v1/query?query={app=\"EmojiVoteBot\"} | json",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3100",
+							"path": [
+								"loki",
+								"api",
+								"v1",
+								"query"
+							],
+							"query": [
+								{
+									"key": "query",
+									"value": "{app=\"EmojiVoteBot\"} | json"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
