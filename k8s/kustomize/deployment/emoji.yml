@@ -28,7 +28,7 @@ spec:
       serviceAccountName: emoji
       containers:
       - name: emoji-svc
-        image: registry.localhost:5000/bravecobra/emojisvc:latest
+        image: bravecobra/emoji-svc:stable
         env:
         - name: ASPNETCORE_ENVIRONMENT
           value: Production

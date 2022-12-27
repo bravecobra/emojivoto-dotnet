@@ -21,12 +21,12 @@ spec:
     spec:
       containers:
       - name: vote-bot
-        image: registry.localhost:5000/bravecobra/emojivotebot:latest
+        image: bravecobra/emoji-votebot:stable
         env:
         - name: ASPNETCORE_ENVIRONMENT
           value: Production
         - name: VOTING_RATE
-          value: "1000"
+          value: "5000"
         - name: WEB_HOST
           value: http://web-svc.emojivoto:80
         - name: Serilog__WriteTo__0__Args__uri
@@ -38,7 +38,7 @@ spec:
         - name: UseMetricsExporter
           value: otlp
         - name: UseLogExporter
-          value: loki
+          value: otlp
         imagePullPolicy: Always
         resources:
           limits:

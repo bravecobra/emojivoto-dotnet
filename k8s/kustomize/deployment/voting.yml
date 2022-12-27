@@ -28,7 +28,7 @@ spec:
       serviceAccountName: voting
       containers:
       - name: voting-svc
-        image: registry.localhost:5000/bravecobra/emojivoting:latest
+        image: bravecobra/emoji-voting-svc:stable
         env:
         - name: ASPNETCORE_ENVIRONMENT
           value: Production
@@ -45,7 +45,7 @@ spec:
         - name: UseMetricsExporter
           value: otlp
         - name: UseLogExporter
-          value: loki
+          value: otlp
         imagePullPolicy: Always
         ports:
         - containerPort: 80
