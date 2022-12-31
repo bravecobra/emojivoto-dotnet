@@ -29,6 +29,7 @@ spec:
       containers:
       - name: voting-svc
         image: bravecobra/emoji-voting-svc:stable
+        imagePullPolicy: IfNotPresent
         env:
         - name: ASPNETCORE_ENVIRONMENT
           value: Production
@@ -36,8 +37,8 @@ spec:
           value: "10"
         - name: ARTIFICIAL_DELAY
           value: "0"
-        - name: Serilog__WriteTo__0__Args__uri
-          value: "http://loki.loki:3100"
+        # - name: Serilog__WriteTo__0__Args__uri
+        #   value: "http://loki.loki:3100"
         - name: Otlp__Endpoint
           value: http://otel-collector-collector.opentelemetry:4318
         - name: UseTracingExporter
@@ -46,7 +47,6 @@ spec:
           value: otlp
         - name: UseLogExporter
           value: otlp
-        imagePullPolicy: Always
         ports:
         - containerPort: 80
           name: grpc

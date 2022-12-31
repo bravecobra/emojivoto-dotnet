@@ -29,6 +29,7 @@ spec:
       containers:
       - name: web-svc
         image: bravecobra/emoji-ui-svc:latest
+        imagePullPolicy: IfNotPresent
         env:
         - name: ASPNETCORE_ENVIRONMENT
           value: Production
@@ -36,8 +37,8 @@ spec:
           value: http://emoji-svc.emojivoto:80
         - name: VOTINGSVC_HOST
           value: http://voting-svc.emojivoto:80
-        - name: Serilog__WriteTo__0__Args__uri
-          value: "http://loki.loki:3100"
+        # - name: Serilog__WriteTo__0__Args__uri
+        #   value: "http://loki.loki:3100"
         - name: Otlp__Endpoint
           value: http://otel-collector-collector.opentelemetry:4318
         - name: UseTracingExporter
@@ -46,7 +47,6 @@ spec:
           value: otlp
         - name: UseLogExporter
           value: otlp
-        imagePullPolicy: Always
         ports:
         - containerPort: 80
           name: http

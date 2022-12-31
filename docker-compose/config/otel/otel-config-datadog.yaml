@@ -12,10 +12,6 @@ receivers:
   hostmetrics:
     collection_interval: 10s
     scrapers:
-      paging:
-        metrics:
-          system.paging.utilization:
-            enabled: true
       cpu:
         metrics:
           system.cpu.utilization:
@@ -27,8 +23,16 @@ receivers:
             enabled: true
       load:
       memory:
+        metrics:
+          system.memory.utilization:
+            enabled: true
       network:
       processes:
+      paging:
+        metrics:
+          system.paging.utilization:
+            enabled: true
+      process:
   filelog:
     include_file_path: true
     poll_interval: 500ms
@@ -55,14 +59,48 @@ receivers:
           - targets: ['host.docker.internal:9323']
 
 processors:
+  memory_limiter:
+    check_interval: 1s
+    limit_mib: 1000
+    spike_limit_mib: 200
   batch:
     # Datadog APM Intake limit is 3.2MB. Let's make sure the batches do not go over that.
     send_batch_max_size: 1000
     send_batch_size: 100
     timeout: 10s
+  resource:
+    attributes:
+      - key: host.id
+        from_attribute: host.name
+        action: upsert
+  cumulativetodelta:
+    include:
+      metrics:
+        - system.network.io
+        - system.disk.operations
+        - system.network.dropped
+        - system.network.packets
+        - process.cpu.time
+      match_type: strict
   resourcedetection:
     detectors: [system, env, docker]
-
+  k8sattributes:
+    auth_type: "serviceAccount"
+    passthrough: false
+    filter:
+      node_from_env_var: KUBE_NODE_NAME
+    extract:
+      metadata:
+        - k8s.pod.name
+        - k8s.pod.uid
+        - k8s.deployment.name
+        - k8s.cluster.name
+        - k8s.namespace.name
+        - k8s.node.name
+        - k8s.pod.start_time
+    pod_association:
+      - from: resource_attribute
+        name: k8s.pod.uid
 exporters:
   logging:
     loglevel: debug
@@ -83,14 +121,14 @@ service:
   pipelines:
     metrics:
       receivers: [hostmetrics, otlp, prometheus, docker_stats]
-      processors: [batch]
+      processors: [resourcedetection, k8sattributes, resource, cumulativetodelta , batch]
       exporters: [datadog]
     traces:
       receivers: [otlp]
-      processors: [batch]
+      processors: [ resourcedetection, k8sattributes, resource, batch]
       exporters: [datadog]
     logs:
       # This pipeline has an OTLP receiver, filelog receiver, a batch processor and a Datadog exporter.
       receivers: [otlp, filelog]
-      processors: [batch]
+      processors: [ resourcedetection, k8sattributes, resource, batch]
       exporters: [datadog]
