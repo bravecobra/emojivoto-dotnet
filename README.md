@@ -227,6 +227,8 @@ Reconfiguring to output to opentelemetry
 docker-compose --profile app --profile otlp -f docker-compose.yml -f ./docker-compose/docker-compose.otlp.yaml up -d --remove-orphans
 ```
 
+To bring it down again:
+
 ```powershell
 docker-compose --profile app --profile otlp -f docker-compose.yml -f ./docker-compose/docker-compose.otlp.yaml down --volumes
 ```
