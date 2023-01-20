@@ -1,5 +1,5 @@
 #addin nuget:?package=Cake.Docker&version=1.2.0
-#tool "dotnet:?package=GitVersion.Tool&version=5.11.1"
+#tool "dotnet:?package=GitVersion.Tool&version=5.12.0"
 
 ///////////////////////////////////////////////////////////////////////////////
 // ARGUMENTS
