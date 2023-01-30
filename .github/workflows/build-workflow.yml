@@ -123,7 +123,7 @@ jobs:
         password: ${{ secrets.DOCKERHUB_TOKEN }}
 
     - name: Build and push ${{ matrix.svcName }} image
-      uses: docker/build-push-action@v3
+      uses: docker/build-push-action@v4
       if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop' || contains(github.ref, 'refs/tags') || contains(github.ref, 'refs/heads/release') || contains(github.ref, 'refs/heads/hotfix')
       env:
         SemVer: ${{ steps.gitversion.outputs.semVer }}
@@ -135,7 +135,7 @@ jobs:
         labels: ${{ steps.meta.outputs.labels }}
 
     - name: Build and push ${{ matrix.svcName }} image
-      uses: docker/build-push-action@v3
+      uses: docker/build-push-action@v4
       env:
         SemVer: ${{ steps.gitversion.outputs.semVer }}
       with:
