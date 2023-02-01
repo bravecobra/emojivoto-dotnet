@@ -164,7 +164,7 @@ services:
 
   prometheus:
     container_name: prometheus
-    image: prom/prometheus:v2.41.0
+    image: prom/prometheus:v2.42.0
     profiles: ["individual", "otlp", "grafana"]
     networks:
       monitoring: null
