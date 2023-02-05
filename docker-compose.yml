@@ -94,7 +94,7 @@ services:
             cpus: '0.500'
             memory: 500M
   jaeger:
-    image: jaegertracing/all-in-one:1.41.0
+    image: jaegertracing/all-in-one:1.42.0
     container_name: jaeger
     profiles: ["individual"]
     networks:
