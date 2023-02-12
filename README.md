@@ -146,12 +146,14 @@ graph TD;
     VoteBot -.logs.-> Loki
     VoteBot -.traces.-> Tempo
     VoteBot -.metrics.-> Prometheus
-  subgraph one
+  subgraph GrafanaBackend[Grafana Backend]
     Loki <--> Tempo
     Prometheus <--> Loki
     Tempo <--> Prometheus
+    Loki <--> Grafana[Grafana UI]
+    Prometheus <--> Grafana
+    Tempo <--> Grafana
   end
-
   style VoteBot fill:#fcba03,color:#000
   style EmojiUI fill:#03fc28,color:#000
   style EmojiSvc fill:#03fc28,color:#000
@@ -159,6 +161,7 @@ graph TD;
   style Loki fill:#0356fc,color:#000
   style Tempo fill:#0356fc,color:#000
   style Prometheus fill:#0356fc,color:#000
+  style Grafana fill:#0356fc,color:#000
 ```
 
 ```powershell
@@ -200,14 +203,20 @@ graph TD;
     VoteBot -.logs.-> OpenTelemetry
     VoteBot -.traces.-> OpenTelemetry
     VoteBot -.metrics.-> OpenTelemetry
+  subgraph Backend[Grafana Backend]
+    Loki <--> Tempo
+    Tempo <--> Prometheus
+    Prometheus <--> Loki
+    Loki <--> Grafana
+    Prometheus <--> Grafana
+    Tempo <--> Grafana
+  end
   subgraph Monitoring
     OpenTelemetry -.logs.-> Loki
     OpenTelemetry -.traces.-> Tempo
     OpenTelemetry -.metrics.-> Prometheus
-    Loki <--> Tempo
-    Tempo <--> Prometheus
-    Prometheus <--> Loki
   end
+
   style VoteBot fill:#fcba03,color:#000
   style EmojiUI fill:#03fc28,color:#000
   style EmojiSvc fill:#03fc28,color:#000
@@ -216,6 +225,7 @@ graph TD;
   style Loki fill:#0356fc,color:#000
   style Tempo fill:#0356fc,color:#000
   style Prometheus fill:#0356fc,color:#000
+  style Grafana fill:#0356fc,color:#000
 ```
 
 We let the app output to just one component: `opentelemetry-collector`. From there we then can decide where each output should go without
