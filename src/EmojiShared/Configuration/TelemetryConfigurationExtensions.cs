@@ -107,7 +107,7 @@ namespace EmojiShared.Configuration
                             break;
                     }
                 })
-                .StartWithHost();
+                ;
             return services;
         }
 
