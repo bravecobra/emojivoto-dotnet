@@ -126,7 +126,7 @@ services:
       - "9411"   # zipkin
 
   loki:
-    image: grafana/loki:2.7.3
+    image: grafana/loki:2.7.4
     container_name: loki
     profiles: ["grafana", "otlp"]
     networks:
