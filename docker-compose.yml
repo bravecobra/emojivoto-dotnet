@@ -109,7 +109,7 @@ services:
       # - 14268:14268
 
   tempo:
-    image: grafana/tempo:2.0.1
+    image: grafana/tempo:2.1.0
     container_name: tempo
     profiles: ["grafana", "otlp"]
     command: [ "-config.file=/etc/tempo.yaml" ]
