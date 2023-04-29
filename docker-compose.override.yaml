@@ -2,16 +2,16 @@ version: '3'
 
 services:
   web:
-    image: emojiui:latest
+    image: bravecobra/emoji-ui-svc:latest
   emoji-svc:
-    image: emojisvc:latest
+    image: bravecobra/emoji-svc:latest
   voting-svc:
-    image: emojivoting:latest
+    image: bravecobra/emoji-voting-svc:latest
     environment:
       - FAILURE_RATE=50
       - ARTIFICIAL_DELAY=0
   vote-bot:
-    image: emojivotebot:latest
+    image: bravecobra/emoji-votebot:latest
 
   # aws-otel-collector:
   #   environment:

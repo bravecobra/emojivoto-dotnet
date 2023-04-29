@@ -166,6 +166,8 @@ services:
     container_name: prometheus
     image: prom/prometheus:v2.43.0
     profiles: ["individual", "otlp", "grafana"]
+    command:
+      - '--web.enable-remote-write-receiver'
     networks:
       monitoring: null
     volumes:
@@ -175,7 +177,7 @@ services:
       - "9090:9090"
 
   otel-collector:
-    image: otel/opentelemetry-collector-contrib:0.75.0
+    image: otel/opentelemetry-collector-contrib:0.76.1
     container_name: otel-collector
     profiles: ["otlp", "datadog"]
     command: ["--config=/etc/otel-collector-config.yml"]
