@@ -32,7 +32,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:9090/api/v1/query?query=Votes",
+							"raw": "http://localhost:9090/api/v1/query?query=Votes_total",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -46,7 +46,7 @@
 							"query": [
 								{
 									"key": "query",
-									"value": "Votes"
+									"value": "Votes_total"
 								}
 							]
 						}
@@ -258,7 +258,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:3100/loki/api/v1/query?query={app=\"EmojiSvc\"} | json",
+							"raw": "http://localhost:3100/loki/api/v1/query?query={job=\"EmojiSvc\"} | json",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -273,7 +273,7 @@
 							"query": [
 								{
 									"key": "query",
-									"value": "{app=\"EmojiSvc\"} | json"
+									"value": "{job=\"EmojiSvc\"} | json"
 								}
 							]
 						}
@@ -303,7 +303,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:3100/loki/api/v1/query?query={app=\"EmojiVoting\"} | json",
+							"raw": "http://localhost:3100/loki/api/v1/query?query={job=\"EmojiVoting\"} | json",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -318,7 +318,7 @@
 							"query": [
 								{
 									"key": "query",
-									"value": "{app=\"EmojiVoting\"} | json"
+									"value": "{job=\"EmojiVoting\"} | json"
 								}
 							]
 						}
@@ -348,7 +348,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:3100/loki/api/v1/query?query={app=\"EmojiUI\"} | json",
+							"raw": "http://localhost:3100/loki/api/v1/query?query={job=\"EmojiUI\"} | json",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -363,7 +363,7 @@
 							"query": [
 								{
 									"key": "query",
-									"value": "{app=\"EmojiUI\"} | json"
+									"value": "{job=\"EmojiUI\"} | json"
 								}
 							]
 						}
@@ -393,7 +393,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:3100/loki/api/v1/query?query={app=\"EmojiVoteBot\"} | json",
+							"raw": "http://localhost:3100/loki/api/v1/query?query={job=\"EmojiVoteBot\"} | json",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -408,7 +408,7 @@
 							"query": [
 								{
 									"key": "query",
-									"value": "{app=\"EmojiVoteBot\"} | json"
+									"value": "{job=\"EmojiVoteBot\"} | json"
 								}
 							]
 						}
