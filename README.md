@@ -65,7 +65,7 @@ graph TD;
 To bring the app back down
 
 ```powershell
-docker-compose down --volumes
+docker-compose --profile app down --volumes
 ```
 
 ### Monitoring to individual services (jaeger, seq, prometheus)
