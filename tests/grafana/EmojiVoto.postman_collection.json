@@ -32,7 +32,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:9090/api/v1/query?query=Votes_total",
+							"raw": "http://localhost:9090/api/v1/query?query=Votes",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -46,7 +46,7 @@
 							"query": [
 								{
 									"key": "query",
-									"value": "Votes_total"
+									"value": "Votes"
 								}
 							]
 						}

@@ -57,4 +57,4 @@ services:
   prometheus:
     volumes:
       - prometheus:/prometheus
-      - ./docker-compose/config/prometheus/prometheus.individual.yaml:/etc/prometheus/prometheus.yml
+      - ./docker-compose/config/prometheus/prometheus.grafana.yaml:/prometheus/prometheus.yml

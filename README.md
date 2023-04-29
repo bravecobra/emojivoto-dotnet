@@ -118,6 +118,8 @@ Each component is reconfigured to output to each monitoring service. That means 
 
 Although we have some observability now, we still need to reconfigure each service.
 
+To bring the app back down
+
 ```powershell
 docker-compose --profile app --profile individual -f docker-compose.yml -f ./docker-compose/docker-compose.individual.yaml down --volumes
 ```

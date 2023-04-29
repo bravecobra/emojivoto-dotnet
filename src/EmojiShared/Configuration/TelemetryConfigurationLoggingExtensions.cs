@@ -27,7 +27,7 @@ namespace EmojiShared.Configuration
                     var logger = new LoggerConfiguration()
                         .ReadFrom.Configuration(builder.Configuration)
                         .Enrich.FromLogContext()
-                        .Enrich.With(new PropertyEnricher("app", Assembly.GetEntryAssembly()?.GetName().Name!))
+                        .Enrich.With(new PropertyEnricher("job", Assembly.GetEntryAssembly()?.GetName().Name!))
                         .Enrich.With(new PropertyEnricher("version", Assembly.GetEntryAssembly()?.GetName().Version?.ToString()))
                         .Enrich.WithExceptionDetails()
                         .Enrich.WithAssemblyInformationalVersion()
@@ -60,7 +60,7 @@ namespace EmojiShared.Configuration
                     var logger = new LoggerConfiguration()
                         .WriteTo.Seq(seqUri)
                         .Enrich.FromLogContext()
-                        .Enrich.With(new PropertyEnricher("app", Assembly.GetEntryAssembly()?.GetName().Name!))
+                        .Enrich.With(new PropertyEnricher("job", Assembly.GetEntryAssembly()?.GetName().Name!))
                         .Enrich.With(new PropertyEnricher("version", Assembly.GetEntryAssembly()?.GetName().Version?.ToString()))
                         .Enrich.WithExceptionDetails()
                         .Enrich.WithAssemblyInformationalVersion()
@@ -125,7 +125,7 @@ namespace EmojiShared.Configuration
             builder.ConfigureLogging((context, loggingBuilder) =>
             {
                 loggingBuilder.ClearProviders();
-                
+
                 var logExporter = context.Configuration.GetValue<string>("UseLogExporter")?.ToLowerInvariant();
                 switch (logExporter)
                 {
@@ -139,7 +139,7 @@ namespace EmojiShared.Configuration
                                 //     textFormatter: new LokiJsonTextFormatter(),
                                 // )
                                 .Enrich.FromLogContext()
-                                .Enrich.With(new PropertyEnricher("app", Assembly.GetEntryAssembly()?.GetName().Name!))
+                                .Enrich.With(new PropertyEnricher("job", Assembly.GetEntryAssembly()?.GetName().Name!))
                                 .Enrich.WithExceptionDetails()
                                 .Enrich.WithAssemblyInformationalVersion()
                                 .Enrich.WithAssemblyName()
@@ -171,7 +171,7 @@ namespace EmojiShared.Configuration
                             var logger = new LoggerConfiguration()
                                 .WriteTo.Seq(seqUri)
                                 .Enrich.FromLogContext()
-                                .Enrich.With(new PropertyEnricher("app", Assembly.GetEntryAssembly()?.GetName().Name!))
+                                .Enrich.With(new PropertyEnricher("job", Assembly.GetEntryAssembly()?.GetName().Name!))
                                 .Enrich.WithExceptionDetails()
                                 .Enrich.WithAssemblyInformationalVersion()
                                 .Enrich.WithAssemblyName()

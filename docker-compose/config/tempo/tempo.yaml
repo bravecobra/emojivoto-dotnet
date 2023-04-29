@@ -38,7 +38,6 @@ metrics_generator:
     path: /tmp/tempo/generator/wal
     remote_write:
       - url: http://prometheus:9090/api/v1/write
-        send_exemplars: true
 
 storage:
   trace:
