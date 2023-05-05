@@ -164,7 +164,7 @@ services:
 
   prometheus:
     container_name: prometheus
-    image: prom/prometheus:v2.43.0
+    image: prom/prometheus:v2.43.1
     profiles: ["individual", "otlp", "grafana"]
     command:
       - '--web.enable-remote-write-receiver'
