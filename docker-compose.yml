@@ -177,7 +177,7 @@ services:
       - "9090:9090"
 
   otel-collector:
-    image: otel/opentelemetry-collector-contrib:0.78.0
+    image: otel/opentelemetry-collector-contrib:0.79.0
     container_name: otel-collector
     profiles: ["otlp", "datadog"]
     command: ["--config=/etc/otel-collector-config.yml"]
