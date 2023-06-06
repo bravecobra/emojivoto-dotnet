@@ -78,7 +78,7 @@ services:
       # - "k8s.local:192.168.65.2"
 
   seq:
-    image: datalust/seq:2023.1.9229
+    image: datalust/seq:2023.2.9372
     container_name: seq
     profiles: ["individual"]
     networks:
