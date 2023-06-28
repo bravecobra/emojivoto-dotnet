@@ -28,29 +28,33 @@ spec:
       serviceAccountName: emoji
       containers:
       - name: emoji-svc
-        image: registry.localhost:5000/emojisvc:latest
+        image: bravecobra/emoji-svc:stable
+        imagePullPolicy: IfNotPresent
         env:
-        - name: ASPNETCORE_ENVIRONMENT
-          value: Production
-        - name: Serilog__WriteTo__0__Args__uri
-          value: "http://loki.loki:3100"
-        - name: Otlp__Endpoint
-          value: http://otel-collector-collector.opentelemetry:4318
-        - name: UseTracingExporter
-          value: otlp
-        - name: UseMetricsExporter
-          value: otlp
-        - name: UseLogExporter
-          value: otlp
-        imagePullPolicy: Always
+          - name: ASPNETCORE_ENVIRONMENT
+            value: Production
+          # - name: Serilog__WriteTo__0__Args__uri
+          #   value: "http://loki.loki:3100"
+          - name: Otlp__Endpoint
+            value: http://otel-collector-collector.opentelemetry:4318
+          - name: UseTracingExporter
+            value: otlp
+          - name: UseMetricsExporter
+            value: otlp
+          - name: UseLogExporter
+            value: otlp
         ports:
         - containerPort: 80
           name: grpc
         - containerPort: 88
           name: prom
         resources:
+          limits:
+            cpu: 200m
+            memory: 300Mi
           requests:
             cpu: 100m
+            memory: 200Mi
 ---
 apiVersion: v1
 kind: Service

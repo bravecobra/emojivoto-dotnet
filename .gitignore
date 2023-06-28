@@ -66,3 +66,4 @@ $RECYCLE.BIN/
 tools
 .idea
 coverage.opencover.xml
+OTEL_DIAGNOSTICS.json

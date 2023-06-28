@@ -14,6 +14,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Misc", "Misc", "{80853468-DDD4-4FF7-8D13-C4EB6FE83412}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
+		.github\workflows\build-workflow.yml = .github\workflows\build-workflow.yml
 		build.cake = build.cake
 		build.ps1 = build.ps1
 		build.sh = build.sh

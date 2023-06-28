@@ -21,16 +21,17 @@ spec:
     spec:
       containers:
       - name: vote-bot
-        image: registry.localhost:5000/emojivotebot:latest
+        image: bravecobra/emoji-votebot:stable
+        imagePullPolicy: IfNotPresent
         env:
         - name: ASPNETCORE_ENVIRONMENT
           value: Production
         - name: VOTING_RATE
-          value: "1000"
+          value: "5000"
         - name: WEB_HOST
           value: http://web-svc.emojivoto:80
-        - name: Serilog__WriteTo__0__Args__uri
-          value: "http://loki.loki:3100"
+        # - name: Serilog__WriteTo__0__Args__uri
+        #   value: "http://loki.loki:3100"
         - name: Otlp__Endpoint
           value: http://otel-collector-collector.opentelemetry:4318
         - name: UseTracingExporter
@@ -38,8 +39,11 @@ spec:
         - name: UseMetricsExporter
           value: otlp
         - name: UseLogExporter
-          value: loki
-        imagePullPolicy: Always
+          value: otlp
         resources:
+          limits:
+            cpu: 200m
+            memory: 300Mi
           requests:
-            cpu: 10m
+            cpu: 100m
+            memory: 200Mi
